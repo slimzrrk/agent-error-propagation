@@ -26,6 +26,14 @@ class Question:
     question: str
     rationale: str  # gold step-by-step solution, without the "#### <answer>" line
     gold: str  # canonical number
+    rank: int | None = None  # position in a seeded shuffle of the whole split (balanced designs)
+
+
+def split_ranks(ids: list[str], seed: int = 42) -> dict[str, int]:
+    """Rank of each question in a seeded shuffle of its full split, independent of --limit."""
+    order = list(ids)
+    random.Random(seed).shuffle(order)
+    return {qid: i for i, qid in enumerate(order)}
 
 
 def parse_gold(answer_field: str) -> tuple[str, str]:
@@ -77,13 +85,14 @@ def load_splits(path: Path = SPLITS_PATH) -> dict:
 def load_questions(split: str, limit: int | None = None, path: Path = SPLITS_PATH, loader=load_hf_split) -> list[Question]:
     """Questions of our 'dev' or 'test' split, in the order stored in splits.json."""
     spec = load_splits(path)["splits"][split]
+    ranks = split_ranks(spec["ids"])
     ids = spec["ids"][:limit] if limit else spec["ids"]
     rows = loader(spec["source_split"])
     questions = []
     for qid in ids:
         row = rows[int(qid.rsplit("-", 1)[1])]
         rationale, gold = parse_gold(row["answer"])
-        questions.append(Question(id=qid, question=row["question"], rationale=rationale, gold=gold))
+        questions.append(Question(id=qid, question=row["question"], rationale=rationale, gold=gold, rank=ranks[qid]))
     return questions
 
 

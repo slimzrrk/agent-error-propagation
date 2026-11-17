@@ -93,6 +93,22 @@ def test_normalize_number(text, expected):
     assert normalize_number(text) == expected
 
 
+@pytest.mark.parametrize(
+    "text, expected",
+    [
+        ("Therefore, each book has on average 80 pages.", "80"),
+        ("\\[ \\boxed{12} \\]", "12"),
+        ("The total is $1,250.", "1250"),
+        ("No numbers here", None),
+        (None, None),
+    ],
+)
+def test_last_number(text, expected):
+    from src.parser import last_number
+
+    assert last_number(text) == expected
+
+
 def test_answers_match():
     assert answers_match("18", "18")
     assert answers_match("18.0", "18")

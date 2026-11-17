@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import platform
 import subprocess
@@ -13,6 +14,26 @@ from importlib import metadata
 from pathlib import Path
 
 PACKAGES = ("openai", "datasets", "numpy", "pandas", "scipy", "PyYAML")
+ROOT = Path(__file__).resolve().parent.parent
+# Everything that changes what a run produces: results made with a different version
+# of any of these files must not be mixed in the same log. The faults enter through the
+# hash of their messages (passed by the caller), not the raw faults.json.
+PROTOCOL_FILES = (
+    "src/prompts.py", "src/parser.py", "src/agents.py", "src/topologies.py", "src/faults.py",
+    "src/defenses.py", "data/splits.json",
+)
+
+
+def protocol_fingerprint(*extra: str | None) -> str:
+    h = hashlib.sha256()
+    for name in PROTOCOL_FILES:
+        path = ROOT / name
+        if path.exists():
+            h.update(name.encode())
+            h.update(path.read_bytes())
+    for part in extra:
+        h.update(str(part).encode())
+    return h.hexdigest()[:12]
 
 
 def now() -> str:

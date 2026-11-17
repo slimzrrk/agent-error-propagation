@@ -17,8 +17,9 @@ from scripts.summarize import print_main_table
 from src import prompts
 from src.config import RunConfig
 from src.data import load_questions
+from src.faults import faults_sha
 from src.llm import LLMClient
-from src.logging_utils import JsonlLog, environment_metadata, read_records
+from src.logging_utils import JsonlLog, environment_metadata, protocol_fingerprint, read_records
 from src.topologies import run_question
 
 log = logging.getLogger("run_experiment")
@@ -48,9 +49,11 @@ def main(argv=None) -> None:
     llm = LLMClient(cfg.llm)
     jl = JsonlLog(out)
 
-    previous = {r.get("prompts_sha") for r in read_records(out, "meta")} - {None}
-    if previous and previous != {prompts.fingerprint()}:
-        raise SystemExit(f"{out} was produced with different prompts; use another --out")
+    protocol = protocol_fingerprint(faults_sha())
+    previous = {r.get("protocol_sha") for r in read_records(out, "meta")}
+    if previous and previous != {protocol}:
+        raise SystemExit(f"{out} was produced with a different protocol (prompts, code or faults); "
+                         "use another --out")
 
     done = jl.done_keys()
     tasks = [(exp, q) for exp in cfg.experiments for q in questions if (exp.id, q.id) not in done]
@@ -65,7 +68,9 @@ def main(argv=None) -> None:
             "limit": args.limit,
             "workers": workers,
             "base_seed": cfg.seed,
+            "protocol_sha": protocol,
             "prompts_sha": prompts.fingerprint(),
+            "faults_sha": faults_sha(),
             "llm": cfg.llm.to_dict(),
             "server": llm.server_info(),
             "experiments": [{"id": e.id, **e.to_dict()} for e in cfg.experiments],

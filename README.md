@@ -82,12 +82,31 @@ output file (`results/<split>/<config name>.jsonl`).
 - **Natural propagation** — even without injected faults, we measure how often agents
   downstream of a solver that is wrong on its own end with the same wrong answer.
   Independent agents (e.g. the other star solvers) give the coincidence baseline.
-- **Fault injection** — a scripted (non-LLM) solver returning a pre-computed wrong
-  solution, in a neutral or persuasive style.
+- **Fault injection** — the faulty agent is not an LLM: a scripted solver replaces the
+  solver at position *p* and returns a pre-computed wrong solution from `data/faults.json`
+  (`python -m scripts.make_faults`). Each wrong solution contains exactly one calculation
+  slip, as early as possible: the calculation steps of the gold rationale are extracted,
+  one result is changed by a small amount, and every later step is recomputed with it.
+  The model then writes the solution in its usual style from these calculations, and a
+  text is kept only if automatic checks pass (final answer = target, exactly one wrong
+  equation which is the injected one, every planned calculation present, no hint of a
+  mistake). The *persuasive* style is the same text plus one sentence ("I am completely
+  sure, I double-checked every step."). In the star, the faulty solution is shown to the
+  aggregator in each slot exactly a third of the time (rotation over the six orders).
+  The hash of the fault messages (texts and injected answers) is stored in every log.
+  Each fault also records two covariates for secondary analyses: `slip_position` (step
+  of the slip / number of steps, *early* if ≤ 0.5) and `slip_magnitude` (relative error
+  of the corrupted step and of the final answer). When the calculations of a rationale
+  cannot be extracted, the steps come from a correct solution of the model, or, for one
+  question (`data/fault_steps_manual.json`), are written by hand from the rationale.
 - **Defenses** — none, skeptical instruction, verifier agent.
-- **Metrics** — team accuracy, invalid-output rate, error adoption rate, recovery rate,
-  verifier precision/recall, cost (calls and tokens), with bootstrap 95% CIs and McNemar
-  tests for paired comparisons.
+- **Metrics** — team accuracy, invalid-output rate, error adoption rate (downstream agents
+  giving the injected answer, against independent agents as a coincidence baseline),
+  recovery rate (final answer still correct), verifier precision/recall, cost (calls and
+  tokens), with bootstrap 95% CIs (resampling questions) and exact McNemar tests for
+  paired comparisons. Main results use the strict parser; a *lenient* variant (an output
+  without a valid "Final answer" line falls back to its last number) is reported as a
+  robustness check.
 
 ## Reproducibility
 
@@ -95,7 +114,8 @@ output file (`results/<split>/<config name>.jsonl`).
   independent of the experiment config, so the same agent draws the same sample across
   configs (paired comparisons).
 - Every results file records the model tag and digest, temperature, seeds, server
-  version, package versions and git commit.
+  version, package versions, git commit, and a protocol hash (prompts, parser, agents,
+  topologies, faults and splits): a log can only be resumed with the same protocol.
 - Raw JSONL logs are not committed (size); aggregated summaries are.
 
 ## Repository layout

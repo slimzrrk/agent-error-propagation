@@ -1,0 +1,25 @@
+# Fault injection without defense: chain (faulty solver at position 1, 2, 3) and star
+# (position 1, shown to the aggregator in a balanced rotating slot), neutral and persuasive.
+# The no-fault configs are rerun here so that every comparison is paired within one log.
+name: phase3_propagation
+seed: 42
+workers: 8
+
+llm:
+  base_url: http://localhost:11434/v1
+  model: qwen2.5:1.5b-instruct-fp16
+  temperature: 0.7
+  max_tokens: 768
+
+experiments:
+  - topology: single
+  - topology: chain
+  - topology: star
+  - {topology: chain, fault: neutral, position: 1}
+  - {topology: chain, fault: neutral, position: 2}
+  - {topology: chain, fault: neutral, position: 3}
+  - {topology: chain, fault: persuasive, position: 1}
+  - {topology: chain, fault: persuasive, position: 2}
+  - {topology: chain, fault: persuasive, position: 3}
+  - {topology: star, fault: neutral, position: 1}
+  - {topology: star, fault: persuasive, position: 1}

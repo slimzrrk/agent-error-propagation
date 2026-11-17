@@ -1,0 +1,6 @@
+{
+ "note": "Calculation steps written by hand from the gold rationale, for questions whose rationale ends with algebra that cannot be extracted automatically and that the model does not solve. They go through the same error planning, rewriting and checks as the other questions.",
+ "steps": {
+  "test-13": ["5 * 2 = 10", "10 + 2 = 12", "12 * 3 / 2 = 18"]
+ }
+}

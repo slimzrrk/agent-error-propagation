@@ -66,6 +66,15 @@ def parse_final_answer(text: str | None) -> str | None:
     return _canonical(m) if m else None
 
 
+def last_number(text: str | None) -> str | None:
+    """Last number in the text. Only used for the lenient sensitivity analysis, never by
+    the protocol itself."""
+    if not text:
+        return None
+    matches = list(_NUMBER.finditer(text))
+    return _canonical(matches[-1]) if matches else None
+
+
 def answers_match(pred: str | None, gold: str | None) -> bool:
     if pred is None or gold is None:
         return False

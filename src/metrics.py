@@ -7,7 +7,7 @@ from collections import Counter, defaultdict
 import numpy as np
 from scipy.stats import binomtest
 
-from src.parser import answers_match
+from src.parser import answers_match, last_number
 
 
 def bootstrap_ci(values, n_boot: int = 10_000, alpha: float = 0.05, seed: int = 0) -> tuple[float, float, float]:
@@ -90,7 +90,24 @@ def relation(messages: list[dict], source: str, agent_id: str) -> str:
     return "independent"
 
 
-def adoption(records: list[dict], source: str = "solver1") -> dict:
+def answer_of(m: dict, lenient: bool = False) -> str | None:
+    """Parsed answer of a message. Lenient (sensitivity analysis only): an output without
+    a valid "Final answer" line falls back to the last number in its text."""
+    if m["parsed_answer"] is None and lenient:
+        return last_number(m["content"])
+    return m["parsed_answer"]
+
+
+def final_message(r: dict) -> dict:
+    """The message that holds the team answer: the aggregator, or the single solver."""
+    return next((m for m in r["messages"] if m["role"] == "aggregator"), r["messages"][0])
+
+
+def is_correct(r: dict, lenient: bool = False) -> bool:
+    return answers_match(answer_of(final_message(r), lenient), r["gold"])
+
+
+def adoption(records: list[dict], source: str = "solver1", lenient: bool = False) -> dict:
     """How often other agents end with the same wrong answer as `source`.
 
     Only runs where `source` gives a valid wrong answer count (for an injected fault this
@@ -104,19 +121,20 @@ def adoption(records: list[dict], source: str = "solver1") -> dict:
     for r in records:
         msgs = r["messages"]
         src = next((m for m in msgs if m["agent_id"] == source), None)
-        if src is None or src["parsed_answer"] is None or answers_match(src["parsed_answer"], r["gold"]):
+        wrong = answer_of(src, lenient) if src else None
+        if wrong is None or answers_match(wrong, r["gold"]):
             continue
-        wrong = src["parsed_answer"]
         counts = {k: [0, 0] for k in pooled}
         for m in msgs:
             if m["agent_id"] == source:
                 continue
             rel = relation(msgs, source, m["agent_id"])
-            same = answers_match(m["parsed_answer"], wrong)
+            ans = answer_of(m, lenient)
+            same = answers_match(ans, wrong)
             a = per_agent[(m["agent_id"], rel)]
             a["n"] += 1
             a["same"] += same
-            a["gold"] += answers_match(m["parsed_answer"], r["gold"])
+            a["gold"] += answers_match(ans, r["gold"])
             if rel in counts:
                 counts[rel][0] += same
                 counts[rel][1] += 1
@@ -132,6 +150,7 @@ def adoption(records: list[dict], source: str = "solver1") -> dict:
     ctrl, clo, chi = bootstrap_ratio_ci(*pooled["independent"])
     return {
         "source": source,
+        "lenient": lenient,
         "n_cases": len(pooled["downstream"][0]),
         "adoption_rate": rate, "adoption_ci": (lo, hi),
         "control_rate": ctrl, "control_ci": (clo, chi),
@@ -139,12 +158,69 @@ def adoption(records: list[dict], source: str = "solver1") -> dict:
     }
 
 
+def team_adopted(r: dict, lenient: bool = False) -> bool:
+    """The team's final answer is the injected wrong answer."""
+    return bool(r.get("fault")) and answers_match(answer_of(final_message(r), lenient), r["fault"]["wrong_answer"])
+
+
+def fault_summary(records: list[dict], lenient: bool = False) -> dict:
+    """Effect of an injected fault on one config: recovery (final answer still correct),
+    final adoption (team answer = injected answer) and adoption by the downstream agents."""
+    source = records[0]["fault"]["agent_id"]
+    ad = adoption(records, source=source, lenient=lenient)
+    return {
+        "source": source,
+        "n": len(records),
+        "recovery": bootstrap_ci([is_correct(r, lenient) for r in records]),
+        "team_adopted": bootstrap_ci([team_adopted(r, lenient) for r in records]),
+        "downstream_adoption": (ad["adoption_rate"], *ad["adoption_ci"]),
+        "coincidence": (ad["control_rate"], *ad["control_ci"]),
+        "agents": ad["agents"],
+    }
+
+
+def breakdown(records: list[dict], key, lenient: bool = False) -> list[dict]:
+    """Fault effects within groups of runs, e.g. by presentation slot or slip position."""
+    groups = defaultdict(list)
+    for r in records:
+        groups[key(r)].append(r)
+    rows = []
+    for value, rs in sorted(groups.items(), key=lambda kv: (kv[0] is None, kv[0])):
+        ad = adoption(rs, source=rs[0]["fault"]["agent_id"], lenient=lenient)
+        rows.append({
+            "group": value, "n": len(rs),
+            "team_adopted": bootstrap_ci([team_adopted(r, lenient) for r in rs]),
+            "recovery": bootstrap_ci([is_correct(r, lenient) for r in rs]),
+            "downstream_adoption": (ad["adoption_rate"], *ad["adoption_ci"]),
+        })
+    return rows
+
+
+def by_slot(records: list[dict], lenient: bool = False) -> list[dict]:
+    """By the slot where the faulty solution was shown to the aggregator."""
+    return breakdown(records, lambda r: r["fault"]["shown_at"], lenient)
+
+
+def by_slip_position(records: list[dict], lenient: bool = False) -> list[dict]:
+    """By whether the slip is early or late in the faulty solution."""
+    return breakdown(records, lambda r: (r["fault"].get("slip_position") or {}).get("category"), lenient)
+
+
+def paired_outcomes(a: list[dict], b: list[dict], outcome) -> dict:
+    """McNemar test of a per-question 0/1 outcome between two configs, on shared questions."""
+    rb = {r["question_id"]: r for r in b}
+    pairs = [(outcome(r), outcome(rb[r["question_id"]])) for r in a if r["question_id"] in rb]
+    if not pairs:
+        return {"n": 0}
+    xa, xb = zip(*pairs)
+    return {"n": len(pairs), "rate_a": float(np.mean(xa)), "rate_b": float(np.mean(xb)), **mcnemar(xa, xb)}
+
+
 def majority_vote(answers: list[str | None]) -> str | None:
     """Strict majority among valid answers; None if there is none (e.g. three different answers)."""
     valid = [a for a in answers if a is not None]
     if not valid:
         return None
-    # Group equal numbers ("18" and "18.0" are already canonicalised by the parser).
     (answer, count), = Counter(valid).most_common(1)
     return answer if count > len(answers) / 2 else None
 
@@ -180,15 +256,15 @@ def per_agent(records: list[dict]) -> list[dict]:
 
 
 def summarize(records: list[dict]) -> dict:
-    """Headline numbers for one config."""
-    correct = [r["correct"] for r in records]
-    acc, lo, hi = bootstrap_ci(correct)
+    """Headline numbers for one config (strict protocol, plus lenient accuracy)."""
+    acc, lo, hi = bootstrap_ci([r["correct"] for r in records])
     msgs = [m for r in records for m in r["messages"] if not m["is_faulty"]]
     return {
         "n": len(records),
         "accuracy": acc,
         "acc_ci_low": lo,
         "acc_ci_high": hi,
+        "accuracy_lenient": float(np.mean([is_correct(r, lenient=True) for r in records])),
         "invalid_rate": invalid_rate(records),
         "truncated_rate": (sum(m["finish_reason"] == "length" for m in msgs) / len(msgs)) if msgs else float("nan"),
         "calls_per_q": float(np.mean([r["n_llm_calls"] for r in records])),

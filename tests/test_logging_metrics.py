@@ -123,3 +123,78 @@ def test_invalid_rate_ignores_faulty_messages():
     ]}]
     assert invalid_rate(records) == 0.5
     assert invalid_rate(records, role="solver") == 0.0
+
+
+def fault_run(qid, s2, s2_text, agg, gold="160", wrong="80", shown_at=1):
+    return {
+        "question_id": qid, "gold": gold, "correct": agg == gold,
+        "fault": {"agent_id": "solver1", "wrong_answer": wrong, "shown_at": shown_at},
+        "messages": [
+            {**msg("solver1", wrong, faulty=True), "content": f"Final answer: {wrong}"},
+            {**msg("solver2", s2, ["solver1"]), "content": s2_text},
+            {**msg("aggregator", agg, ["solver1", "solver2"]), "content": f"Final answer: {agg}"},
+        ],
+    }
+
+
+def test_lenient_counts_invalid_outputs_that_copy_the_error():
+    # solver2 copies the wrong answer but forgets the "Final answer" line (like train-204)
+    r = fault_run("q1", None, "Therefore, each book has on average 80 pages.", "160")
+    strict = adoption([r], source="solver1")
+    lenient = adoption([r], source="solver1", lenient=True)
+    assert strict["adoption_rate"] == 0.0
+    assert lenient["adoption_rate"] == 0.5  # solver2 yes, aggregator no
+
+
+def test_lenient_accuracy_and_team_adoption():
+    from src.metrics import is_correct, team_adopted
+
+    r = fault_run("q1", "80", "Final answer: 80", None)
+    r["messages"][-1]["content"] = "So the answer is 80 pages."
+    assert not is_correct(r) and not team_adopted(r)
+    assert team_adopted(r, lenient=True)
+
+
+def test_fault_summary_and_slots():
+    from src.metrics import by_slot, fault_summary
+
+    records = [fault_run("q1", "80", "", "80", shown_at=1), fault_run("q2", "160", "", "160", shown_at=2)]
+    s = fault_summary(records)
+    assert s["recovery"][0] == 0.5 and s["team_adopted"][0] == 0.5
+    assert s["downstream_adoption"][0] == 0.5
+    slots = by_slot(records)
+    assert [(x["group"], x["team_adopted"][0]) for x in slots] == [(1, 1.0), (2, 0.0)]
+
+
+def test_paired_outcomes():
+    from src.metrics import paired_outcomes
+
+    a = [{"question_id": f"q{i}", "correct": i < 8} for i in range(10)]
+    b = [{"question_id": f"q{i}", "correct": i < 3} for i in range(10)]
+    res = paired_outcomes(a, b, lambda r: r["correct"])
+    assert res["n"] == 10 and (res["only_a"], res["only_b"]) == (5, 0)
+    assert res["rate_a"] == 0.8 and res["rate_b"] == 0.3
+
+
+def test_protocol_fingerprint_changes_with_protocol_files(tmp_path, monkeypatch):
+    import src.logging_utils as lu
+
+    (tmp_path / "src").mkdir()
+    (tmp_path / "src" / "prompts.py").write_text("A = 1\n")
+    monkeypatch.setattr(lu, "ROOT", tmp_path)
+    before = lu.protocol_fingerprint()
+    assert before == lu.protocol_fingerprint()
+    (tmp_path / "src" / "prompts.py").write_text("A = 2\n")
+    assert lu.protocol_fingerprint() != before
+
+
+def test_breakdown_by_slip_position():
+    from src.metrics import by_slip_position
+
+    early = fault_run("q1", "80", "", "80")
+    late = fault_run("q2", "160", "", "160")
+    early["fault"]["slip_position"] = {"relative": 0.25, "category": "early"}
+    late["fault"]["slip_position"] = {"relative": 1.0, "category": "late"}
+    rows = {x["group"]: x for x in by_slip_position([early, late])}
+    assert rows["early"]["downstream_adoption"][0] == 1.0
+    assert rows["late"]["downstream_adoption"][0] == 0.0 and rows["late"]["recovery"][0] == 1.0

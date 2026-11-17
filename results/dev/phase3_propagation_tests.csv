@@ -1,0 +1,13 @@
+comparison,outcome,n,rate_a,rate_b,only_a,only_b,p_value
+chain-*-p1-none,team adopted,50,0.4600,0.2400,17,6,0.0347
+chain-*-p1-none,recovery,50,0.5000,0.6800,6,15,0.0784
+chain-*-p2-none,team adopted,50,0.0800,0.0800,4,4,1.0000
+chain-*-p2-none,recovery,50,0.8000,0.7800,5,4,1.0000
+chain-*-p3-none,team adopted,50,0.1000,0.0800,5,4,1.0000
+chain-*-p3-none,recovery,50,0.7600,0.8200,5,8,0.5811
+star-*-p1-none,team adopted,50,0.1600,0.2200,3,6,0.5078
+star-*-p1-none,recovery,50,0.7200,0.6600,7,4,0.5488
+chain (all positions),team adopted,150,0.2133,0.1333,26,14,0.0807
+chain (all positions),recovery,150,0.6867,0.7600,16,27,0.1263
+star (all positions),team adopted,50,0.1600,0.2200,3,6,0.5078
+star (all positions),recovery,50,0.7200,0.6600,7,4,0.5488

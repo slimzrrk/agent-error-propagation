@@ -1,9 +1,26 @@
+import json
 from collections import Counter
 
+import pytest
+
+import src.faults
 from src.config import ExperimentConfig
 from src.data import Question
+from src.faults import PERSUASIVE_SENTENCE
 from src.llm import Completion, LLMConfig
 from src.topologies import call_kinds, expected_llm_calls, presentation_order, run_question
+
+FAULT_TEXT = "The sum is 2 + 3 = 6.\n\nFinal answer: 6"
+
+
+@pytest.fixture(autouse=True)
+def fake_faults(tmp_path, monkeypatch):
+    path = tmp_path / "faults.json"
+    path.write_text(json.dumps({"faults": {"test-7": {"text": FAULT_TEXT, "wrong_answer": "6"}}}))
+    monkeypatch.setattr(src.faults, "FAULTS_PATH", path)
+    src.faults._cache.clear()
+    yield
+    src.faults._cache.clear()
 
 
 class FakeLLM:
@@ -56,18 +73,46 @@ def test_star_solvers_are_independent_and_order_is_shuffled():
     assert all("<solution" not in c["user"] for c in llm.calls[:3])
     agg = r["messages"][-1]
     assert sorted(agg["sees"]) == ["solver1", "solver2", "solver3"]
-    assert agg["sees"] == presentation_order(Q.id, ["solver1", "solver2", "solver3"], 42)
+    assert agg["sees"] == presentation_order(Q, ["solver1", "solver2", "solver3"], 42)
     # the aggregator prompt follows the logged order
     prompt = llm.calls[3]["user"]
     shown = sorted(range(3), key=lambda i: prompt.index(f"reply #{i + 1}"))
     assert [f"solver{i + 1}" for i in shown] == agg["sees"]
 
 
-def test_presentation_order_is_deterministic_and_balanced():
+def test_presentation_order_rotates_all_six_orders():
     ids = ["solver1", "solver2", "solver3"]
-    assert presentation_order("q1", ids, 42) == presentation_order("q1", ids, 42)
-    first = Counter(presentation_order(f"test-{i}", ids, 42).index("solver1") for i in range(300))
-    assert set(first) == {0, 1, 2} and min(first.values()) > 70
+    orders = [tuple(presentation_order(Question("q", "", "", "1", rank=r), ids, 42)) for r in range(6)]
+    assert len(set(orders)) == 6
+    slots = Counter(presentation_order(Question("q", "", "", "1", rank=r), ids, 42).index("solver1")
+                    for r in range(200))
+    assert sorted(slots.values()) == [66, 67, 67]
+
+
+@pytest.mark.parametrize("position", [1, 2, 3])
+def test_chain_fault_replaces_solver(position):
+    llm = FakeLLM()
+    exp = ExperimentConfig("chain", "neutral", position)
+    r = run_question(llm, Q, exp, base_seed=42)
+    msgs = {m["agent_id"]: m for m in r["messages"]}
+    faulty = msgs[f"solver{position}"]
+    assert faulty["is_faulty"] and faulty["content"] == FAULT_TEXT and faulty["sees"] == []
+    assert faulty["parsed_answer"] == "6" and faulty["prompt_tokens"] == 0
+    assert r["n_llm_calls"] == 3 == len(llm.calls)
+    if position < 3:  # the next solver reads the faulty solution
+        assert FAULT_TEXT in llm.calls[position - 1]["user"]
+    assert r["fault"]["wrong_answer"] == "6" and r["fault"]["shown_at"] == position
+    assert r["fault"]["faults_sha"]
+
+
+def test_star_persuasive_fault():
+    llm = FakeLLM()
+    r = run_question(llm, Q, ExperimentConfig("star", "persuasive", 1), base_seed=42)
+    faulty = r["messages"][0]
+    assert faulty["content"] == FAULT_TEXT.replace("\n\nFinal", f"\n\n{PERSUASIVE_SENTENCE}\nFinal")
+    agg = r["messages"][-1]
+    assert r["fault"]["shown_at"] == agg["sees"].index("solver1") + 1
+    assert PERSUASIVE_SENTENCE in llm.calls[-1]["user"]
 
 
 def test_wrong_aggregator_makes_team_wrong():
