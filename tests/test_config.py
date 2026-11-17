@@ -27,9 +27,12 @@ def test_invalid_experiments(kwargs):
 
 def test_full_grid_size():
     grid = full_grid(include_single=False)
-    # chain: 3 defenses x (1 no-fault + 2 styles x 3 positions) = 21; star: 3 x (1 + 2) = 9
-    assert len(grid) == 30
-    assert len({e.id for e in grid}) == 30
+    # chain: 3 defenses x (1 no-fault + 2 styles x 3 positions) = 21; star: 3 x (1 + 2) = 9;
+    # chain_rotated: 2 styles x 3 positions, no defense = 6
+    assert len(grid) == 36
+    assert len({e.id for e in grid}) == 36
+    rotated = [e for e in grid if e.topology == "chain_rotated"]
+    assert len(rotated) == 6 and all(e.defense == "none" and e.fault != "none" for e in rotated)
     assert all(e.position in (None, 1) for e in grid if e.topology == "star")
 
 

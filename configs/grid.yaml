@@ -125,3 +125,27 @@ experiments:
   fault: persuasive
   position: 1
   defense: verifier
+- topology: chain_rotated
+  fault: neutral
+  position: 1
+  defense: none
+- topology: chain_rotated
+  fault: neutral
+  position: 2
+  defense: none
+- topology: chain_rotated
+  fault: neutral
+  position: 3
+  defense: none
+- topology: chain_rotated
+  fault: persuasive
+  position: 1
+  defense: none
+- topology: chain_rotated
+  fault: persuasive
+  position: 2
+  defense: none
+- topology: chain_rotated
+  fault: persuasive
+  position: 3
+  defense: none

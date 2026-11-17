@@ -16,8 +16,8 @@ import pandas as pd
 
 from src.logging_utils import read_records
 from src.metrics import (
-    adoption, by_slip_position, by_slot, fault_summary, is_correct, paired_outcomes, per_agent,
-    solver_references, summarize, team_adopted,
+    adoption, by_obvious, by_slip_position, by_slot, fault_summary, is_correct, majority_vs_aggregator,
+    paired_outcomes, per_agent, solver_references, summarize, team_adopted,
 )
 
 
@@ -121,6 +121,30 @@ def compare_styles(label: str, neutral: list[dict], persuasive: list[dict]) -> l
     return rows
 
 
+def position_rank_table(faulty: dict) -> dict:
+    """chain_rotated: team adoption by chain position x presentation rank (both styles)."""
+    rotated = [r for cid, recs in faulty.items() if cid.startswith("chain_rotated") for r in recs]
+    if not rotated:
+        return {}
+    print("\nchain_rotated: team adoption by position in the chain (rows) and presentation rank (columns), both styles")
+    cells = defaultdict(list)
+    for r in rotated:
+        cells[(r["fault"]["position"], r["fault"]["shown_at"])].append(team_adopted(r))
+    out = {}
+    print(f"  {'':<10}" + "".join(f"{'rank ' + str(k):>16}" for k in (1, 2, 3)) + f"{'all ranks':>16}")
+    for p in (1, 2, 3):
+        row = [cells[(p, k)] for k in (1, 2, 3)]
+        allv = [v for c in row for v in c]
+        out[f"p{p}"] = {f"rank{k}": (sum(c) / len(c), len(c)) for k, c in zip((1, 2, 3), row) if c}
+        print(f"  {'p' + str(p):<10}" + "".join(f"{sum(c) / len(c):>10.0%} (n={len(c):>2})" for c in row)
+              + f"{sum(allv) / len(allv):>10.0%} (n={len(allv)})")
+    for k in (1, 2, 3):
+        col = [v for p in (1, 2, 3) for v in cells[(p, k)]]
+        out[f"rank{k}"] = (sum(col) / len(col), len(col))
+    print(f"  {'all pos.':<10}" + "".join(f"{out[f'rank{k}'][0]:>10.0%} (n={out[f'rank{k}'][1]})" for k in (1, 2, 3)))
+    return out
+
+
 def slot_table(faulty: dict) -> dict:
     out = {}
     star = {cid: recs for cid, recs in faulty.items() if cid.startswith("star")}
@@ -139,15 +163,33 @@ def slot_table(faulty: dict) -> dict:
     return out
 
 
-def slip_position_table(faulty: dict) -> dict:
-    print("\nExploratory: fault effects by position of the slip in the faulty solution (early <= 50% of the steps)")
+def covariate_table(faulty: dict, title: str, split) -> dict:
+    print(f"\nExploratory: fault effects by {title}")
     out = {}
     groups = {**faulty, "all fault configs": [r for recs in faulty.values() for r in recs]}
     for cid, recs in sorted(groups.items()):
-        out[cid] = by_slip_position(recs)
+        out[cid] = split(recs)
         for row in out[cid]:
             print(f"  {cid:<30} {str(row['group']):<5} n={row['n']:>3}  downstream {ci(row['downstream_adoption'])}"
                   f"  team adopted {ci(row['team_adopted'])}  recovery {ci(row['recovery'])}")
+    return out
+
+
+def majority_table(team_cfgs: dict) -> dict:
+    print("\nLLM aggregator vs counterfactual majority vote over the same solver answers (no extra LLM call;"
+          "\nthree different answers = no majority = wrong). McNemar p: aggregator vs majority.")
+    out = {}
+    for cid, recs in sorted(team_cfgs.items()):
+        res = majority_vs_aggregator(recs)
+        out[cid] = res
+        line = (f"  {cid:<28} accuracy agg {ci(res['aggregator_acc'])} maj {ci(res['majority_acc'])}"
+                f" p={res['acc_test']['p_value']:.3f}")
+        if "adopt_test" in res:
+            line += (f" | adopted agg {res['aggregator_adopted'][0]:4.0%} maj {res['majority_adopted'][0]:4.0%}"
+                     f" p={res['adopt_test']['p_value']:.3f}")
+        else:
+            line += f" | oracle {ci(solver_references(recs)['oracle_acc'])}"
+        print(line)
     return out
 
 
@@ -184,23 +226,22 @@ def main(argv=None):
              if not recs[0].get("fault") and any(m["role"] == "aggregator" for m in recs[0]["messages"])}
     faulty = {cid: recs for cid, recs in by_cfg.items() if recs[0].get("fault")}
 
-    if teams:
-        print("\nAggregator vs non-LLM references (no fault)")
-        for cid, recs in sorted(teams.items()):
-            s, ref = summarize(recs), solver_references(recs)
-            print(f"  {cid:<28} aggregator {ci((s['accuracy'], s['acc_ci_low'], s['acc_ci_high']))}"
-                  f"  majority {ci(ref['majority_acc'])}  oracle {ci(ref['oracle_acc'])}")
+    saved = {}
+    if teams or faulty:
+        saved["majority"] = majority_table({**teams, **faulty})
     if args.reference in by_cfg:
         paired_vs_reference(by_cfg, args.reference)
 
-    saved = {}
     if teams:
         saved["natural"] = natural_propagation(teams, args.source)
     tests = []
     if faulty:
         saved["faults"], tests = fault_tables(faulty)
         saved["slots"] = slot_table(faulty)
-        saved["slip_position"] = slip_position_table(faulty)
+        saved["position_rank"] = position_rank_table(faulty)
+        saved["slip_position"] = covariate_table(
+            faulty, "position of the slip in the faulty solution (early <= 50% of the steps)", by_slip_position)
+        saved["obvious"] = covariate_table(faulty, "obvious faults (True = breaks the plausibility rule)", by_obvious)
 
     if args.save:
         stem = Path(args.log).with_suffix("")

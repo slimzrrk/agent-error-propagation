@@ -204,11 +204,18 @@ def propagate(steps: list[Equation], i: int, new_value: Fraction, question: str)
     return calcs, changes
 
 
+# Plausibility rule for the corrupted step (fixed before looking at any result): its true
+# result is at least 10 and the slip changes it by 5% to 30%, keeping its trailing zeros.
+MIN_TRUE_RESULT = Fraction(10)
+SLIP_RANGE = (Fraction(5, 100), Fraction(30, 100))
+
+
 def slip_offsets(r: Fraction, operands: set[Fraction]) -> set[Fraction]:
     """Candidate differences between the wrong and the correct result of a step.
 
     A slip keeps the look of the true result: 14400 can become 14300 but not 14401,
-    which anyone would spot as wrong. Small or non-round results get small offsets.
+    which anyone would spot as wrong. Besides small offsets, a slip can change one digit
+    (d * 10^p), which covers the 5-30% range for large numbers too.
     """
     base = set(range(1, 11)) | {12, 15, 20, 25, 50, 100}
     if r.denominator != 1:
@@ -217,8 +224,14 @@ def slip_offsets(r: Fraction, operands: set[Fraction]) -> set[Fraction]:
     zeros = len(digits) - len(digits.rstrip("0"))
     scale = 10 ** min(zeros, max(len(digits) - 2, 0))
     offsets = {Fraction(k * scale) for k in base}
+    offsets |= {Fraction(d * 10**p) for d in range(1, 10) for p in range(len(digits)) if (d * 10**p) % scale == 0}
     offsets |= {o for o in operands if o.denominator == 1 and 0 < o <= r and o % scale == 0}
     return offsets
+
+
+def slip_is_plausible(true_value: Fraction, wrong_value: Fraction) -> bool:
+    rel = abs(wrong_value - true_value) / true_value
+    return true_value >= MIN_TRUE_RESULT and SLIP_RANGE[0] <= rel <= SLIP_RANGE[1]
 
 
 def _plausible(wrong: Fraction, gold: Fraction) -> bool:
@@ -229,10 +242,11 @@ def _plausible(wrong: Fraction, gold: Fraction) -> bool:
 
 
 def plan_errors(question: str, rationale: str, gold: str, seed: int, max_plans: int = 3,
-                early_only: bool = True) -> list[ErrorPlan]:
+                early_only: bool = True, plausible_slip: bool = True) -> list[ErrorPlan]:
     """Candidate error plans, earliest step first. Empty if none is possible.
 
     With early_only, the corrupted step must be in the first half of the solution.
+    With plausible_slip, the slip must follow the rule above (slip_is_plausible).
     """
     steps = rationale_steps(rationale)
     gold_v = Fraction(gold)
@@ -246,12 +260,14 @@ def plan_errors(question: str, rationale: str, gold: str, seed: int, max_plans: 
         r = steps[i].rhs_value
         if r <= 0:
             continue
+        if plausible_slip and r < MIN_TRUE_RESULT:
+            continue
         operands = {Fraction(t) for t in _NUM_TOKEN.findall(steps[i].lhs)}
         valid = []
         offsets = slip_offsets(r, operands)
         for k in sorted(offsets):
             for new in (r + k, r - k):
-                if new <= 0:
+                if new <= 0 or (plausible_slip and not slip_is_plausible(r, new)):
                     continue
                 res = propagate(steps, i, new, question)
                 if res is None:
@@ -385,6 +401,11 @@ def faults_sha(path: Path | None = None) -> str | None:
         return None
 
 
+def slip_values(plan: dict) -> tuple[Fraction, Fraction]:
+    """(true result, written result) of the corrupted step."""
+    return Fraction(plan["original"].split(" = ")[1]), Fraction(plan["corrupted"].split(" = ")[1])
+
+
 def covariates(plan: dict, gold: str) -> dict:
     """Where the slip is and how large it is, for secondary analyses.
 
@@ -393,8 +414,7 @@ def covariates(plan: dict, gold: str) -> dict:
     and of the final answer.
     """
     relative = (plan["step"] + 1) / len(plan["calculations"])
-    true_v = Fraction(plan["original"].split(" = ")[1])
-    wrong_v = Fraction(plan["corrupted"].split(" = ")[1])
+    true_v, wrong_v = slip_values(plan)
     gold_v = Fraction(gold)
     return {
         "slip_position": {"relative": round(relative, 4), "category": "early" if relative <= 0.5 else "late"},

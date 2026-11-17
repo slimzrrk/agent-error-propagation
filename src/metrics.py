@@ -201,6 +201,11 @@ def by_slot(records: list[dict], lenient: bool = False) -> list[dict]:
     return breakdown(records, lambda r: r["fault"]["shown_at"], lenient)
 
 
+def by_obvious(records: list[dict], lenient: bool = False) -> list[dict]:
+    """By whether the fault had to be kept although it breaks the plausibility rule."""
+    return breakdown(records, lambda r: bool(r["fault"].get("obvious")), lenient)
+
+
 def by_slip_position(records: list[dict], lenient: bool = False) -> list[dict]:
     """By whether the slip is early or late in the faulty solution."""
     return breakdown(records, lambda r: (r["fault"].get("slip_position") or {}).get("category"), lenient)
@@ -223,6 +228,59 @@ def majority_vote(answers: list[str | None]) -> str | None:
         return None
     (answer, count), = Counter(valid).most_common(1)
     return answer if count > len(answers) / 2 else None
+
+
+def majority_answer(r: dict, lenient: bool = False) -> str | None:
+    """Counterfactual team answer: strict majority of the solvers' answers (faulty one
+    included), no LLM call. Three different answers give no majority (None, i.e. wrong)."""
+    return majority_vote([answer_of(m, lenient) for m in r["messages"] if m["role"] == "solver"])
+
+
+def majority_vs_aggregator(records: list[dict], lenient: bool = False) -> dict:
+    """Accuracy (and, with a fault, adoption of the injected answer) of the LLM aggregator
+    and of a majority vote over the same solver answers, with paired McNemar tests."""
+    agg_ok = [is_correct(r, lenient) for r in records]
+    maj_ok = [answers_match(majority_answer(r, lenient), r["gold"]) for r in records]
+    out = {"n": len(records), "aggregator_acc": bootstrap_ci(agg_ok), "majority_acc": bootstrap_ci(maj_ok),
+           "acc_test": mcnemar(agg_ok, maj_ok)}
+    if records[0].get("fault"):
+        agg_ad = [team_adopted(r, lenient) for r in records]
+        maj_ad = [answers_match(majority_answer(r, lenient), r["fault"]["wrong_answer"]) for r in records]
+        out.update(aggregator_adopted=bootstrap_ci(agg_ad), majority_adopted=bootstrap_ci(maj_ad),
+                   adopt_test=mcnemar(agg_ad, maj_ad))
+    return out
+
+
+def paired_permutation_test(diffs, alternative: str = "greater", n_perm: int = 100_000, seed: int = 0) -> float:
+    """Sign-flip permutation test on per-question paired differences (H0: mean 0).
+
+    Under H0 each question's difference is equally likely to have either sign.
+    """
+    d = np.asarray(diffs, dtype=float)
+    obs = d.mean()
+    rng = np.random.default_rng(seed)
+    hits, done = 0, 0
+    while done < n_perm:
+        k = min(10_000, n_perm - done)
+        null = (rng.choice([-1.0, 1.0], size=(k, d.size)) * d).mean(axis=1)
+        if alternative == "greater":
+            hits += int(np.sum(null >= obs - 1e-12))
+        elif alternative == "less":
+            hits += int(np.sum(null <= obs + 1e-12))
+        else:
+            hits += int(np.sum(np.abs(null) >= abs(obs) - 1e-12))
+        done += k
+    return (hits + 1) / (n_perm + 1)
+
+
+def holm(pvalues: dict[str, float]) -> dict[str, float]:
+    """Holm step-down adjusted p-values (family-wise error control)."""
+    order = sorted(pvalues, key=pvalues.get)
+    m, running, adjusted = len(order), 0.0, {}
+    for i, name in enumerate(order):
+        running = max(running, min(1.0, (m - i) * pvalues[name]))
+        adjusted[name] = running
+    return adjusted
 
 
 def solver_references(records: list[dict]) -> dict:

@@ -2,6 +2,8 @@
 
     python -m scripts.make_faults --config configs/baseline.yaml
 
+    python -m scripts.make_faults --fix-implausible   # revision 2, see README
+
 For each question, plan a calculation slip (src/faults.py), let the model write the
 solution with that slip, and keep the first text that passes every check. Error plans
 are tried in this order: from the gold rationale with the error in the first half of the
@@ -25,7 +27,7 @@ from src.config import RunConfig
 from src.data import Question, load_questions
 from src.faults import (
     FAULTS_PATH, PERSUASIVE_SENTENCE, REWRITE_SYSTEM, check_fault_text, covariates, finalize,
-    messages_sha, plan_errors, plan_to_dict, rewrite_messages,
+    messages_sha, plan_errors, plan_to_dict, rewrite_messages, slip_is_plausible, slip_values,
 )
 from src.llm import LLMClient, derive_seed
 from src.logging_utils import environment_metadata, now
@@ -126,6 +128,49 @@ def add_covariates(path: Path) -> None:
     print(f"covariates added to {len(doc['faults'])} faults; messages hash unchanged ({before})")
 
 
+def fix_implausible(llm: LLMClient, path: Path, workers: int) -> None:
+    """Regenerate only the faults whose slip breaks the plausibility rule; every other
+    text is left untouched. A fault that cannot be regenerated is kept and marked obvious."""
+    doc = json.loads(path.read_text())
+    questions = {q.id: q for s in ("dev", "test") for q in load_questions(s)}
+    concerned = [qid for qid, f in doc["faults"].items() if not slip_is_plausible(*slip_values(f["plan"]))]
+    untouched = {qid: f["text"] for qid, f in doc["faults"].items() if qid not in concerned}
+
+    with ThreadPoolExecutor(workers) as pool:
+        results = list(tqdm(pool.map(lambda qid: make_fault(llm, questions[qid]), concerned), total=len(concerned)))
+
+    replaced, obvious = [], []
+    for qid, r in zip(concerned, results):
+        old = doc["faults"][qid]
+        if r.get("failed"):
+            old["obvious"] = True
+            old["obvious_reason"] = "no plausible slip" if r["n_plans"] == 0 else "generation failed"
+            obvious.append(qid)
+        else:
+            r["obvious"] = False
+            r["replaces"] = {"wrong_answer": old["wrong_answer"], "original": old["plan"]["original"],
+                             "corrupted": old["plan"]["corrupted"]}
+            doc["faults"][qid] = r
+            replaced.append(qid)
+    for qid, f in doc["faults"].items():
+        f.setdefault("obvious", False)
+        f.update(covariates(f["plan"], f["gold"]))
+    assert all(doc["faults"][qid]["text"] == text for qid, text in untouched.items())
+
+    doc["messages_sha"] = messages_sha(doc)
+    doc.setdefault("revisions", []).append({
+        "date": now(), "rule": "slip on a step with true result >= 10, relative error 5-30%, trailing zeros kept",
+        "replaced": replaced, "kept_as_obvious": obvious,
+    })
+    path.write_text(json.dumps(doc, indent=1, ensure_ascii=False) + "\n")
+    print(f"{len(concerned)} faults broke the rule: {len(replaced)} regenerated, {len(obvious)} kept as obvious")
+    print(f"  {len(untouched)} other texts unchanged; new messages hash {doc['messages_sha']}")
+    print(f"  regenerated, source: {dict(Counter(doc['faults'][q]['source'] for q in replaced))}, "
+          f"corrupted step: {dict(sorted(Counter(doc['faults'][q]['plan']['step'] + 1 for q in replaced).items()))}")
+    for qid in obvious:
+        print(f"  OBVIOUS {qid}: {doc['faults'][qid]['obvious_reason']}")
+
+
 def main(argv=None):
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--config", default="configs/baseline.yaml", help="llm settings")
@@ -134,6 +179,8 @@ def main(argv=None):
     p.add_argument("--workers", type=int, default=8)
     p.add_argument("--add-covariates", action="store_true",
                    help="only add the covariates to an existing file; texts are left untouched")
+    p.add_argument("--fix-implausible", action="store_true",
+                   help="regenerate only the faults that break the plausibility rule")
     args = p.parse_args(argv)
     logging.basicConfig(level=logging.WARNING)
 
@@ -143,6 +190,9 @@ def main(argv=None):
 
     cfg = RunConfig.from_yaml(args.config)
     llm = LLMClient(cfg.llm)
+    if args.fix_implausible:
+        fix_implausible(llm, Path(args.out), args.workers)
+        return
     questions = [q for s in args.splits for q in load_questions(s)]
 
     with ThreadPoolExecutor(args.workers) as pool:

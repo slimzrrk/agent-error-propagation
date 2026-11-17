@@ -76,9 +76,14 @@ output file (`results/<split>/<config name>.jsonl`).
 - **Topologies** — *chain*: Solver1 → Solver2 → Solver3, each sees the problem and the
   previous solution and may keep or revise it; the aggregator then sees the three
   solutions in chain order. *Star*: three independent solvers; the aggregator sees them in
-  an order shuffled per question (deterministic seed), so no solver is always shown first.
-  The aggregator prompt is identical in both topologies and solutions are labelled
-  1, 2, 3 only. A *single* solver (same seed as Solver1) is the reference.
+  a balanced rotating order: the six possible orders are assigned in turn along a seeded
+  ranking of the questions, so each solver is shown at each rank a third of the time.
+  *Chain_rotated* (faults only, no defense): exactly the same chain of solvers, but the
+  aggregator sees the solutions in the star's rotating order. For a given question the
+  faulty solver at p1, p2, p3 is then shown at three different ranks (a Latin square),
+  which separates the effect of the position in the chain from the effect of the
+  presentation rank. The aggregator prompt is identical in all topologies and solutions
+  are labelled 1, 2, 3 only. A *single* solver (same seed as Solver1) is the reference.
 - **Natural propagation** — even without injected faults, we measure how often agents
   downstream of a solver that is wrong on its own end with the same wrong answer.
   Independent agents (e.g. the other star solvers) give the coincidence baseline.
@@ -86,7 +91,12 @@ output file (`results/<split>/<config name>.jsonl`).
   solver at position *p* and returns a pre-computed wrong solution from `data/faults.json`
   (`python -m scripts.make_faults`). Each wrong solution contains exactly one calculation
   slip, as early as possible: the calculation steps of the gold rationale are extracted,
-  one result is changed by a small amount, and every later step is recomputed with it.
+  one result is changed, and every later step is recomputed with it. **Plausibility
+  rule** (fixed before looking at any result): the corrupted step must have a true result
+  ≥ 10, the slip must change it by 5% to 30%, and it keeps its trailing zeros (14400 can
+  become 14500, never 14401); the earliest step that allows such a slip is used. When no
+  step allows it (tiny problems), the fault is kept but flagged `obvious: true`. The
+  final wrong answer is a positive integer different from the gold answer.
   The model then writes the solution in its usual style from these calculations, and a
   text is kept only if automatic checks pass (final answer = target, exactly one wrong
   equation which is the injected one, every planned calculation present, no hint of a
@@ -99,6 +109,9 @@ output file (`results/<split>/<config name>.jsonl`).
   of the corrupted step and of the final answer). When the calculations of a rationale
   cannot be extracted, the steps come from a correct solution of the model, or, for one
   question (`data/fault_steps_manual.json`), are written by hand from the rationale.
+  History: the first version of `faults.json` used small offsets without the rule above;
+  the faults breaking it were then regenerated with `python -m scripts.make_faults
+  --fix-implausible`, every other text unchanged (listed under `revisions` in the file).
 - **Defenses** — none, skeptical instruction, verifier agent.
 - **Metrics** — team accuracy, invalid-output rate, error adoption rate (downstream agents
   giving the injected answer, against independent agents as a coincidence baseline),
@@ -106,7 +119,12 @@ output file (`results/<split>/<config name>.jsonl`).
   tokens), with bootstrap 95% CIs (resampling questions) and exact McNemar tests for
   paired comparisons. Main results use the strict parser; a *lenient* variant (an output
   without a valid "Final answer" line falls back to its last number) is reported as a
-  robustness check.
+  robustness check. For every team config we also compute the counterfactual answer of a
+  *majority vote* over the same solver answers (no extra LLM call) and compare it with
+  the LLM aggregator.
+- **Pre-registration** — the confirmatory hypotheses, their tests and the Holm
+  correction are fixed in `report/hypotheses.md` and `scripts/confirmatory.py`, committed
+  before any run on the test split. Everything else is reported as exploratory.
 
 ## Reproducibility
 

@@ -127,3 +127,25 @@ def test_call_kinds():
     assert call_kinds(ExperimentConfig("chain", "neutral", 1)) == Counter(chained=2, aggregator=1)
     assert call_kinds(ExperimentConfig("chain", "neutral", 3)) == Counter(solo=1, chained=1, aggregator=1)
     assert expected_llm_calls(ExperimentConfig("chain", "none", None, "verifier")) == 7
+
+
+def test_chain_rotated_has_same_solvers_and_rotated_aggregator():
+    plain, rotated = FakeLLM(), FakeLLM()
+    run_question(plain, Q, ExperimentConfig("chain", "neutral", 2), base_seed=42)
+    r = run_question(rotated, Q, ExperimentConfig("chain_rotated", "neutral", 2), base_seed=42)
+    assert plain.calls[:2] == rotated.calls[:2]  # identical solver prompts and seeds
+    agg = r["messages"][-1]
+    assert agg["sees"] == presentation_order(Q, ["solver1", "solver2", "solver3"], 42)
+    assert r["fault"]["shown_at"] == agg["sees"].index("solver2") + 1
+
+
+def test_chain_rotated_is_a_latin_square():
+    ids = ["solver1", "solver2", "solver3"]
+    slots = Counter()
+    for rank in range(60):
+        order = presentation_order(Question("q", "", "", "1", rank=rank), ids, 42)
+        # within a question, the three fault positions are shown at three different ranks
+        assert sorted(order.index(f"solver{p}") for p in (1, 2, 3)) == [0, 1, 2]
+        for p in (1, 2, 3):
+            slots[(p, order.index(f"solver{p}"))] += 1
+    assert set(slots.values()) == {20}  # each position at each rank equally often

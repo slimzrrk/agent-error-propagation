@@ -32,8 +32,11 @@ def run_single(llm: LLMClient, q: Question, exp: ExperimentConfig, base_seed: in
 def run_chain(llm: LLMClient, q: Question, exp: ExperimentConfig, base_seed: int) -> dict:
     """Solver1 -> Solver2 -> Solver3, each sees the previous solution; the aggregator sees all three.
 
-    The aggregator gets them in chain order: in a chain the order carries meaning
-    (each solution is a revision of the previous one).
+    In the chain topology the aggregator gets them in chain order, since each solution is a
+    revision of the previous one. In chain_rotated the solvers are exactly the same (same
+    prompts and seeds) but the aggregator sees them in the star's balanced rotating order:
+    for a given question the faulty solver is then shown at a different rank for each of
+    the three positions (a Latin square), so position and rank can be separated.
     """
     solvers: list[Message] = []
     previous = None
@@ -41,7 +44,11 @@ def run_chain(llm: LLMClient, q: Question, exp: ExperimentConfig, base_seed: int
         msg = solver_message(llm, q, exp, i, base_seed, previous)
         solvers.append(msg)
         previous = msg
-    agg = run_aggregator(llm, q, solvers, base_seed=base_seed, temperature=exp.temperature)
+    shown = solvers
+    if exp.topology == "chain_rotated":
+        by_id = {m.agent_id: m for m in solvers}
+        shown = [by_id[a] for a in presentation_order(q, list(by_id), base_seed)]
+    agg = run_aggregator(llm, q, shown, base_seed=base_seed, temperature=exp.temperature)
     return build_result(q, exp, solvers + [agg], final_answer=agg.parsed_answer)
 
 
@@ -69,7 +76,7 @@ def run_star(llm: LLMClient, q: Question, exp: ExperimentConfig, base_seed: int)
     return build_result(q, exp, solvers + [agg], final_answer=agg.parsed_answer)
 
 
-RUNNERS = {"single": run_single, "chain": run_chain, "star": run_star}
+RUNNERS = {"single": run_single, "chain": run_chain, "chain_rotated": run_chain, "star": run_star}
 
 
 def run_question(llm: LLMClient, q: Question, exp: ExperimentConfig, base_seed: int) -> dict:
@@ -91,7 +98,7 @@ def call_kinds(exp: ExperimentConfig) -> Counter:
     for i in range(1, N_SOLVERS + 1):
         if i == faulty:
             continue
-        kinds["chained" if exp.topology == "chain" and i > 1 else "solo"] += 1
+        kinds["chained" if exp.topology != "star" and i > 1 else "solo"] += 1
     if exp.defense == "verifier":
         kinds["verifier"] = N_SOLVERS
     return kinds
@@ -116,6 +123,7 @@ def fault_info(q: Question, exp: ExperimentConfig, messages: list[Message]) -> d
         "shown_at": shown,  # 1-based slot in the aggregator prompt
         "slip_position": stored.get("slip_position"),
         "slip_magnitude": stored.get("slip_magnitude"),
+        "obvious": stored.get("obvious"),
         "faults_sha": faults_sha(),
     }
 

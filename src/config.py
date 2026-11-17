@@ -9,7 +9,9 @@ import yaml
 
 from src.llm import LLMConfig
 
-TOPOLOGIES = ("single", "chain", "star")
+# chain_rotated: same chain of solvers, but the aggregator sees the three solutions in a
+# balanced rotating order (as in the star), to separate chain position from presentation rank.
+TOPOLOGIES = ("single", "chain", "chain_rotated", "star")
 FAULTS = ("none", "neutral", "persuasive")
 DEFENSES = ("none", "skeptical", "verifier")
 
@@ -79,7 +81,8 @@ class RunConfig:
 
 
 def full_grid(include_single: bool = True) -> list[ExperimentConfig]:
-    """topology x fault x position x defense. Star uses position 1 only (symmetry)."""
+    """topology x fault x position x defense (star: position 1 only, by symmetry), plus the
+    six chain_rotated fault configs without defense."""
     grid = [ExperimentConfig("single")] if include_single else []
     for topology in ("chain", "star"):
         positions = (1, 2, 3) if topology == "chain" else (1,)
@@ -88,4 +91,8 @@ def full_grid(include_single: bool = True) -> list[ExperimentConfig]:
             for fault in ("neutral", "persuasive"):
                 for p in positions:
                     grid.append(ExperimentConfig(topology, fault, p, defense))
+    # Rotated presentation in the chain: faults only, no defense.
+    for fault in ("neutral", "persuasive"):
+        for p in (1, 2, 3):
+            grid.append(ExperimentConfig("chain_rotated", fault, p, "none"))
     return grid

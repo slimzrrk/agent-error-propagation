@@ -198,3 +198,31 @@ def test_breakdown_by_slip_position():
     rows = {x["group"]: x for x in by_slip_position([early, late])}
     assert rows["early"]["downstream_adoption"][0] == 1.0
     assert rows["late"]["downstream_adoption"][0] == 0.0 and rows["late"]["recovery"][0] == 1.0
+
+
+def test_majority_vs_aggregator():
+    from src.metrics import majority_vs_aggregator
+
+    # faulty solver1 says 80, both others say 160: majority is right, the aggregator adopted 80
+    r = fault_run("q1", "160", "", "80")
+    r["messages"].insert(2, {**msg("solver3", "160", ["solver2"]), "content": "Final answer: 160"})
+    res = majority_vs_aggregator([r])
+    assert res["majority_acc"][0] == 1.0 and res["aggregator_acc"][0] == 0.0
+    assert res["majority_adopted"][0] == 0.0 and res["aggregator_adopted"][0] == 1.0
+
+
+def test_paired_permutation_test():
+    from src.metrics import paired_permutation_test
+
+    assert paired_permutation_test([1.0] * 20, n_perm=5000) < 0.001
+    assert paired_permutation_test([-1.0] * 20, n_perm=5000) > 0.99
+    assert paired_permutation_test([0.0] * 20, n_perm=5000) == 1.0
+    p = paired_permutation_test([1, -1] * 10, alternative="two-sided", n_perm=5000)
+    assert p > 0.5
+
+
+def test_holm():
+    from src.metrics import holm
+
+    adj = holm({"H1": 0.01, "H2": 0.04, "H3": 0.03, "H4": 0.5})
+    assert adj == {"H1": 0.04, "H3": 0.09, "H2": 0.09, "H4": 0.5}
