@@ -2,9 +2,10 @@
 
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field
 
 from src import prompts
+from src.data import Question
 from src.llm import LLMClient, derive_seed
 from src.parser import parse_final_answer
 
@@ -16,6 +17,7 @@ class Message:
     content: str
     parsed_answer: str | None
     is_faulty: bool = False
+    sees: list[str] = field(default_factory=list)  # agents whose messages were in the prompt
     prompt_tokens: int = 0
     completion_tokens: int = 0
     latency: float = 0.0
@@ -31,36 +33,79 @@ class Message:
         return asdict(self)
 
 
-def run_solver(
+def _llm_message(
     llm: LLMClient,
-    question: str,
+    q: Question,
     *,
     agent_id: str,
-    question_id: str,
+    role: str,
+    system: str,
+    user: str,
+    sees: list[str],
     base_seed: int,
-    temperature: float | None = None,
+    temperature: float | None,
 ) -> Message:
     # The seed depends on (question, agent) only, not on the experiment config, so that
     # the same agent draws the same sample across configs (paired comparisons).
-    seed = derive_seed(question_id, agent_id, base=base_seed)
+    seed = derive_seed(q.id, agent_id, base=base_seed)
     temp = llm.config.temperature if temperature is None else temperature
     out = llm.chat(
-        [
-            {"role": "system", "content": prompts.SOLVER_SYSTEM},
-            {"role": "user", "content": prompts.solver_user(question)},
-        ],
+        [{"role": "system", "content": system}, {"role": "user", "content": user}],
         temperature=temp,
         seed=seed,
     )
     return Message(
         agent_id=agent_id,
-        role="solver",
+        role=role,
         content=out.text,
         parsed_answer=parse_final_answer(out.text),
+        sees=sees,
         prompt_tokens=out.prompt_tokens,
         completion_tokens=out.completion_tokens,
         latency=round(out.latency, 3),
         finish_reason=out.finish_reason,
         seed=seed,
         temperature=temp,
+    )
+
+
+def run_solver(
+    llm: LLMClient,
+    q: Question,
+    *,
+    agent_id: str,
+    base_seed: int,
+    temperature: float | None = None,
+    previous: Message | None = None,
+) -> Message:
+    return _llm_message(
+        llm, q,
+        agent_id=agent_id,
+        role="solver",
+        system=prompts.SOLVER_SYSTEM,
+        user=prompts.solver_user(q.question, previous.content if previous else None),
+        sees=[previous.agent_id] if previous else [],
+        base_seed=base_seed,
+        temperature=temperature,
+    )
+
+
+def run_aggregator(
+    llm: LLMClient,
+    q: Question,
+    solutions: list[Message],
+    *,
+    base_seed: int,
+    temperature: float | None = None,
+) -> Message:
+    """`solutions` are shown in the given order, labelled 1..n (no agent names)."""
+    return _llm_message(
+        llm, q,
+        agent_id="aggregator",
+        role="aggregator",
+        system=prompts.AGGREGATOR_SYSTEM,
+        user=prompts.aggregator_user(q.question, [m.content for m in solutions]),
+        sees=[m.agent_id for m in solutions],
+        base_seed=base_seed,
+        temperature=temperature,
     )

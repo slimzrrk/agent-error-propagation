@@ -1,7 +1,87 @@
 import numpy as np
 
 from src.logging_utils import JsonlLog, read_records
-from src.metrics import bootstrap_ci, invalid_rate, mcnemar
+from src.metrics import (
+    adoption,
+    bootstrap_ci,
+    bootstrap_ratio_ci,
+    downstream,
+    invalid_rate,
+    majority_vote,
+    mcnemar,
+    upstream,
+)
+
+
+def msg(agent_id, answer, sees=(), role=None, faulty=False):
+    return {"agent_id": agent_id, "role": role or ("aggregator" if agent_id == "aggregator" else "solver"),
+            "parsed_answer": answer, "sees": list(sees), "is_faulty": faulty}
+
+
+def chain(a1, a2, a3, agg, gold="5"):
+    return {"gold": gold, "messages": [
+        msg("solver1", a1), msg("solver2", a2, ["solver1"]), msg("solver3", a3, ["solver2"]),
+        msg("aggregator", agg, ["solver1", "solver2", "solver3"]),
+    ]}
+
+
+def star(a1, a2, a3, agg, gold="5"):
+    return {"gold": gold, "messages": [
+        msg("solver1", a1), msg("solver2", a2), msg("solver3", a3),
+        msg("aggregator", agg, ["solver2", "solver1", "solver3"]),
+    ]}
+
+
+def test_downstream_is_transitive():
+    msgs = chain("1", "1", "1", "1")["messages"]
+    assert downstream(msgs, "solver1") == {"solver2", "solver3", "aggregator"}
+    assert downstream(msgs, "solver3") == {"aggregator"}
+    assert downstream(star("1", "1", "1", "1")["messages"], "solver1") == {"aggregator"}
+
+
+def test_adoption_chain():
+    records = [
+        chain("7", "7", "5", "5"),  # solver1 wrong, solver2 adopts, then corrected
+        chain("7", "7", "7", "7"),  # full propagation
+        chain("5", "5", "5", "5"),  # solver1 right: not a case
+        chain(None, "5", "5", "5"),  # invalid source: not a case
+    ]
+    res = adoption(records)
+    assert res["n_cases"] == 2
+    assert res["adoption_rate"] == 4 / 6
+    assert np.isnan(res["control_rate"])  # no independent agent in a chain
+    s2 = next(a for a in res["agents"] if a["agent_id"] == "solver2")
+    assert s2["relation"] == "downstream" and s2["adopted"] == 1.0
+
+
+def test_adoption_excludes_upstream_agents():
+    # solver2 copied solver1's wrong answer: solver1 is upstream, not a coincidence
+    res = adoption([chain("7", "7", "5", "7")], source="solver2")
+    s1 = next(a for a in res["agents"] if a["agent_id"] == "solver1")
+    assert s1["relation"] == "upstream"
+    assert np.isnan(res["control_rate"])
+    assert res["adoption_rate"] == 0.5  # solver3 no, aggregator yes
+    assert upstream(chain("1", "1", "1", "1")["messages"], "solver3") == {"solver1", "solver2"}
+
+
+def test_adoption_star_has_coincidence_control():
+    res = adoption([star("7", "7", "5", "7"), star("7", "5", "5", "5")])
+    assert res["adoption_rate"] == 0.5  # aggregator: 1 of 2
+    assert res["control_rate"] == 0.25  # solver2/solver3: 1 of 4
+
+
+def test_bootstrap_ratio_ci():
+    rate, lo, hi = bootstrap_ratio_ci([1, 0, 2, 3], [3, 3, 3, 3])
+    assert rate == 0.5 and lo <= rate <= hi
+    assert np.isnan(bootstrap_ratio_ci([0], [0])[0])
+
+
+def test_majority_vote():
+    assert majority_vote(["5", "5", "7"]) == "5"
+    assert majority_vote(["5", "6", "7"]) is None
+    assert majority_vote(["5", None, None]) is None
+    assert majority_vote(["5", "5", None]) == "5"
+    assert majority_vote([None, None, None]) is None
 
 
 def test_jsonl_resume(tmp_path):

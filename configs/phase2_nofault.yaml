@@ -1,0 +1,15 @@
+# Teams without faults or defenses, compared with the single-agent reference.
+name: phase2_nofault
+seed: 42
+workers: 8
+
+llm:
+  base_url: http://localhost:11434/v1
+  model: qwen2.5:1.5b-instruct-fp16
+  temperature: 0.7
+  max_tokens: 768
+
+experiments:
+  - topology: single
+  - topology: chain
+  - topology: star

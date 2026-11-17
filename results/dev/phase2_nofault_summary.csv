@@ -1,0 +1,4 @@
+config,n,accuracy,acc_ci_low,acc_ci_high,invalid_rate,truncated_rate,calls_per_q,prompt_tokens_per_q,completion_tokens_per_q,latency_per_call
+chain-none-none,50,0.8600,0.7600,0.9400,0.0400,0.0000,4.0000,1709.5600,723.2000,4.3424
+single,50,0.8200,0.7000,0.9200,0.0600,0.0000,1.0000,134.8400,188.1600,3.5946
+star-none-none,50,0.9000,0.8200,0.9800,0.0500,0.0000,4.0000,1177.1200,660.1200,3.6712

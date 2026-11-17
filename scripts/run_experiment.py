@@ -7,18 +7,18 @@ from __future__ import annotations
 
 import argparse
 import logging
-from collections import defaultdict
+import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 from tqdm import tqdm
 
+from scripts.summarize import print_main_table
 from src import prompts
 from src.config import RunConfig
 from src.data import load_questions
 from src.llm import LLMClient
 from src.logging_utils import JsonlLog, environment_metadata, read_records
-from src.metrics import summarize
 from src.topologies import run_question
 
 log = logging.getLogger("run_experiment")
@@ -32,23 +32,6 @@ def parse_args(argv=None):
     p.add_argument("--workers", type=int, default=None, help="overrides the config value")
     p.add_argument("--out", default=None, help="default: results/<split>/<config name>.jsonl")
     return p.parse_args(argv)
-
-
-def print_summary(records: list[dict], config_order: list[str]) -> None:
-    by_cfg = defaultdict(list)
-    for r in records:
-        by_cfg[r["config_id"]].append(r)
-    header = f"{'config':<36} {'n':>4} {'acc':>6} {'95% CI':>15} {'invalid':>8} {'trunc':>6} {'calls':>6} {'tok/q':>7} {'s/call':>7}"
-    print("\n" + header + "\n" + "-" * len(header))
-    for cid in config_order:
-        if cid not in by_cfg:
-            continue
-        s = summarize(by_cfg[cid])
-        print(
-            f"{cid:<36} {s['n']:>4} {s['accuracy']:>6.1%} [{s['acc_ci_low']:>5.1%}, {s['acc_ci_high']:>5.1%}]"
-            f" {s['invalid_rate']:>8.1%} {s['truncated_rate']:>6.1%} {s['calls_per_q']:>6.1f}"
-            f" {s['prompt_tokens_per_q'] + s['completion_tokens_per_q']:>7.0f} {s['latency_per_call']:>7.2f}"
-        )
 
 
 def main(argv=None) -> None:
@@ -89,31 +72,37 @@ def main(argv=None) -> None:
             **environment_metadata(),
         })
 
-    failures = 0
-    with ThreadPoolExecutor(max_workers=workers) as pool:
-        futures = {pool.submit(run_question, llm, q, exp, cfg.seed): (exp, q) for exp, q in tasks}
-        for fut in tqdm(as_completed(futures), total=len(futures), desc="runs"):
-            exp, q = futures[fut]
-            try:
-                result = fut.result()
-            except Exception as exc:  # keep going; the pair is retried on the next run
-                failures += 1
-                log.error("%s / %s failed: %r", exp.id, q.id, exc)
-                continue
-            jl.write_run({
-                "config_id": exp.id,
-                "config": exp.to_dict(),
-                "split": args.split,
-                "model": cfg.llm.model,
-                "base_seed": cfg.seed,
-                **result,
-            })
+        failures = 0
+        start = time.perf_counter()
+        with ThreadPoolExecutor(max_workers=workers) as pool:
+            futures = {pool.submit(run_question, llm, q, exp, cfg.seed): (exp, q) for exp, q in tasks}
+            for fut in tqdm(as_completed(futures), total=len(futures), desc="runs"):
+                exp, q = futures[fut]
+                try:
+                    result = fut.result()
+                except Exception as exc:  # keep going; the pair is retried on the next run
+                    failures += 1
+                    log.error("%s / %s failed: %r", exp.id, q.id, exc)
+                    continue
+                jl.write_run({
+                    "config_id": exp.id,
+                    "config": exp.to_dict(),
+                    "split": args.split,
+                    "model": cfg.llm.model,
+                    "base_seed": cfg.seed,
+                    **result,
+                })
+        wall = time.perf_counter() - start
+        # Wall time of the session, used to turn per-call latencies into cost estimates.
+        jl.write({"record_type": "session_end", "session_id": jl.session_id,
+                  "wall_s": round(wall, 1), "runs": len(tasks) - failures, "failures": failures, "workers": workers})
+        print(f"{len(tasks) - failures} runs in {wall / 60:.1f} min")
+        if failures:
+            print(f"{failures} runs failed, rerun the same command to retry them")
 
-    if failures:
-        print(f"{failures} runs failed, rerun the same command to retry them")
     qids = {q.id for q in questions}
     records = [r for r in read_records(out) if r["question_id"] in qids]
-    print_summary(records, [e.id for e in cfg.experiments])
+    print_main_table(records, [e.id for e in cfg.experiments])
 
 
 if __name__ == "__main__":

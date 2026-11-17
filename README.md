@@ -48,8 +48,11 @@ and `llm.model` in the config file, nothing else.
 ```bash
 pytest                                                    # unit tests (no server needed)
 python -m src.data                                        # rebuild data/splits.json
-python -m scripts.run_experiment --config configs/baseline.yaml --split dev --limit 20
-python -m scripts.benchmark_speed --levels 1 4 8          # throughput + grid time estimate
+python -m scripts.run_experiment --config configs/phase2_nofault.yaml --split dev
+python -m scripts.summarize results/dev/phase2_nofault.jsonl --save   # tables + csv/json
+python -m scripts.show_run results/dev/phase2_nofault.jsonl --config chain-none-none --question train-204
+python -m scripts.make_grid --estimate-from results/dev/phase2_nofault.jsonl  # configs/grid.yaml + time
+python -m scripts.benchmark_speed --levels 1 4 8          # raw throughput
 ```
 
 Runs are resumable: rerunning a command skips the (config, question) pairs already in the
@@ -68,9 +71,17 @@ output file (`results/<split>/<config name>.jsonl`).
 *To be completed as the project progresses.*
 
 - **Agents** — Solver, Aggregator, Verifier: same model, different system prompts.
-  Every agent ends with `Final answer: <number>`, parsed by `src/parser.py`.
-- **Topologies** — chain (Solver1 → Solver2 → Solver3 → Aggregator) and star (three
-  independent solvers → Aggregator).
+  Every agent ends with `Final answer: <number>`, parsed by `src/parser.py`. Without any
+  defense, prompts are neutral: they neither encourage nor discourage trusting others.
+- **Topologies** — *chain*: Solver1 → Solver2 → Solver3, each sees the problem and the
+  previous solution and may keep or revise it; the aggregator then sees the three
+  solutions in chain order. *Star*: three independent solvers; the aggregator sees them in
+  an order shuffled per question (deterministic seed), so no solver is always shown first.
+  The aggregator prompt is identical in both topologies and solutions are labelled
+  1, 2, 3 only. A *single* solver (same seed as Solver1) is the reference.
+- **Natural propagation** — even without injected faults, we measure how often agents
+  downstream of a solver that is wrong on its own end with the same wrong answer.
+  Independent agents (e.g. the other star solvers) give the coincidence baseline.
 - **Fault injection** — a scripted (non-LLM) solver returning a pre-computed wrong
   solution, in a neutral or persuasive style.
 - **Defenses** — none, skeptical instruction, verifier agent.

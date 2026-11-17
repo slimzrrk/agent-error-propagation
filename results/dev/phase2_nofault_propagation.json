@@ -1,0 +1,76 @@
+{
+  "chain-none-none": {
+    "source": "solver1",
+    "n_cases": 6,
+    "adoption_rate": 0.5,
+    "adoption_ci": [
+      0.16666666666666666,
+      0.8333333333333334
+    ],
+    "control_rate": null,
+    "control_ci": [
+      null,
+      null
+    ],
+    "agents": [
+      {
+        "agent_id": "aggregator",
+        "relation": "downstream",
+        "n": 6,
+        "adopted": 0.6666666666666666,
+        "correct": 0.16666666666666666
+      },
+      {
+        "agent_id": "solver2",
+        "relation": "downstream",
+        "n": 6,
+        "adopted": 0.5,
+        "correct": 0.16666666666666666
+      },
+      {
+        "agent_id": "solver3",
+        "relation": "downstream",
+        "n": 6,
+        "adopted": 0.3333333333333333,
+        "correct": 0.3333333333333333
+      }
+    ]
+  },
+  "star-none-none": {
+    "source": "solver1",
+    "n_cases": 6,
+    "adoption_rate": 0.3333333333333333,
+    "adoption_ci": [
+      0.0,
+      0.6666666666666666
+    ],
+    "control_rate": 0.0,
+    "control_ci": [
+      0.0,
+      0.0
+    ],
+    "agents": [
+      {
+        "agent_id": "aggregator",
+        "relation": "downstream",
+        "n": 6,
+        "adopted": 0.3333333333333333,
+        "correct": 0.3333333333333333
+      },
+      {
+        "agent_id": "solver2",
+        "relation": "independent",
+        "n": 6,
+        "adopted": 0.0,
+        "correct": 0.16666666666666666
+      },
+      {
+        "agent_id": "solver3",
+        "relation": "independent",
+        "n": 6,
+        "adopted": 0.0,
+        "correct": 0.3333333333333333
+      }
+    ]
+  }
+}
