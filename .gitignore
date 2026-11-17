@@ -1,0 +1,19 @@
+# Local assistant / editor files
+CLAUDE.md
+.claude/
+.vscode/
+.idea/
+.DS_Store
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Raw experiment logs can get large (tens of MB for the full grid).
+# They are kept out of git; aggregated summaries (csv/json) and compressed
+# final logs (*.jsonl.gz) can be committed.
+results/**/*.jsonl
+results/**/*.log

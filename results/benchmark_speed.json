@@ -1,0 +1,97 @@
+{
+  "timestamp": "2026-11-17T18:08:32+00:00",
+  "llm": {
+    "base_url": "http://localhost:11434/v1",
+    "model": "qwen2.5:1.5b-instruct-fp16",
+    "temperature": 0.7,
+    "max_tokens": 768,
+    "timeout": 180.0,
+    "max_retries": 4,
+    "retry_backoff": 2.0
+  },
+  "server": {
+    "model": "qwen2.5:1.5b-instruct-fp16",
+    "base_url": "http://localhost:11434/v1",
+    "ollama_version": "0.40.13",
+    "model_digest": "d8035f049126b916d6dd500c31d123e369f9e32867b05001c09c1da56fef739f",
+    "model_details": {
+      "parent_model": "/Users/ollama/.ollama/models/blobs/sha256-2b9e80eacde5690a3a3cf6afcf44a3d53cdab6e0b777552fb64f055efc658956",
+      "format": "gguf",
+      "family": "qwen2",
+      "families": [
+        "qwen2"
+      ],
+      "parameter_size": "1.5B",
+      "quantization_level": "F16",
+      "context_length": 32768,
+      "embedding_length": 1536,
+      "runner": "ggml"
+    },
+    "context_length": 4096
+  },
+  "levels": [
+    {
+      "concurrency": 1,
+      "requests": 24,
+      "wall_s": 70.8,
+      "completion_tokens": 5029,
+      "prompt_tokens": 3299,
+      "throughput_tok_s": 71.0,
+      "requests_per_s": 0.339,
+      "latency_mean_s": 2.95,
+      "latency_p90_s": 3.9,
+      "per_stream_tok_s": 71.0
+    },
+    {
+      "concurrency": 4,
+      "requests": 24,
+      "wall_s": 35.54,
+      "completion_tokens": 5029,
+      "prompt_tokens": 3299,
+      "throughput_tok_s": 141.5,
+      "requests_per_s": 0.675,
+      "latency_mean_s": 5.42,
+      "latency_p90_s": 9.37,
+      "per_stream_tok_s": 43.4
+    },
+    {
+      "concurrency": 8,
+      "requests": 24,
+      "wall_s": 25.65,
+      "completion_tokens": 5029,
+      "prompt_tokens": 3299,
+      "throughput_tok_s": 196.0,
+      "requests_per_s": 0.936,
+      "latency_mean_s": 5.09,
+      "latency_p90_s": 11.11,
+      "per_stream_tok_s": 50.5
+    }
+  ],
+  "sec_per_call_at_max_level": 1.069,
+  "grid_estimate": {
+    "n_configs": 31,
+    "llm_calls_per_question": 127,
+    "dev": {
+      "questions": 50,
+      "llm_calls": 6350,
+      "hours": 1.89
+    },
+    "test": {
+      "questions": 200,
+      "llm_calls": 25400,
+      "hours": 7.54
+    }
+  },
+  "python": "3.13.2",
+  "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+  "machine": "arm64",
+  "packages": {
+    "openai": "3.52.0",
+    "datasets": "5.2.0",
+    "numpy": "2.5.5",
+    "pandas": "3.1.1",
+    "scipy": "1.18.1",
+    "PyYAML": "6.0.3"
+  },
+  "git_commit": null
+}
