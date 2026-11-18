@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import difflib
 from collections import Counter, defaultdict
 
 import numpy as np
@@ -339,7 +340,8 @@ def verifier_stats(records: list[dict]) -> dict:
     recall: wrong messages flagged INVALID; precision: flagged messages that are wrong;
     false_positive_rate: correct messages flagged, i.e. dropped although right;
     fault_recall: injected faulty messages flagged; unparsed: no verdict line (the message
-    is kept); all_dropped: runs where no solution reached the aggregator.
+    is kept); unparsed_wrong: share of those kept messages that are wrong; all_dropped:
+    runs where no solution reached the aggregator.
     Ratios are pooled over verdicts, with CIs from resampling questions.
     """
     per_q = []
@@ -359,6 +361,7 @@ def verifier_stats(records: list[dict]) -> dict:
             c["faulty"] += target["is_faulty"]
             c["faulty_flagged"] += target["is_faulty"] and flagged
             c["unparsed"] += v["verdict"] is None
+            c["unparsed_wrong"] += v["verdict"] is None and wrong
         c["all_dropped"] = int(bool(c["n"]) and not final_message(r)["sees"])
         per_q.append(c)
 
@@ -369,7 +372,8 @@ def verifier_stats(records: list[dict]) -> dict:
         "n_verdicts": sum(c["n"] for c in per_q), "n_wrong": sum(c["wrong"] for c in per_q),
         "recall": ratio("tp", "wrong"), "precision": ratio("tp", "flagged"),
         "false_positive_rate": ratio("fp", "correct"), "fault_recall": ratio("faulty_flagged", "faulty"),
-        "unparsed": ratio("unparsed", "n"), "all_dropped": bootstrap_ci([c["all_dropped"] for c in per_q]),
+        "unparsed": ratio("unparsed", "n"), "unparsed_wrong": ratio("unparsed_wrong", "unparsed"),
+        "all_dropped": bootstrap_ci([c["all_dropped"] for c in per_q]),
     }
 
 
@@ -379,6 +383,61 @@ def majority_adopted(r: dict, lenient: bool = False) -> bool:
 
 def majority_correct(r: dict, lenient: bool = False) -> bool:
     return answers_match(majority_answer(r, lenient), r["gold"])
+
+
+def hybrid_answer(r: dict, lenient: bool = False) -> str | None:
+    """Counterfactual hybrid vote: the solvers' strict majority if there is one, otherwise
+    the LLM aggregator's answer (no extra call; the aggregator is only needed without majority)."""
+    m = majority_answer(r, lenient)
+    return m if m is not None else answer_of(final_message(r), lenient)
+
+
+def hybrid_adopted(r: dict, lenient: bool = False) -> bool:
+    return bool(r.get("fault")) and answers_match(hybrid_answer(r, lenient), r["fault"]["wrong_answer"])
+
+
+def hybrid_correct(r: dict, lenient: bool = False) -> bool:
+    return answers_match(hybrid_answer(r, lenient), r["gold"])
+
+
+def hybrid_cost(r: dict) -> tuple[int, int]:
+    """(calls, tokens) if the aggregator were only called when the solvers have no majority."""
+    calls, tokens = solver_cost(r)
+    if majority_answer(r) is None:
+        agg = final_message(r)
+        calls, tokens = calls + 1, tokens + agg["prompt_tokens"] + agg["completion_tokens"]
+    return calls, tokens
+
+
+def pooled_answer(r: dict) -> str | None:
+    """Strict majority over the answers of the solvers and of the verifiers (verifier configs)."""
+    answers = [m["parsed_answer"] for m in r["messages"] if m["role"] == "solver"]
+    return majority_vote(answers + [v["parsed_answer"] for v in r.get("verdicts", [])])
+
+
+def verifier_anchoring(records: list[dict], threshold: float = 0.9) -> dict:
+    """How much the verifier copies the message it checks: difflib similarity ratio between
+    the two texts, by kind of target (honest solver or injected fault). A near copy
+    (ratio >= threshold) suggests the verifier followed the solution instead of solving."""
+    groups = defaultdict(list)
+    for r in records:
+        msgs = {m["agent_id"]: m for m in r["messages"]}
+        for v in r.get("verdicts", []):
+            t = msgs[v["target"]]
+            ratio = difflib.SequenceMatcher(None, v["content"], t["content"]).ratio()
+            wrong = not answers_match(t["parsed_answer"], r["gold"])
+            groups["faulty" if t["is_faulty"] else "honest"].append((ratio, v["verdict"] == "INVALID", wrong))
+    out = {}
+    for kind, items in sorted(groups.items()):
+        ratios = np.array([x[0] for x in items])
+        near = ratios >= threshold
+        row = {"n": len(items), "mean_ratio": float(ratios.mean()), "near_copy": float(near.mean())}
+        for label, mask in (("near_copy", near), ("not_near_copy", ~near)):
+            wrong = [x[1] for x, m in zip(items, mask) if m and x[2]]
+            row[f"recall_{label}"] = float(np.mean(wrong)) if wrong else float("nan")
+            row[f"n_wrong_{label}"] = len(wrong)
+        out[kind] = row
+    return out
 
 
 def solver_cost(r: dict) -> tuple[int, int]:
