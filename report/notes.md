@@ -25,6 +25,13 @@
 - **Presentation order.** The LLM aggregator has a strong primacy bias. In the
   chronological chain, the position of the faulty solver and its rank in the aggregator
   prompt are confounded; the `chain_rotated` variant is there to separate them.
+- **Reproducibility of sampling.** Seeds make most outputs identical across configs, but
+  batched inference is not bit-for-bit deterministic: with the same prompt and seed, 2-10%
+  of the texts drift after a while (1-2% of the answers change). Paired tests stay valid
+  (they pair by question); the pairing is just a little looser than exact common random
+  numbers. The dev rerun after faults revision 3 copied the 766 runs with unchanged
+  inputs and redid the 84 others; a sample of 24 copied runs rerun as a check gave 19
+  identical texts and 23 identical answers.
 - **Scale.** One small model (Qwen2.5-1.5B-Instruct), one task (GSM8K), three agents.
   The dev split (50 questions) is only used for development; with 200 test questions,
   differences of a few points remain within the confidence intervals.

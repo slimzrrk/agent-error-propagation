@@ -134,7 +134,13 @@ output file (`results/<split>/<config name>.jsonl`).
 
 - Solvers sample at temperature 0.7 with a deterministic seed per (question, agent),
   independent of the experiment config, so the same agent draws the same sample across
-  configs (paired comparisons).
+  configs (paired comparisons). Batched inference on the server is not bit-for-bit
+  reproducible, though: on dev, two calls with the same prompt and seed give the same
+  text 90-98% of the time and the same answer 98-100% of the time; otherwise the text
+  drifts after a while. Pairing is therefore close to, not exactly, common random numbers.
+- On dev, `run_experiment --reuse OLD_LOG` redoes only the runs whose inputs changed
+  (e.g. after a fault revision) and copies the others; the test split is always run
+  once, from scratch.
 - Every results file records the model tag and digest, temperature, seeds, server
   version, package versions, git commit, and a protocol hash (prompts, parser, agents,
   topologies, faults and splits): a log can only be resumed with the same protocol.
