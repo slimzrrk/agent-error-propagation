@@ -1,0 +1,11 @@
+{
+ "note": "Pinned by amendment 3 of report/hypotheses.md; run_experiment refuses to run the test split with anything else.",
+ "amendment": 3,
+ "date": "2026-11-18",
+ "protocol_sha": "58917055adcf",
+ "prompts_sha": "7cad7f5851d8",
+ "faults_sha": "3655c7b6f668",
+ "config": "configs/grid.yaml",
+ "hypotheses": ["H1", "H2", "H3", "H4", "H5", "H6", "H7", "H8"],
+ "family_alpha": 0.05
+}

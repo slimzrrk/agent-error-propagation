@@ -1,6 +1,10 @@
 """Run every experiment of a config file on a split, in parallel, with resumable logging.
 
     python -m scripts.run_experiment --config configs/baseline.yaml --split dev --limit 20
+    python -m scripts.run_experiment --config configs/grid.yaml --split test --check-only
+
+The test split only runs with the pre-registered protocol (report/preregistration.json),
+the full experiment grid and every question; --check-only runs these checks and stops.
 
 On dev, --reuse OLD_LOG copies the runs of an older log whose inputs have not changed
 (same config, question and faulty message; same prompts, model, sampling settings and
@@ -15,6 +19,7 @@ point to a changed input rather than to numerical noise.
 from __future__ import annotations
 
 import argparse
+import json
 import logging
 import random
 import time
@@ -25,7 +30,7 @@ from tqdm import tqdm
 
 from scripts.summarize import print_main_table
 from src import prompts
-from src.config import RunConfig
+from src.config import RunConfig, full_grid
 from src.data import load_questions
 from src.faults import fault_text, faults_sha
 from src.llm import LLMClient
@@ -33,6 +38,7 @@ from src.logging_utils import JsonlLog, environment_metadata, protocol_fingerpri
 from src.topologies import fault_record, run_question
 
 log = logging.getLogger("run_experiment")
+PREREGISTRATION = Path(__file__).resolve().parent.parent / "report" / "preregistration.json"
 
 
 def parse_args(argv=None):
@@ -44,7 +50,22 @@ def parse_args(argv=None):
     p.add_argument("--out", default=None, help="default: results/<split>/<config name>.jsonl")
     p.add_argument("--reuse", default=None, help="dev only: older log whose unchanged runs are copied")
     p.add_argument("--reuse-check", type=int, default=24, help="copied runs that are rerun as a check")
+    p.add_argument("--check-only", action="store_true", help="run the checks, print the plan and stop")
     return p.parse_args(argv)
+
+
+def check_test_run(protocol: str, cfg: RunConfig, args, path: Path = PREREGISTRATION) -> dict:
+    """Refuse a test run that is not the pre-registered one."""
+    pre = json.loads(path.read_text())
+    if protocol != pre["protocol_sha"]:
+        raise SystemExit(f"protocol {protocol} differs from the pre-registered {pre['protocol_sha']} ({path.name}, "
+                         f"amendment {pre['amendment']}): prompts, code, faults or splits changed since. "
+                         "The test split only runs with the pre-registered protocol.")
+    if args.limit is not None or args.reuse:
+        raise SystemExit("the test split is run once, on every question and from scratch: no --limit, no --reuse")
+    if sorted(e.id for e in cfg.experiments) != sorted(e.id for e in full_grid()):
+        raise SystemExit(f"the test split runs the full grid ({pre['config']}), not {args.config}")
+    return pre
 
 
 def run_tasks(llm: LLMClient, tasks: list, base_seed: int, workers: int, desc: str = "runs"):
@@ -141,18 +162,27 @@ def main(argv=None) -> None:
     workers = args.workers or cfg.workers
     out = Path(args.out or f"results/{args.split}/{cfg.name}.jsonl")
 
-    questions = load_questions(args.split, limit=args.limit)
-    llm = LLMClient(cfg.llm)
-    jl = JsonlLog(out)
-
     protocol = protocol_fingerprint(faults_sha())
+    if args.split == "test":
+        check_test_run(protocol, cfg, args)
     previous = {r.get("protocol_sha") for r in read_records(out, "meta")}
     if previous and previous != {protocol}:
         raise SystemExit(f"{out} was produced with a different protocol (prompts, code or faults); "
                          "use another --out")
 
-    done = jl.done_keys()
+    questions = load_questions(args.split, limit=args.limit)
+    llm = LLMClient(cfg.llm)
+    done = {(r["config_id"], r["question_id"]) for r in read_records(out)}
     tasks = [(exp, q) for exp in cfg.experiments for q in questions if (exp.id, q.id) not in done]
+    if args.check_only:
+        server = llm.server_info()
+        print(f"checks passed: protocol {protocol}, prompts {prompts.fingerprint()}, faults {faults_sha()}")
+        print(f"server: {server.get('model')} digest {str(server.get('model_digest'))[:12]}, "
+              f"ollama {server.get('ollama_version')}, context {server.get('context_length')}")
+        print(f"{len(cfg.experiments)} experiments x {len(questions)} questions: {len(tasks)} runs to do, "
+              f"{len(done)} already in {out}; {workers} workers (OLLAMA_NUM_PARALLEL should be {workers})")
+        return
+    jl = JsonlLog(out)
     reuse_info, copies = None, []
     if args.reuse and tasks:
         reuse_info, copies = prepare_reuse(args, cfg, llm, tasks, workers)

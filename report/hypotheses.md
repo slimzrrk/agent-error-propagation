@@ -24,7 +24,7 @@ and to formulate these hypotheses; they are not used as evidence.
   (H0: mean difference = 0; 100,000 permutations, seed 0). Effect size: mean difference
   with a 95% bootstrap confidence interval over questions.
 - **Multiplicity:** Holm correction over H1–H4, family-wise alpha = 0.05.
-  *Amendment 2: over H1–H7.*
+  *Amendment 2: over H1–H7. Amendment 3: over H1–H8.*
 - Code: `python -m scripts.confirmatory results/test/<log>.jsonl`.
 
 ## Hypotheses
@@ -120,6 +120,34 @@ verifier's recall, precision and false positives (correct messages dropped), ove
 without fault; the defenses against the majority vote; and the correction of the error by
 downstream solvers (in `chain_rotated`, at equal rank, adoption with the faulty solver at
 p3 compared with p1).
+
+## Amendment 3 (2026-11-18, before any run on the test split)
+
+**H8 — Hybrid vote vs LLM aggregator.** The hybrid vote takes the strict majority of the
+three solver answers when there is one (at least two equal valid answers, the faulty
+solver included), and otherwise the answer of the LLM aggregator of the same run; it needs
+no extra LLM call. Without defense and with a fault, the hybrid vote is more accurate than
+the LLM aggregator. Outcome: **accuracy** (the final answer is the gold answer, strict
+parser), not adoption. Per question: mean over the eight no-defense fault cells of
+correct(hybrid vote) minus correct(aggregator). One-sided, alternative: difference > 0.
+`chain_rotated` is not included. The confirmatory family becomes **H1–H8**, with the Holm
+correction over all eight (family-wise alpha = 0.05).
+
+The hybrid vote is reported in every table next to the majority vote. New exploratory
+analyses: anchoring of the verifier (difflib similarity ratio between the verifier's text
+and the checked message, near copies = ratio ≥ 0.9, for honest and faulty targets), and a
+pooled vote (strict majority over the answers of the three solvers and the three
+verifiers, i.e. at least 4 of 6, in the verifier configs).
+
+Handling of verifier outputs without a valid final answer, fixed since the defenses were
+implemented and unchanged here: there is no verdict and the checked message is **kept**.
+A checked message without a final answer of its own is rejected.
+
+**The test run.** The protocol is pinned in `report/preregistration.json` (protocol hash
+`58917055adcf`, prompts `7cad7f5851d8`, faults `3655c7b6f668`). `scripts/run_experiment`
+refuses to run the test split with any other protocol hash, with `--limit` or `--reuse`,
+or with a config other than the full grid (`configs/grid.yaml`). The commit of this
+amendment is tagged `pre-test-run`.
 
 ## Deviations
 

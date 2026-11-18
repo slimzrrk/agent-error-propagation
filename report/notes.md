@@ -46,3 +46,23 @@
 - **Scale.** One small model (Qwen2.5-1.5B-Instruct), one task (GSM8K), three agents.
   The dev split (50 questions) is only used for development; with 200 test questions,
   differences of a few points remain within the confidence intervals.
+
+## For the report
+
+- **Describe the verifier** as a verifier that solves the problem again, with a verdict
+  made by programmatic comparison of its final answer with the checked message's.
+- **Present tuning iterations 1-2 as a result**, not only as a design step: asked to judge
+  a solution (iteration 1) or to compare its own answer with the solution's (iteration 2),
+  the 1.5B model rejects 41-46% of the correct solutions; in iteration 2 it had found the
+  same answer as the solution in 51 of its 56 false positives. The model can recompute
+  but cannot compare. Details in `report/defense_tuning.md`.
+- **Unparsed verifier outputs** (2.7% of the verdicts on dev) give no verdict and the
+  message is kept. On dev, 30 of these 40 kept messages were wrong (15 injected faults,
+  15 honest wrong answers): a fail-closed rule would have stopped them, at the cost of 10
+  correct messages. Exploratory only; the rule was fixed with the defenses.
+- **Verifier anchoring** (dev): 29% of the verifier texts are near copies (difflib ratio
+  >= 0.9) of the honest solution they check, 11% for the injected faults. On honest wrong
+  answers, recall is 34% for near copies against 52% otherwise.
+- **Hybrid vote** (H8): on dev, without defense and with a fault, accuracy 86% vs 72%
+  (chain) and 80% vs 66% (star) for the LLM aggregator, adoption 5% vs 16% and 10% vs 23%,
+  and no loss without fault (86% vs 84%, 94% vs 94%), at no extra call.

@@ -1,5 +1,10 @@
-from scripts.run_experiment import same_outputs, select_reusable
-from src.config import ExperimentConfig
+import json
+from types import SimpleNamespace
+
+import pytest
+
+from scripts.run_experiment import check_test_run, same_outputs, select_reusable
+from src.config import ExperimentConfig, RunConfig, full_grid
 from src.data import Question
 
 
@@ -29,3 +34,22 @@ def test_same_outputs_compares_every_message_and_verdict():
     assert same_outputs(a, {**a})
     assert not same_outputs(a, {**a, "messages": [{**a["messages"][0], "content": "b"}]})
     assert not same_outputs({**a, "verdicts": [{"content": "VALID"}]}, {**a, "verdicts": [{"content": "INVALID"}]})
+
+
+@pytest.fixture
+def prereg(tmp_path):
+    path = tmp_path / "preregistration.json"
+    path.write_text(json.dumps({"protocol_sha": "abc123", "amendment": 3, "config": "configs/grid.yaml"}))
+    return path
+
+
+def test_test_run_needs_the_preregistered_protocol(prereg):
+    cfg = RunConfig(name="grid", experiments=full_grid())
+    args = SimpleNamespace(limit=None, reuse=None, config="configs/grid.yaml")
+    assert check_test_run("abc123", cfg, args, prereg)["amendment"] == 3
+    with pytest.raises(SystemExit, match="differs from the pre-registered"):
+        check_test_run("abc124", cfg, args, prereg)
+    with pytest.raises(SystemExit, match="no --limit"):
+        check_test_run("abc123", cfg, SimpleNamespace(limit=5, reuse=None, config="x"), prereg)
+    with pytest.raises(SystemExit, match="full grid"):
+        check_test_run("abc123", RunConfig(name="x", experiments=full_grid()[:-1]), args, prereg)

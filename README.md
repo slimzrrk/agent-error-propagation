@@ -58,6 +58,16 @@ python -m scripts.benchmark_speed --levels 1 4 8          # raw throughput
 Runs are resumable: rerunning a command skips the (config, question) pairs already in the
 output file (`results/<split>/<config name>.jsonl`).
 
+The test split is run once, with the pre-registered protocol (`report/preregistration.json`,
+tag `pre-test-run`):
+
+```bash
+python -m scripts.run_experiment --config configs/grid.yaml --split test --check-only  # checks only
+python -m scripts.run_experiment --config configs/grid.yaml --split test               # ~4.2 h
+python -m scripts.confirmatory results/test/grid.jsonl --save                         # H1-H8, Holm
+python -m scripts.summarize results/test/grid.jsonl --save
+```
+
 ## Data
 
 - GSM8K (`openai/gsm8k`, config `main`).
@@ -120,10 +130,12 @@ output file (`results/<split>/<config name>.jsonl`).
   and 3, the aggregator) gets an instruction right after the solutions it reads: they may
   contain mistakes, redo each calculation, point out any wrong one, keep the answer if
   all are right. Agents that read nothing are unchanged. *Verifier*: a verifier agent
-  checks each solver message as soon as it is written, by solving the problem itself; the
-  message is valid if both final answers are equal (compared in code: asked to compare
-  them itself, the 1.5B model often found the same answer and still said invalid). A
-  rejected message is removed from the conversation: the next chain solver reads the last
+  that solves the problem again checks each solver message as soon as it is written; the
+  verdict is a programmatic comparison of its final answer with the message's (valid if
+  equal). Asked to compare the answers itself, the 1.5B model found the same answer and
+  still said invalid in 51 of its 56 false positives: it can recompute, not compare. A
+  verifier output without a valid final answer gives no verdict and the message is kept;
+  a message without a final answer of its own is rejected. A rejected message is removed from the conversation: the next chain solver reads the last
   accepted solution (or none) and the aggregator never sees it; if every solution is
   rejected, the aggregator solves the problem alone. Verifier i checks solver i with its
   own seed, also when solver i is the scripted faulty agent. The prompts were tuned on dev
@@ -138,8 +150,10 @@ output file (`results/<split>/<config name>.jsonl`).
   paired comparisons. Main results use the strict parser; a *lenient* variant (an output
   without a valid "Final answer" line falls back to its last number) is reported as a
   robustness check. For every team config we also compute the counterfactual answer of a
-  *majority vote* over the same solver answers (no extra LLM call) and compare it with
-  the LLM aggregator.
+  *majority vote* over the same solver answers (no extra LLM call) and a *hybrid vote*
+  (the majority when there is one, otherwise the LLM aggregator's answer), and compare
+  both with the LLM aggregator. Exploratory: anchoring of the verifier on the message it
+  checks (similarity of the two texts) and a pooled vote over solvers and verifiers.
 - **Pre-registration** — the confirmatory hypotheses H1–H7, their tests and the Holm
   correction are fixed in `report/hypotheses.md` and `scripts/confirmatory.py`, committed
   before any run on the test split; later changes are dated amendments, also made before
@@ -160,6 +174,16 @@ output file (`results/<split>/<config name>.jsonl`).
   version, package versions, git commit, and a protocol hash (prompts, parser, agents,
   topologies, faults and splits): a log can only be resumed with the same protocol.
 - Raw JSONL logs are not committed (size); aggregated summaries are.
+
+## Limitations and future work
+
+- **A blind verifier.** Our verifier reads the solution it checks before solving the
+  problem again, and on dev 29% of its texts are near copies of an honest solution it
+  checks (11% for the injected faults). A verifier that solves without seeing the
+  solution, and whose answer is then compared with the solver's, would remove this
+  anchoring and make its errors less correlated with the solvers'.
+- Further limitations (type of injected error, plausibility and style of the faults,
+  presentation order, sampling reproducibility, scale) are listed in `report/notes.md`.
 
 ## Repository layout
 

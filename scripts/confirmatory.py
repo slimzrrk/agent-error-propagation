@@ -1,4 +1,4 @@
-"""Pre-registered confirmatory tests (report/hypotheses.md), with Holm correction over H1-H7.
+"""Pre-registered confirmatory tests (report/hypotheses.md), with Holm correction over H1-H8.
 
     python -m scripts.confirmatory results/test/grid.jsonl
 
@@ -7,7 +7,8 @@ Several logs can be given (dev dry runs): a config is taken from the first log t
 Outcome: team adoption = the team's final answer is the injected wrong answer (strict
 parser). Unit of analysis: the question. Each hypothesis is a sign-flip permutation test
 on per-question differences, averaged over the two fault styles; one-sided or two-sided
-as pre-registered (H2 and H4 two-sided since amendment 1; H5-H7 added by amendment 2).
+as pre-registered (H2 and H4 two-sided since amendment 1; H5-H7 added by amendment 2,
+H8 by amendment 3). H8's outcome is accuracy (final answer correct) instead of adoption.
 """
 
 from __future__ import annotations
@@ -20,7 +21,9 @@ import numpy as np
 import pandas as pd
 
 from src.logging_utils import read_records
-from src.metrics import bootstrap_ci, holm, majority_adopted, paired_permutation_test, team_adopted
+from src.metrics import (
+    bootstrap_ci, holm, hybrid_correct, is_correct, majority_adopted, paired_permutation_test, team_adopted,
+)
 
 STYLES = ("neutral", "persuasive")
 ALPHA = 0.05
@@ -32,10 +35,11 @@ HYPOTHESES = {
     "H5": "the verifier lowers team adoption compared with no defense",
     "H6": "verifier vs skeptical instruction team adoption differ",
     "H7": "a majority vote adopts the error less than the LLM aggregator (no defense)",
+    "H8": "the hybrid vote is more accurate than the LLM aggregator (faults, no defense)",
 }
 # "greater": the difference is positive; "two-sided": it is not zero.
 ALTERNATIVES = {"H1": "greater", "H2": "two-sided", "H3": "greater", "H4": "two-sided",
-                "H5": "greater", "H6": "two-sided", "H7": "greater"}
+                "H5": "greater", "H6": "two-sided", "H7": "greater", "H8": "greater"}
 # The eight fault cells of the main design: chain p1-p3 and star p1, two styles.
 CELLS = [(t, s, p) for t, ps in (("chain", (1, 2, 3)), ("star", (1,))) for s in STYLES for p in ps]
 
@@ -44,16 +48,20 @@ def cell(topology: str, style: str, position: int, defense: str = "none") -> str
     return f"{topology}-{style}-p{position}-{defense}"
 
 
-def adoption_by_question(records: list[dict]) -> tuple[dict, dict, dict]:
-    """{config_id: {question_id: value}} for team adoption, majority-vote adoption and the
-    rank at which the faulty solution was shown."""
-    adopted, majority, rank = defaultdict(dict), defaultdict(dict), defaultdict(dict)
+OUTCOMES = {"adopted": team_adopted, "majority_adopted": majority_adopted, "correct": is_correct,
+            "hybrid_correct": hybrid_correct, "rank": lambda r: r["fault"]["shown_at"]}
+
+
+def outcomes_by_question(records: list[dict]) -> dict:
+    """{outcome: {config_id: {question_id: value}}} over the fault runs: team adoption,
+    majority-vote adoption, accuracy of the team and of the hybrid vote, rank of the
+    faulty solution in the aggregator prompt."""
+    out = {name: defaultdict(dict) for name in OUTCOMES}
     for r in records:
         if r.get("fault"):
-            adopted[r["config_id"]][r["question_id"]] = float(team_adopted(r))
-            majority[r["config_id"]][r["question_id"]] = float(majority_adopted(r))
-            rank[r["config_id"]][r["question_id"]] = r["fault"]["shown_at"]
-    return adopted, majority, rank
+            for name, f in OUTCOMES.items():
+                out[name][r["config_id"]][r["question_id"]] = float(f(r)) if name != "rank" else f(r)
+    return out
 
 
 def diffs_h1(a: dict, qids: list[str]) -> np.ndarray:
@@ -94,13 +102,19 @@ def diffs_h7(a: dict, majority: dict, qids: list[str]) -> np.ndarray:
     return np.array([np.mean([a[cell(*c)][q] - majority[cell(*c)][q] for c in CELLS]) for q in qids])
 
 
+def diffs_h8(correct: dict, hybrid: dict, qids: list[str]) -> np.ndarray:
+    """Mean over the eight no-defense cells of correct(hybrid vote) - correct(aggregator)."""
+    return np.array([np.mean([hybrid[cell(*c)][q] - correct[cell(*c)][q] for c in CELLS]) for q in qids])
+
+
 def needed_configs() -> list[str]:
     return ([cell(*c, d) for d in ("none", "skeptical", "verifier") for c in CELLS]
             + [f"chain_rotated-{s}-p{p}-none" for s in STYLES for p in (1, 2, 3)])
 
 
 def run(records: list[dict], n_perm: int = 100_000) -> pd.DataFrame:
-    a, majority, rank = adoption_by_question(records)
+    o = outcomes_by_question(records)
+    a, majority, rank = o["adopted"], o["majority_adopted"], o["rank"]
     needed = needed_configs()
     missing = [c for c in needed if c not in a]
     if missing:
@@ -108,7 +122,7 @@ def run(records: list[dict], n_perm: int = 100_000) -> pd.DataFrame:
     qids = sorted(set.intersection(*(set(a[c]) for c in needed)))
     diffs = {"H1": diffs_h1(a, qids), "H2": diffs_h2(a, qids), "H3": diffs_h3(a, rank, qids), "H4": diffs_h4(a, qids),
              "H5": diffs_defense(a, qids, "none", "verifier"), "H6": diffs_defense(a, qids, "skeptical", "verifier"),
-             "H7": diffs_h7(a, majority, qids)}
+             "H7": diffs_h7(a, majority, qids), "H8": diffs_h8(o["correct"], o["hybrid_correct"], qids)}
     pvals = {h: paired_permutation_test(d, ALTERNATIVES[h], n_perm=n_perm, seed=0) for h, d in diffs.items()}
     adjusted = holm(pvals)
     rows = []
