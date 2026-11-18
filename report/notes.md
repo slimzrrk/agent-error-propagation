@@ -16,6 +16,12 @@
   below 10, the slip is late in the reasoning for 58 of 250 faults (one-step problems,
   or early steps that are too small or do not affect the answer); `slip_position`
   allows a breakdown.
+- **Style of the faults.** A faulty text must not copy more than one sentence of the
+  problem word for word nor label its steps "Calculation N:" (faults revision 3: 51 texts
+  rewritten, 6 in dev). The check is slightly stricter than the honest style: 19 of 551
+  distinct honest solver messages on dev (3%) copy two sentences or more, mostly short
+  clauses restated as reasoning steps, and 2 use such labels. One test fault (`test-198`)
+  could not pass the checks and is flagged `style_check_failed`.
 - **Presentation order.** The LLM aggregator has a strong primacy bias. In the
   chronological chain, the position of the faulty solver and its rank in the aggregator
   prompt are confounded; the `chain_rotated` variant is there to separate them.

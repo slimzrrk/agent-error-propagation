@@ -3,8 +3,9 @@
     python -m scripts.confirmatory results/test/grid.jsonl
 
 Outcome: team adoption = the team's final answer is the injected wrong answer (strict
-parser). Unit of analysis: the question. Each hypothesis is a one-sided sign-flip
-permutation test on per-question differences, averaged over the two fault styles.
+parser). Unit of analysis: the question. Each hypothesis is a sign-flip permutation test
+on per-question differences, averaged over the two fault styles; one-sided or two-sided
+as pre-registered (H2 and H4 two-sided since amendment 1).
 """
 
 from __future__ import annotations
@@ -23,10 +24,12 @@ STYLES = ("neutral", "persuasive")
 ALPHA = 0.05
 HYPOTHESES = {
     "H1": "chain: team adoption higher with the faulty solver at p1 than at p2/p3",
-    "H2": "persuasive > neutral team adoption (chain p1-p3 and star)",
+    "H2": "persuasive vs neutral team adoption differ (chain p1-p3 and star)",
     "H3": "primacy: team adoption higher when the faulty solution is shown first (chain_rotated)",
-    "H4": "chain (chronological) adopts more than star",
+    "H4": "chain (chronological) vs star team adoption differ",
 }
+# "greater": the difference is positive; "two-sided": it is not zero.
+ALTERNATIVES = {"H1": "greater", "H2": "two-sided", "H3": "greater", "H4": "two-sided"}
 
 
 def adoption_by_question(records: list[dict]) -> tuple[dict, dict]:
@@ -77,14 +80,15 @@ def run(records: list[dict], n_perm: int = 100_000) -> pd.DataFrame:
         raise SystemExit(f"missing configs: {missing}")
     qids = sorted(set.intersection(*(set(a[c]) for c in needed)))
     diffs = {"H1": diffs_h1(a, qids), "H2": diffs_h2(a, qids), "H3": diffs_h3(a, rank, qids), "H4": diffs_h4(a, qids)}
-    pvals = {h: paired_permutation_test(d, "greater", n_perm=n_perm, seed=0) for h, d in diffs.items()}
+    pvals = {h: paired_permutation_test(d, ALTERNATIVES[h], n_perm=n_perm, seed=0) for h, d in diffs.items()}
     adjusted = holm(pvals)
     rows = []
     for h, d in diffs.items():
         mean, lo, hi = bootstrap_ci(d)
         rows.append({"hypothesis": h, "description": HYPOTHESES[h], "n_questions": len(d),
                      "mean_difference": mean, "ci_low": lo, "ci_high": hi,
-                     "p_one_sided": pvals[h], "p_holm": adjusted[h], "supported": adjusted[h] < ALPHA})
+                     "alternative": ALTERNATIVES[h], "p_value": pvals[h], "p_holm": adjusted[h],
+                     "supported": adjusted[h] < ALPHA})
     return pd.DataFrame(rows)
 
 
@@ -96,7 +100,7 @@ def main(argv=None):
     df = run(read_records(args.log))
     for r in df.itertuples():
         print(f"{r.hypothesis}  {r.description}\n    n={r.n_questions}  difference {r.mean_difference:+.3f} "
-              f"[{r.ci_low:+.3f}, {r.ci_high:+.3f}]  p={r.p_one_sided:.4f}  Holm p={r.p_holm:.4f}  "
+              f"[{r.ci_low:+.3f}, {r.ci_high:+.3f}]  p ({r.alternative})={r.p_value:.4f}  Holm p={r.p_holm:.4f}  "
               f"{'supported' if r.supported else 'not supported'} at alpha={ALPHA}")
     if args.save:
         out = f"{Path(args.log).with_suffix('')}_confirmatory.csv"

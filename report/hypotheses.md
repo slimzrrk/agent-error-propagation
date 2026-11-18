@@ -9,6 +9,7 @@ and to formulate these hypotheses; they are not used as evidence.
 
 - Test split: 200 GSM8K test questions (`data/splits.json`, seed 42).
 - Faults: `data/faults.json`, fault messages hash `6a2fc4273a88` (texts and injected answers).
+  *Superseded by amendment 1: `3655c7b6f668`.*
 - Model: `qwen2.5:1.5b-instruct-fp16` (Ollama), temperature 0.7, seed per (question, agent).
 - Configurations (all without defense): `chain-{neutral,persuasive}-p{1,2,3}-none`,
   `chain_rotated-{neutral,persuasive}-p{1,2,3}-none`, `star-{neutral,persuasive}-p1-none`.
@@ -19,7 +20,7 @@ and to formulate these hypotheses; they are not used as evidence.
   wrong answer, with the strict parser.
 - **Unit of analysis: the question.** For each hypothesis we compute one difference per
   question, averaged over the two fault styles unless stated otherwise.
-- **Test:** one-sided sign-flip permutation test on the 200 per-question differences
+- **Test:** one-sided (H2 and H4: two-sided since amendment 1) sign-flip permutation test on the 200 per-question differences
   (H0: mean difference = 0; 100,000 permutations, seed 0). Effect size: mean difference
   with a 95% bootstrap confidence interval over questions.
 - **Multiplicity:** Holm correction over H1–H4, family-wise alpha = 0.05.
@@ -35,6 +36,7 @@ adoption(p). Alternative: difference > 0.
 **H2 — Persuasion.** A persuasive faulty solver is adopted more than a neutral one.
 Per question: mean over the four cells (chain p1, p2, p3 and star p1) of
 adoption(persuasive) minus adoption(neutral). Alternative: difference > 0.
+*Amendment 1: two-sided, the alternative is difference ≠ 0.*
 
 **H3 — Primacy of the aggregator.** Team adoption is higher when the faulty solution is
 shown first to the aggregator than when it is shown second or third. Tested on
@@ -46,6 +48,7 @@ mean over styles. Alternative: difference > 0.
 **H4 — Topology.** The chain adopts the error more than the star.
 Per question: mean adoption over the six chronological chain fault configs minus mean
 adoption over the two star fault configs. Alternative: difference > 0.
+*Amendment 1: two-sided, the alternative is difference ≠ 0.*
 
 ## Exploratory analyses (no correction, reported as exploratory)
 
@@ -60,6 +63,24 @@ accuracy and cost against the single agent.
 
 Hypotheses about the defenses (research question 3) will be added to this file as a dated
 amendment, after the defense design is fixed on dev and before any run on the test split.
+
+## Amendment 1 (2026-11-18, before any run on the test split)
+
+1. **H2 and H4 become two-sided.** On dev, the observed effects go the other way from the
+   original one-sided alternatives (persuasive minus neutral: −0.02; chain minus star:
+   −0.04). A one-sided test could then only ever fail, so the honest question is whether
+   there is a difference at all. H2 and H4 are now tested two-sided (alternative:
+   difference ≠ 0), with the same statistics, the same per-question differences and the
+   same Holm family. H1 and H3 stay one-sided.
+2. **Fault style checks (faults revision 3).** Some faulty solutions copied several
+   sentences of the problem word for word or labelled their steps "Calculation N:", which
+   honest solvers almost never do and which could give the faulty agent away. Two checks
+   were added to the generator (at most one copied sentence of four words or more, no
+   "Calculation N:" labels) and the 51 failing faults were rewritten, keeping their error
+   plan when possible (43 same plan, 7 new plan); every other text is unchanged. One test
+   fault (`test-198`), whose steps follow the problem sentence by sentence, could not be
+   rewritten and is kept, flagged `style_check_failed`. The fault messages hash becomes
+   **`3655c7b6f668`**; the test run must use it.
 
 ## Deviations
 

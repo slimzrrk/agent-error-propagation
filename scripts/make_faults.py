@@ -3,6 +3,7 @@
     python -m scripts.make_faults --config configs/baseline.yaml
 
     python -m scripts.make_faults --fix-implausible   # revision 2, see README
+    python -m scripts.make_faults --fix-style         # revision 3
 
 For each question, plan a calculation slip (src/faults.py), let the model write the
 solution with that slip, and keep the first text that passes every check. Error plans
@@ -14,6 +15,7 @@ gives its calculations in words), and only then with the error at any step.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import logging
 from collections import Counter
@@ -26,8 +28,8 @@ from src import prompts
 from src.config import RunConfig
 from src.data import Question, load_questions
 from src.faults import (
-    FAULTS_PATH, PERSUASIVE_SENTENCE, REWRITE_SYSTEM, check_fault_text, covariates, finalize,
-    messages_sha, plan_errors, plan_to_dict, rewrite_messages, slip_is_plausible, slip_values,
+    FAULTS_PATH, PERSUASIVE_SENTENCE, REWRITE_SYSTEM, ErrorPlan, check_fault_text, covariates, finalize,
+    messages_sha, plan_errors, plan_to_dict, rewrite_messages, slip_is_plausible, slip_values, style_problems,
 )
 from src.llm import LLMClient, derive_seed
 from src.logging_utils import environment_metadata, now
@@ -38,8 +40,12 @@ MANUAL_STEPS_PATH = FAULTS_PATH.parent / "fault_steps_manual.json"
 BASE_TRIES = 6  # correct model solutions tried as a source of steps
 REWRITE_TRIES = 12  # generations per error plan
 MAX_PLANS = 4
+RESTYLE_TRIES = 24  # new texts for an unchanged error plan
+# Last resort for problems whose steps follow the sentences of the problem one by one.
+OWN_WORDS = "Use your own words: do not copy the sentences of the problem."
 REASONS = ("wrong equations", "is not the injected one", "missing calculation", "exactly once",
-           "forbidden wording", "correct answer is computed", "final answer")
+           "forbidden wording", "correct answer is computed", "final answer", "sentences of the problem",
+           "Calculation N")
 
 
 def reason(problem: str) -> str:
@@ -82,29 +88,35 @@ def candidate_plans(llm: LLMClient, q: Question):
                 break
 
 
+def rewrite(llm: LLMClient, q: Question, plan: ErrorPlan, seed: int,
+            own_words: bool = False) -> tuple[str | None, str | None]:
+    """(accepted text, None) or (None, reason of the rejection)."""
+    messages = rewrite_messages(q.question, plan)
+    if own_words:
+        messages[-1]["content"] += f"\n{OWN_WORDS}"
+    out = llm.chat(messages, seed=seed)
+    if out.finish_reason != "stop":
+        return None, "truncated"
+    # The model's own reasoning must reach the target; the final line is then
+    # rewritten canonically and the checks run on the text actually used.
+    if parse_final_answer(out.text) != plan.wrong_answer:
+        return None, "other final answer"
+    text = finalize(out.text, plan.wrong_answer)
+    problems = check_fault_text(text, plan, q.gold, q.question)
+    return (None, reason(problems[0])) if problems else (text, None)
+
+
 def make_fault(llm: LLMClient, q: Question) -> dict:
-    attempts, last_problems, rejections, n_plans = 0, [], Counter(), 0
+    attempts, last_problem, rejections, n_plans = 0, None, Counter(), 0
     for source, early_only, plans in candidate_plans(llm, q):
         n_plans += len(plans)
         for p_idx, plan in enumerate(plans):
             for t in range(REWRITE_TRIES):
                 attempts += 1
                 seed = derive_seed(q.id, "fault-rewrite", source, early_only, p_idx, t, base=BASE_SEED)
-                out = llm.chat(rewrite_messages(q.question, plan), seed=seed)
-                if out.finish_reason != "stop":
-                    last_problems = ["truncated"]
-                    rejections["truncated"] += 1
-                    continue
-                # The model's own reasoning must reach the target; the final line is then
-                # rewritten canonically and the checks run on the text actually used.
-                if parse_final_answer(out.text) != plan.wrong_answer:
-                    last_problems = [f"model reached {parse_final_answer(out.text)}"]
-                    rejections["other final answer"] += 1
-                    continue
-                text = finalize(out.text, plan.wrong_answer)
-                last_problems = check_fault_text(text, plan, q.gold)
-                if last_problems:
-                    rejections[reason(last_problems[0])] += 1
+                text, last_problem = rewrite(llm, q, plan, seed)
+                if text is None:
+                    rejections[last_problem] += 1
                     continue
                 return {
                     "question_id": q.id, "gold": q.gold, "wrong_answer": plan.wrong_answer,
@@ -113,7 +125,25 @@ def make_fault(llm: LLMClient, q: Question) -> dict:
                     "generation": {"seed": seed, "attempts": attempts, "rejections": dict(rejections)},
                 }
     return {"question_id": q.id, "gold": q.gold, "failed": True, "n_plans": n_plans,
-            "attempts": attempts, "last_problems": last_problems, "rejections": dict(rejections)}
+            "attempts": attempts, "last_problems": [last_problem], "rejections": dict(rejections)}
+
+
+def restyle(llm: LLMClient, q: Question, fault: dict, tries: int = RESTYLE_TRIES, batch: int = 1,
+            own_words: bool = False) -> dict | None:
+    """A new text for the same error plan (same slip, same wrong answer), or None.
+    Tries run `batch` at a time; the accepted text is always the first passing try."""
+    plan, rejections = ErrorPlan(**fault["plan"]), Counter()
+    for start in range(0, tries, batch):
+        idx = list(range(start, min(start + batch, tries)))
+        seeds = [derive_seed(q.id, "fault-restyle", t, base=BASE_SEED) for t in idx]
+        with ThreadPoolExecutor(len(idx)) as pool:
+            results = list(pool.map(lambda seed: rewrite(llm, q, plan, seed, own_words), seeds))
+        for t, seed, (text, problem) in zip(idx, seeds, results):
+            if text is not None:
+                return {"text": text, "seed": seed, "attempts": t + 1, "rejections": dict(rejections),
+                        **({"own_words": OWN_WORDS} if own_words else {})}
+            rejections[problem] += 1
+    return None
 
 
 def add_covariates(path: Path) -> None:
@@ -171,6 +201,55 @@ def fix_implausible(llm: LLMClient, path: Path, workers: int) -> None:
         print(f"  OBVIOUS {qid}: {doc['faults'][qid]['obvious_reason']}")
 
 
+def fix_style(llm: LLMClient, path: Path, workers: int, tries: int = RESTYLE_TRIES, own_words: bool = False) -> None:
+    """Rewrite only the faults whose text fails a style check, keeping their error plan
+    (same slip, same wrong answer). If no new text passes, plan a new error from scratch."""
+    doc = json.loads(path.read_text())
+    questions = {q.id: q for s in ("dev", "test") for q in load_questions(s)}
+    concerned = {qid: style_problems(questions[qid].question, f["text"]) for qid, f in doc["faults"].items()}
+    concerned = {qid: p for qid, p in concerned.items() if p}
+    untouched = {qid: f["text"] for qid, f in doc["faults"].items() if qid not in concerned}
+
+    def fix(qid):
+        new = restyle(llm, questions[qid], doc["faults"][qid], tries, max(1, workers // len(concerned)), own_words)
+        return ("restyled", new) if new else ("replanned", make_fault(llm, questions[qid]))
+
+    with ThreadPoolExecutor(workers) as pool:
+        results = list(tqdm(pool.map(fix, concerned), total=len(concerned)))
+
+    restyled, replanned, failed = [], [], []
+    for (qid, problems), (kind, r) in zip(concerned.items(), results):
+        old = doc["faults"][qid]
+        history = {"text_sha": hashlib.sha256(old["text"].encode()).hexdigest()[:12], "style_problems": problems}
+        if kind == "restyled":
+            old["text"] = r["text"]
+            old["restyle"] = {**history, **{k: v for k, v in r.items() if k != "text"}}
+            restyled.append(qid)
+        elif not r.get("failed"):
+            r["obvious"] = False
+            r["restyle"] = {**history, "replaces": {"wrong_answer": old["wrong_answer"], "corrupted": old["plan"]["corrupted"]}}
+            doc["faults"][qid] = r
+            replanned.append(qid)
+        else:
+            failed.append(qid)
+    assert all(doc["faults"][qid]["text"] == text for qid, text in untouched.items())
+    remaining = [qid for qid, f in doc["faults"].items() if style_problems(questions[qid].question, f["text"])]
+    for f in doc["faults"].values():
+        f.update(covariates(f["plan"], f["gold"]))
+
+    doc["messages_sha"] = messages_sha(doc)
+    doc["revisions"].append({
+        "date": now(), "rule": "style: at most one sentence of the problem copied word for word, "
+                               "no 'Calculation N:' labels", "restyle_tries": tries, "own_words": own_words,
+        "restyled_same_plan": restyled, "replanned": replanned, "still_failing": remaining,
+    })
+    path.write_text(json.dumps(doc, indent=1, ensure_ascii=False) + "\n")
+    print(f"{len(concerned)} faults failed a style check: {len(restyled)} rewritten with the same plan, "
+          f"{len(replanned)} with a new plan, {len(failed)} could not be fixed")
+    print(f"  {len(untouched)} other texts unchanged; new messages hash {doc['messages_sha']}")
+    print(f"  still failing: {remaining}")
+
+
 def main(argv=None):
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--config", default="configs/baseline.yaml", help="llm settings")
@@ -181,6 +260,9 @@ def main(argv=None):
                    help="only add the covariates to an existing file; texts are left untouched")
     p.add_argument("--fix-implausible", action="store_true",
                    help="regenerate only the faults that break the plausibility rule")
+    p.add_argument("--fix-style", action="store_true", help="rewrite only the faults that fail a style check")
+    p.add_argument("--tries", type=int, default=RESTYLE_TRIES, help="new texts tried per fault with --fix-style")
+    p.add_argument("--own-words", action="store_true", help="--fix-style, last resort: ask not to copy the problem")
     args = p.parse_args(argv)
     logging.basicConfig(level=logging.WARNING)
 
@@ -192,6 +274,9 @@ def main(argv=None):
     llm = LLMClient(cfg.llm)
     if args.fix_implausible:
         fix_implausible(llm, Path(args.out), args.workers)
+        return
+    if args.fix_style:
+        fix_style(llm, Path(args.out), args.workers, args.tries, args.own_words)
         return
     questions = [q for s in args.splits for q in load_questions(s)]
 

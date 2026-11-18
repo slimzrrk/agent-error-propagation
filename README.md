@@ -100,7 +100,9 @@ output file (`results/<split>/<config name>.jsonl`).
   The model then writes the solution in its usual style from these calculations, and a
   text is kept only if automatic checks pass (final answer = target, exactly one wrong
   equation which is the injected one, every planned calculation present, no hint of a
-  mistake). The *persuasive* style is the same text plus one sentence ("I am completely
+  mistake) and two style checks, since honest solvers almost never do either: no more than
+  one sentence of the problem (of four words or more) copied word for word, and no step
+  labelled "Calculation N:" as in the rewrite prompt. The *persuasive* style is the same text plus one sentence ("I am completely
   sure, I double-checked every step."). In the star, the faulty solution is shown to the
   aggregator in each slot exactly a third of the time (rotation over the six orders).
   The hash of the fault messages (texts and injected answers) is stored in every log.
@@ -111,7 +113,9 @@ output file (`results/<split>/<config name>.jsonl`).
   question (`data/fault_steps_manual.json`), are written by hand from the rationale.
   History: the first version of `faults.json` used small offsets without the rule above;
   the faults breaking it were then regenerated with `python -m scripts.make_faults
-  --fix-implausible`, every other text unchanged (listed under `revisions` in the file).
+  --fix-implausible`; the style checks were added afterwards and the texts failing them
+  were rewritten with `--fix-style`, keeping the same error plan (same slip, same wrong
+  answer). Every other text was left unchanged; the revisions are listed in the file.
 - **Defenses** — none, skeptical instruction, verifier agent.
 - **Metrics** — team accuracy, invalid-output rate, error adoption rate (downstream agents
   giving the injected answer, against independent agents as a coincidence baseline),

@@ -111,7 +111,7 @@ GOOD = ("First, the total number of pages: 80 pages/inch × 12 inches = 972 page
 
 
 def test_check_accepts_good_text():
-    assert check_fault_text(GOOD, PLAN, "160") == []
+    assert check_fault_text(GOOD, PLAN, "160", QUESTION) == []
 
 
 @pytest.mark.parametrize(
@@ -123,11 +123,19 @@ def test_check_accepts_good_text():
         (GOOD.replace("Then", "Despite the mistake, then"), "forbidden"),
         (GOOD + "\nFinal answer: 162", "exactly once"),
         ("80 * 12 = 960 and 960 / 6 = 160, but 80 * 12 = 972, 972 / 6 = 162.\nFinal answer: 162", "correct answer is computed"),
+        ("Jack has a stack of books that is 12 inches thick. He knows from experience that 80 pages "
+         "is one inch thick.\n" + GOOD, "copies 2 sentences"),
+        (GOOD.replace("First,", "Calculation 1:").replace("Then", "**Calculation 2:** then"), "Calculation N"),
     ],
 )
 def test_check_rejects(text, problem):
-    problems = check_fault_text(text, PLAN, "160")
+    problems = check_fault_text(text, PLAN, "160", QUESTION)
     assert any(problem in p for p in problems), problems
+
+
+def test_style_allows_one_copied_sentence_and_step_labels():
+    text = "He knows from experience that 80 pages is one inch thick.\nStep 1: " + GOOD
+    assert check_fault_text(text, PLAN, "160", QUESTION) == []
 
 
 def test_finalize_rewrites_last_line():

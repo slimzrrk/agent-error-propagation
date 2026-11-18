@@ -114,13 +114,17 @@ def fault_info(q: Question, exp: ExperimentConfig, messages: list[Message]) -> d
     agent_id = f"solver{exp.position}"
     agg = next((m for m in messages if m.role == "aggregator"), None)
     shown = agg.sees.index(agent_id) + 1 if agg and agent_id in agg.sees else None
-    stored = load_faults()["faults"][q.id]
+    return fault_record(q.id, exp, shown)
+
+
+def fault_record(question_id: str, exp: ExperimentConfig, shown_at: int | None) -> dict:
+    stored = load_faults()["faults"][question_id]
     return {
-        "agent_id": agent_id,
+        "agent_id": f"solver{exp.position}",
         "position": exp.position,
         "style": exp.fault,
-        "wrong_answer": fault_text(q.id, exp.fault)[1],
-        "shown_at": shown,  # 1-based slot in the aggregator prompt
+        "wrong_answer": fault_text(question_id, exp.fault)[1],
+        "shown_at": shown_at,  # 1-based slot in the aggregator prompt, None if not shown
         "slip_position": stored.get("slip_position"),
         "slip_magnitude": stored.get("slip_magnitude"),
         "obvious": stored.get("obvious"),

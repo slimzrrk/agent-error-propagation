@@ -33,4 +33,13 @@ def test_confirmatory_on_synthetic_data():
     assert df.loc["H3", "mean_difference"] == 1.0 and df.loc["H3", "supported"]
     assert df.loc["H2", "mean_difference"] == 0.0 and not df.loc["H2", "supported"]
     assert abs(df.loc["H4", "mean_difference"] - 1 / 3) < 1e-9 and df.loc["H4", "supported"]
-    assert (df["p_holm"] >= df["p_one_sided"]).all()
+    assert (df["p_holm"] >= df["p_value"]).all()
+
+
+def test_two_sided_hypotheses_detect_reversed_effects():
+    # Star adopts more than chain here: a one-sided H4 would miss it, the two-sided test does not.
+    recs = [{**r, "messages": [{**r["messages"][0], "parsed_answer": "99" if r["config_id"].startswith("star") else "5"}]}
+            if not r["config_id"].startswith("chain_rotated") else r for r in synthetic()]
+    df = run(recs, n_perm=2000).set_index("hypothesis")
+    assert df.loc["H4", "alternative"] == "two-sided"
+    assert df.loc["H4", "mean_difference"] == -1.0 and df.loc["H4", "supported"]

@@ -320,6 +320,38 @@ _FORBIDDEN = re.compile(
 )
 _MARKER = re.compile(r"final\s+answer", re.IGNORECASE)
 
+# Style checks: honest solvers never copy the problem statement sentence by sentence and
+# never label their steps "Calculation 1:", the way the rewrite prompt lists them, so a
+# faulty text doing either would stand out.
+_SENTENCE_END = re.compile(r"(?<=[.!?])\s+")
+_CALC_LABEL = re.compile(r"^\W*calculation\s*\d+\s*\W*:", re.IGNORECASE | re.MULTILINE)
+MIN_COPY_WORDS = 4  # shorter sentences ("He has 5 apples.") can match by chance
+MAX_COPIED_SENTENCES = 1
+
+
+def _squash(s: str) -> str:
+    return re.sub(r"\s+", " ", s).strip().lower()
+
+
+def copied_sentences(question: str, text: str) -> list[str]:
+    """Sentences of the problem (at least MIN_COPY_WORDS words) found word for word in the text."""
+    body = _squash(text)
+    out = []
+    for s in _SENTENCE_END.split(question.strip()):
+        s = _squash(s).rstrip(".!?:")
+        if len(s.split()) >= MIN_COPY_WORDS and s in body:
+            out.append(s)
+    return out
+
+
+def style_problems(question: str, text: str) -> list[str]:
+    problems = []
+    if len(copied := copied_sentences(question, text)) > MAX_COPIED_SENTENCES:
+        problems.append(f"copies {len(copied)} sentences of the problem")
+    if _CALC_LABEL.search(text):
+        problems.append("'Calculation N:' labels")
+    return problems
+
 
 def finalize(text: str, wrong: str) -> str:
     """Cut anything after the last 'Final answer' line and write that line canonically."""
@@ -329,9 +361,9 @@ def finalize(text: str, wrong: str) -> str:
     return f"{body}\n\nFinal answer: {wrong}"
 
 
-def check_fault_text(text: str, plan: ErrorPlan, gold: str) -> list[str]:
+def check_fault_text(text: str, plan: ErrorPlan, gold: str, question: str) -> list[str]:
     """Problems with a generated faulty solution (empty list = accepted)."""
-    problems = []
+    problems = style_problems(question, text)
     if parse_final_answer(text) != plan.wrong_answer:
         problems.append(f"final answer {parse_final_answer(text)} != {plan.wrong_answer}")
     if len(_MARKER.findall(text)) != 1:
