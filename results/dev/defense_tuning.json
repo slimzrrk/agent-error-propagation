@@ -1,0 +1,333 @@
+{
+ "verifier": {
+  "it1": {
+   "prompts_sha": "3461ffc5a2e9",
+   "n_verdicts": 250,
+   "n_wrong": 129,
+   "recall": [
+    0.6511627906976745,
+    0.5671641791044776,
+    0.7338129496402878
+   ],
+   "precision": [
+    0.6268656716417911,
+    0.5447154471544715,
+    0.7076923076923077
+   ],
+   "false_positive_rate": [
+    0.4132231404958678,
+    0.3252032520325203,
+    0.5
+   ],
+   "fault_recall": [
+    0.68,
+    0.5858585858585859,
+    0.77
+   ],
+   "unparsed": [
+    0.036,
+    0.016,
+    0.06
+   ],
+   "all_dropped": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "youden_j": 0.23793965020180669,
+   "honest_only": {
+    "recall": [
+     0.5517241379310345,
+     0.37037037037037035,
+     0.7308333333333323
+    ],
+    "precision": [
+     0.24242424242424243,
+     0.14492753623188406,
+     0.3492063492063492
+    ],
+    "false_positive_rate": [
+     0.4132231404958678,
+     0.3247863247863248,
+     0.504
+    ]
+   },
+   "completion_tokens": 191.172
+  },
+  "it2": {
+   "prompts_sha": "3b6ac17beef5",
+   "n_verdicts": 250,
+   "n_wrong": 129,
+   "recall": [
+    0.8372093023255814,
+    0.7692307692307693,
+    0.8984375
+   ],
+   "precision": [
+    0.6585365853658537,
+    0.5838509316770186,
+    0.73125
+   ],
+   "false_positive_rate": [
+    0.4628099173553719,
+    0.3728813559322034,
+    0.552
+   ],
+   "fault_recall": [
+    0.9,
+    0.8367297880690738,
+    0.9555555555555556
+   ],
+   "unparsed": [
+    0.012,
+    0.0,
+    0.028
+   ],
+   "all_dropped": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "youden_j": 0.3743993849702095,
+   "honest_only": {
+    "recall": [
+     0.6206896551724138,
+     0.4375,
+     0.7941176470588235
+    ],
+    "precision": [
+     0.24324324324324326,
+     0.1506849315068493,
+     0.34523809523809523
+    ],
+    "false_positive_rate": [
+     0.4628099173553719,
+     0.37398373983739835,
+     0.5526315789473685
+    ]
+   },
+   "completion_tokens": 210.2
+  },
+  "it3": {
+   "prompts_sha": "04003c63e50b",
+   "n_verdicts": 250,
+   "n_wrong": 129,
+   "recall": [
+    0.7984496124031008,
+    0.725925925925926,
+    0.8650793650793651
+   ],
+   "precision": [
+    0.9809523809523809,
+    0.9504930038458391,
+    1.0
+   ],
+   "false_positive_rate": [
+    0.01652892561983471,
+    0.0,
+    0.04273809523809519
+   ],
+   "fault_recall": [
+    0.88,
+    0.8118811881188119,
+    0.9393939393939394
+   ],
+   "unparsed": [
+    0.024,
+    0.008,
+    0.044
+   ],
+   "all_dropped": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "youden_j": 0.781920686783266,
+   "honest_only": {
+    "recall": [
+     0.5172413793103449,
+     0.34375,
+     0.7037037037037037
+    ],
+    "precision": [
+     0.8823529411764706,
+     0.7058823529411765,
+     1.0
+    ],
+    "false_positive_rate": [
+     0.01652892561983471,
+     0.0,
+     0.04201680672268908
+    ]
+   },
+   "completion_tokens": 195.84
+  }
+ },
+ "skeptical": {
+  "it1": {
+   "prompts_sha": "04003c63e50b",
+   "star-none-none": {
+    "n": 50,
+    "accuracy": 0.86,
+    "accuracy_no_defense": 0.9,
+    "invalid": 0.06,
+    "completion_tokens": 130.22
+   },
+   "chain-none-none": {
+    "n": 50,
+    "accuracy": 0.9,
+    "accuracy_no_defense": 0.88,
+    "invalid": 0.0,
+    "completion_tokens": 108.66
+   },
+   "star-neutral-p1-none": {
+    "n": 50,
+    "accuracy": 0.7,
+    "accuracy_no_defense": 0.6,
+    "invalid": 0.04,
+    "completion_tokens": 116.64,
+    "team_adopted": 0.14,
+    "team_adopted_no_defense": 0.28
+   },
+   "star-persuasive-p1-none": {
+    "n": 50,
+    "accuracy": 0.76,
+    "accuracy_no_defense": 0.78,
+    "invalid": 0.04,
+    "completion_tokens": 135.82,
+    "team_adopted": 0.12,
+    "team_adopted_no_defense": 0.14
+   },
+   "chain-neutral-p1-none": {
+    "n": 50,
+    "accuracy": 0.44,
+    "accuracy_no_defense": 0.54,
+    "invalid": 0.04,
+    "completion_tokens": 103.28,
+    "team_adopted": 0.4,
+    "team_adopted_no_defense": 0.34
+   },
+   "chain-persuasive-p1-none": {
+    "n": 50,
+    "accuracy": 0.7,
+    "accuracy_no_defense": 0.56,
+    "invalid": 0.04,
+    "completion_tokens": 151.04,
+    "team_adopted": 0.22,
+    "team_adopted_no_defense": 0.34
+   },
+   "mean_fault_adoption": 0.22,
+   "mean_fault_adoption_no_defense": 0.275
+  },
+  "it2": {
+   "prompts_sha": "ea1543127d67",
+   "star-none-none": {
+    "n": 50,
+    "accuracy": 0.82,
+    "accuracy_no_defense": 0.9,
+    "invalid": 0.06,
+    "completion_tokens": 144.84
+   },
+   "chain-none-none": {
+    "n": 50,
+    "accuracy": 0.86,
+    "accuracy_no_defense": 0.88,
+    "invalid": 0.04,
+    "completion_tokens": 168.0
+   },
+   "star-neutral-p1-none": {
+    "n": 50,
+    "accuracy": 0.72,
+    "accuracy_no_defense": 0.6,
+    "invalid": 0.0,
+    "completion_tokens": 157.4,
+    "team_adopted": 0.14,
+    "team_adopted_no_defense": 0.28
+   },
+   "star-persuasive-p1-none": {
+    "n": 50,
+    "accuracy": 0.78,
+    "accuracy_no_defense": 0.78,
+    "invalid": 0.06,
+    "completion_tokens": 159.56,
+    "team_adopted": 0.08,
+    "team_adopted_no_defense": 0.14
+   },
+   "chain-neutral-p1-none": {
+    "n": 50,
+    "accuracy": 0.62,
+    "accuracy_no_defense": 0.54,
+    "invalid": 0.02,
+    "completion_tokens": 179.6,
+    "team_adopted": 0.22,
+    "team_adopted_no_defense": 0.34
+   },
+   "chain-persuasive-p1-none": {
+    "n": 50,
+    "accuracy": 0.7,
+    "accuracy_no_defense": 0.56,
+    "invalid": 0.04,
+    "completion_tokens": 179.24,
+    "team_adopted": 0.22,
+    "team_adopted_no_defense": 0.34
+   },
+   "mean_fault_adoption": 0.165,
+   "mean_fault_adoption_no_defense": 0.275
+  },
+  "it3": {
+   "prompts_sha": "8f5e901b5285",
+   "star-none-none": {
+    "n": 50,
+    "accuracy": 0.88,
+    "accuracy_no_defense": 0.9,
+    "invalid": 0.04,
+    "completion_tokens": 150.04
+   },
+   "chain-none-none": {
+    "n": 50,
+    "accuracy": 0.88,
+    "accuracy_no_defense": 0.88,
+    "invalid": 0.02,
+    "completion_tokens": 128.36
+   },
+   "star-neutral-p1-none": {
+    "n": 50,
+    "accuracy": 0.72,
+    "accuracy_no_defense": 0.6,
+    "invalid": 0.02,
+    "completion_tokens": 163.26,
+    "team_adopted": 0.16,
+    "team_adopted_no_defense": 0.28
+   },
+   "star-persuasive-p1-none": {
+    "n": 50,
+    "accuracy": 0.74,
+    "accuracy_no_defense": 0.78,
+    "invalid": 0.04,
+    "completion_tokens": 146.54,
+    "team_adopted": 0.18,
+    "team_adopted_no_defense": 0.14
+   },
+   "chain-neutral-p1-none": {
+    "n": 50,
+    "accuracy": 0.58,
+    "accuracy_no_defense": 0.54,
+    "invalid": 0.04,
+    "completion_tokens": 178.74,
+    "team_adopted": 0.3,
+    "team_adopted_no_defense": 0.34
+   },
+   "chain-persuasive-p1-none": {
+    "n": 50,
+    "accuracy": 0.62,
+    "accuracy_no_defense": 0.56,
+    "invalid": 0.04,
+    "completion_tokens": 163.0,
+    "team_adopted": 0.22,
+    "team_adopted_no_defense": 0.34
+   },
+   "mean_fault_adoption": 0.21499999999999997,
+   "mean_fault_adoption_no_defense": 0.275
+  }
+ }
+}

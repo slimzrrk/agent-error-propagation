@@ -7,6 +7,7 @@ from collections import Counter
 from src.agents import Message, run_aggregator, run_solver
 from src.config import ExperimentConfig
 from src.data import Question
+from src.defenses import passes, verify
 from src.faults import fault_text, faults_sha, faulty_message, load_faults
 from src.llm import LLMClient, derive_seed
 from src.parser import answers_match
@@ -19,8 +20,17 @@ def solver_message(llm: LLMClient, q: Question, exp: ExperimentConfig, i: int, b
     """Solver i, or the scripted faulty agent if the fault is injected at position i."""
     if exp.fault != "none" and exp.position == i:
         return faulty_message(q.id, exp.fault, agent_id=f"solver{i}")
-    return run_solver(llm, q, agent_id=f"solver{i}", base_seed=base_seed,
-                      temperature=exp.temperature, previous=previous)
+    return run_solver(llm, q, agent_id=f"solver{i}", base_seed=base_seed, temperature=exp.temperature,
+                      previous=previous, skeptical=exp.defense == "skeptical")
+
+
+def check(llm: LLMClient, q: Question, exp: ExperimentConfig, msg: Message, base_seed: int,
+          verdicts: list[dict]) -> bool:
+    """With the verifier defense, verify msg and say whether it may be shown to anyone."""
+    if exp.defense != "verifier":
+        return True
+    verdicts.append(verify(llm, q, msg, base_seed=base_seed, temperature=exp.temperature))
+    return passes(verdicts[-1])
 
 
 def run_single(llm: LLMClient, q: Question, exp: ExperimentConfig, base_seed: int) -> dict:
@@ -37,19 +47,24 @@ def run_chain(llm: LLMClient, q: Question, exp: ExperimentConfig, base_seed: int
     prompts and seeds) but the aggregator sees them in the star's balanced rotating order:
     for a given question the faulty solver is then shown at a different rank for each of
     the three positions (a Latin square), so position and rank can be separated.
+    With the verifier, a rejected solution is skipped: the next solver reads the last
+    accepted one (or none) and the aggregator never sees it.
     """
     solvers: list[Message] = []
-    previous = None
+    accepted: list[Message] = []
+    verdicts: list[dict] = []
     for i in range(1, N_SOLVERS + 1):
-        msg = solver_message(llm, q, exp, i, base_seed, previous)
+        msg = solver_message(llm, q, exp, i, base_seed, accepted[-1] if accepted else None)
         solvers.append(msg)
-        previous = msg
-    shown = solvers
+        if check(llm, q, exp, msg, base_seed, verdicts):
+            accepted.append(msg)
+    shown = accepted
     if exp.topology == "chain_rotated":
-        by_id = {m.agent_id: m for m in solvers}
-        shown = [by_id[a] for a in presentation_order(q, list(by_id), base_seed)]
-    agg = run_aggregator(llm, q, shown, base_seed=base_seed, temperature=exp.temperature)
-    return build_result(q, exp, solvers + [agg], final_answer=agg.parsed_answer)
+        by_id = {m.agent_id: m for m in accepted}
+        shown = [by_id[a] for a in presentation_order(q, [m.agent_id for m in solvers], base_seed) if a in by_id]
+    agg = run_aggregator(llm, q, shown, base_seed=base_seed, temperature=exp.temperature,
+                         skeptical=exp.defense == "skeptical")
+    return build_result(q, exp, solvers + [agg], final_answer=agg.parsed_answer, verdicts=verdicts)
 
 
 def presentation_order(q: Question, agent_ids: list[str], base_seed: int) -> list[str]:
@@ -68,20 +83,21 @@ def presentation_order(q: Question, agent_ids: list[str], base_seed: int) -> lis
 
 
 def run_star(llm: LLMClient, q: Question, exp: ExperimentConfig, base_seed: int) -> dict:
-    """Three independent solvers; the aggregator sees them in a balanced, rotating order."""
+    """Three independent solvers; the aggregator sees them in a balanced, rotating order
+    (minus the solutions rejected by the verifier, if any)."""
     solvers = [solver_message(llm, q, exp, i, base_seed) for i in range(1, N_SOLVERS + 1)]
-    by_id = {m.agent_id: m for m in solvers}
-    shown = [by_id[a] for a in presentation_order(q, list(by_id), base_seed)]
-    agg = run_aggregator(llm, q, shown, base_seed=base_seed, temperature=exp.temperature)
-    return build_result(q, exp, solvers + [agg], final_answer=agg.parsed_answer)
+    verdicts: list[dict] = []
+    by_id = {m.agent_id: m for m in solvers if check(llm, q, exp, m, base_seed, verdicts)}
+    shown = [by_id[a] for a in presentation_order(q, [m.agent_id for m in solvers], base_seed) if a in by_id]
+    agg = run_aggregator(llm, q, shown, base_seed=base_seed, temperature=exp.temperature,
+                         skeptical=exp.defense == "skeptical")
+    return build_result(q, exp, solvers + [agg], final_answer=agg.parsed_answer, verdicts=verdicts)
 
 
 RUNNERS = {"single": run_single, "chain": run_chain, "chain_rotated": run_chain, "star": run_star}
 
 
 def run_question(llm: LLMClient, q: Question, exp: ExperimentConfig, base_seed: int) -> dict:
-    if exp.defense != "none":
-        raise NotImplementedError("defenses are not implemented yet")
     return RUNNERS[exp.topology](llm, q, exp, base_seed)
 
 
@@ -134,7 +150,7 @@ def fault_record(question_id: str, exp: ExperimentConfig, shown_at: int | None) 
 
 def build_result(q: Question, exp: ExperimentConfig, messages: list[Message], final_answer: str | None,
                  verdicts: list | None = None) -> dict:
-    llm_msgs = [m for m in messages if m.is_llm_call]
+    llm_msgs = [m.to_dict() for m in messages if m.is_llm_call] + (verdicts or [])
     return {
         "question_id": q.id,
         "question": q.question,
@@ -145,6 +161,6 @@ def build_result(q: Question, exp: ExperimentConfig, messages: list[Message], fi
         "final_answer": final_answer,
         "correct": answers_match(final_answer, q.gold),
         "n_llm_calls": len(llm_msgs),
-        "prompt_tokens": sum(m.prompt_tokens for m in llm_msgs),
-        "completion_tokens": sum(m.completion_tokens for m in llm_msgs),
+        "prompt_tokens": sum(m["prompt_tokens"] for m in llm_msgs),
+        "completion_tokens": sum(m["completion_tokens"] for m in llm_msgs),
     }

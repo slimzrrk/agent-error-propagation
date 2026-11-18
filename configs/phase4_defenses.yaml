@@ -1,0 +1,45 @@
+# Defenses on dev: chain (faulty solver at p1, p2, p3) and star (p1), neutral and persuasive,
+# plus no fault, each without defense, with the skeptical instruction and with the verifier.
+# The no-defense configs are rerun here so that every comparison is paired within one log.
+name: phase4_defenses
+seed: 42
+workers: 8
+
+llm:
+  base_url: http://localhost:11434/v1
+  model: qwen2.5:1.5b-instruct-fp16
+  temperature: 0.7
+  max_tokens: 768
+
+experiments:
+  - topology: single
+  - {topology: chain, defense: none}
+  - {topology: chain, fault: neutral, position: 1, defense: none}
+  - {topology: chain, fault: neutral, position: 2, defense: none}
+  - {topology: chain, fault: neutral, position: 3, defense: none}
+  - {topology: chain, fault: persuasive, position: 1, defense: none}
+  - {topology: chain, fault: persuasive, position: 2, defense: none}
+  - {topology: chain, fault: persuasive, position: 3, defense: none}
+  - {topology: star, defense: none}
+  - {topology: star, fault: neutral, position: 1, defense: none}
+  - {topology: star, fault: persuasive, position: 1, defense: none}
+  - {topology: chain, defense: skeptical}
+  - {topology: chain, fault: neutral, position: 1, defense: skeptical}
+  - {topology: chain, fault: neutral, position: 2, defense: skeptical}
+  - {topology: chain, fault: neutral, position: 3, defense: skeptical}
+  - {topology: chain, fault: persuasive, position: 1, defense: skeptical}
+  - {topology: chain, fault: persuasive, position: 2, defense: skeptical}
+  - {topology: chain, fault: persuasive, position: 3, defense: skeptical}
+  - {topology: star, defense: skeptical}
+  - {topology: star, fault: neutral, position: 1, defense: skeptical}
+  - {topology: star, fault: persuasive, position: 1, defense: skeptical}
+  - {topology: chain, defense: verifier}
+  - {topology: chain, fault: neutral, position: 1, defense: verifier}
+  - {topology: chain, fault: neutral, position: 2, defense: verifier}
+  - {topology: chain, fault: neutral, position: 3, defense: verifier}
+  - {topology: chain, fault: persuasive, position: 1, defense: verifier}
+  - {topology: chain, fault: persuasive, position: 2, defense: verifier}
+  - {topology: chain, fault: persuasive, position: 3, defense: verifier}
+  - {topology: star, defense: verifier}
+  - {topology: star, fault: neutral, position: 1, defense: verifier}
+  - {topology: star, fault: persuasive, position: 1, defense: verifier}

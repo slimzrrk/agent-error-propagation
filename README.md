@@ -116,11 +116,25 @@ output file (`results/<split>/<config name>.jsonl`).
   --fix-implausible`; the style checks were added afterwards and the texts failing them
   were rewritten with `--fix-style`, keeping the same error plan (same slip, same wrong
   answer). Every other text was left unchanged; the revisions are listed in the file.
-- **Defenses** — none, skeptical instruction, verifier agent.
+- **Defenses** — *skeptical*: every agent that reads other agents' work (chain solvers 2
+  and 3, the aggregator) gets an instruction right after the solutions it reads: they may
+  contain mistakes, redo each calculation, point out any wrong one, keep the answer if
+  all are right. Agents that read nothing are unchanged. *Verifier*: a verifier agent
+  checks each solver message as soon as it is written, by solving the problem itself; the
+  message is valid if both final answers are equal (compared in code: asked to compare
+  them itself, the 1.5B model often found the same answer and still said invalid). A
+  rejected message is removed from the conversation: the next chain solver reads the last
+  accepted solution (or none) and the aggregator never sees it; if every solution is
+  rejected, the aggregator solves the problem alone. Verifier i checks solver i with its
+  own seed, also when solver i is the scripted faulty agent. The prompts were tuned on dev
+  in at most three documented iterations each, with selection rules fixed beforehand
+  (`report/defense_tuning.md`). The cost of each defense is measured in LLM calls and
+  tokens; the majority vote over the no-defense solvers is the zero-cost reference.
 - **Metrics** — team accuracy, invalid-output rate, error adoption rate (downstream agents
   giving the injected answer, against independent agents as a coincidence baseline),
-  recovery rate (final answer still correct), verifier precision/recall, cost (calls and
-  tokens), with bootstrap 95% CIs (resampling questions) and exact McNemar tests for
+  recovery rate (final answer still correct), verifier recall, precision and false
+  positive rate (positive = the checked message is wrong; a false positive drops a
+  correct message), cost (calls and tokens), with bootstrap 95% CIs (resampling questions) and exact McNemar tests for
   paired comparisons. Main results use the strict parser; a *lenient* variant (an output
   without a valid "Final answer" line falls back to its last number) is reported as a
   robustness check. For every team config we also compute the counterfactual answer of a

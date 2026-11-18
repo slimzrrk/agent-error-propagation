@@ -16,8 +16,9 @@ import pandas as pd
 
 from src.logging_utils import read_records
 from src.metrics import (
-    adoption, by_obvious, by_slip_position, by_slot, fault_summary, is_correct, majority_vs_aggregator,
-    paired_outcomes, per_agent, solver_references, summarize, team_adopted,
+    adoption, bootstrap_ci, by_obvious, by_slip_position, by_slot, fault_summary, is_correct, majority_adopted,
+    majority_correct, majority_vs_aggregator, mcnemar, paired_outcomes, per_agent, solver_cost, solver_references,
+    summarize, team_adopted, verifier_stats,
 )
 
 
@@ -193,6 +194,91 @@ def majority_table(team_cfgs: dict) -> dict:
     return out
 
 
+DEFENSES = ("none", "skeptical", "verifier")
+
+
+def cell_of(r: dict) -> str:
+    c = r["config"]
+    return f"{c['topology']}-{c.get('fault', 'none')}" + (f"-p{c['position']}" if c.get("position") else "")
+
+
+def method_rows(by_def: dict) -> list[dict]:
+    """One row per method on a cell: the no-defense team, a majority vote over its solvers
+    (the zero-cost defense), and each defense; paired tests against both references."""
+    base = by_def["none"]
+    faulty = bool(base[0].get("fault"))
+    qids = sorted(set.intersection(*(set(r["question_id"] for r in recs) for recs in by_def.values())))
+    pick = lambda recs: [{r["question_id"]: r for r in recs}[q] for q in qids]  # noqa: E731
+    outcome = (lambda r: team_adopted(r)) if faulty else (lambda r: r["correct"])
+    ref_none = [outcome(r) for r in pick(base)]
+    ref_maj = [(majority_adopted(r) if faulty else majority_correct(r)) for r in pick(base)]
+    methods = [("none", pick(base), outcome, lambda r: (r["n_llm_calls"], r["prompt_tokens"] + r["completion_tokens"])),
+               ("majority vote", pick(base), majority_adopted if faulty else majority_correct, solver_cost)]
+    methods += [(d, pick(by_def[d]), outcome, lambda r: (r["n_llm_calls"], r["prompt_tokens"] + r["completion_tokens"]))
+                for d in DEFENSES[1:] if d in by_def]
+    rows = []
+    for name, recs, out, cost in methods:
+        x = [out(r) for r in recs]
+        costs = [cost(r) for r in recs]
+        rows.append({
+            "method": name, "n": len(recs), "outcome": "team adopted" if faulty else "accuracy",
+            "rate": bootstrap_ci(x),
+            "recovery": bootstrap_ci([majority_correct(r) if name == "majority vote" else is_correct(r) for r in recs])
+            if faulty else None,
+            "calls_per_q": sum(c[0] for c in costs) / len(costs), "tokens_per_q": sum(c[1] for c in costs) / len(costs),
+            "vs_none": mcnemar(x, ref_none) if name != "none" else None,
+            "vs_majority": mcnemar(x, ref_maj) if name != "majority vote" else None,
+        })
+    return rows
+
+
+def defense_table(by_cfg: dict) -> dict:
+    """Defenses against no defense and against a majority vote, cell by cell and pooled."""
+    cells = defaultdict(dict)
+    for cid, recs in by_cfg.items():
+        c = recs[0]["config"]
+        if c["topology"] in ("chain", "star"):
+            cells[cell_of(recs[0])][c.get("defense", "none")] = recs
+    cells = {k: v for k, v in cells.items() if "none" in v and len(v) > 1}
+    if not cells:
+        return {}
+    print("\nDefenses: team adoption with a fault (accuracy without), recovery, cost; McNemar vs no defense and"
+          "\nvs a majority vote over the no-defense solvers (the zero-cost defense)")
+    out = {}
+    pooled = defaultdict(lambda: defaultdict(list))
+    for cell, by_def in sorted(cells.items()):
+        topo, fault = cell.split("-")[:2]
+        if fault != "none":
+            for d, recs in by_def.items():
+                pooled[f"{topo}-all faults"][d] += [{**r, "question_id": f"{r['question_id']}|{cell}"} for r in recs]
+    for cell, by_def in [*sorted(cells.items()), *sorted(pooled.items())]:
+        out[cell] = method_rows(by_def)
+        for row in out[cell]:
+            tests = "".join(f"  {k.replace('vs_', 'vs ')} p={row[k]['p_value']:.3f}" for k in ("vs_none", "vs_majority")
+                            if row[k])
+            rec = f" recovery {ci(row['recovery'])}" if row["recovery"] else ""
+            print(f"  {cell:<20} {row['method']:<14} {row['outcome']:<12} {ci(row['rate'])}{rec}"
+                  f"  calls {row['calls_per_q']:.1f} tok {row['tokens_per_q']:6.0f}{tests}")
+    return out
+
+
+def verifier_table(by_cfg: dict) -> dict:
+    ver = {cid: recs for cid, recs in by_cfg.items() if any(r.get("verdicts") for r in recs)}
+    if not ver:
+        return {}
+    print("\nVerifier (positive = checked message wrong): recall, precision, false positives = correct messages"
+          "\ndropped, recall on the injected faulty message, verdicts not parsed (kept), runs with every solution dropped")
+    out = {}
+    groups = {**ver, "all verifier configs": [r for recs in ver.values() for r in recs],
+              "no-fault configs": [r for recs in ver.values() for r in recs if not r.get("fault")]}
+    for cid, recs in sorted(groups.items()):
+        out[cid] = v = verifier_stats(recs)
+        print(f"  {cid:<30} n={v['n_verdicts']:>4} wrong={v['n_wrong']:>3}  recall {ci(v['recall'])}"
+              f"  precision {ci(v['precision'])}  false pos. {ci(v['false_positive_rate'])}"
+              f"  fault recall {ci(v['fault_recall'])}  unparsed {v['unparsed'][0]:.0%}  all dropped {v['all_dropped'][0]:.0%}")
+    return out
+
+
 def json_safe(obj):
     """NaN -> null, tuples -> lists, so the file is strict JSON."""
     if isinstance(obj, float) and math.isnan(obj):
@@ -229,6 +315,8 @@ def main(argv=None):
     saved = {}
     if teams or faulty:
         saved["majority"] = majority_table({**teams, **faulty})
+    saved["defenses"] = defense_table(by_cfg)
+    saved["verifier"] = verifier_table(by_cfg)
     if args.reference in by_cfg:
         paired_vs_reference(by_cfg, args.reference)
 

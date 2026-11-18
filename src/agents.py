@@ -77,13 +77,14 @@ def run_solver(
     base_seed: int,
     temperature: float | None = None,
     previous: Message | None = None,
+    skeptical: bool = False,
 ) -> Message:
     return _llm_message(
         llm, q,
         agent_id=agent_id,
         role="solver",
         system=prompts.SOLVER_SYSTEM,
-        user=prompts.solver_user(q.question, previous.content if previous else None),
+        user=prompts.solver_user(q.question, previous.content if previous else None, skeptical),
         sees=[previous.agent_id] if previous else [],
         base_seed=base_seed,
         temperature=temperature,
@@ -97,15 +98,43 @@ def run_aggregator(
     *,
     base_seed: int,
     temperature: float | None = None,
+    skeptical: bool = False,
 ) -> Message:
-    """`solutions` are shown in the given order, labelled 1..n (no agent names)."""
+    """`solutions` are shown in the given order, labelled 1..n (no agent names).
+    With no solution at all (every one rejected by the verifier) it solves the problem alone."""
+    if not solutions:
+        system, user = prompts.SOLVER_SYSTEM, prompts.solver_user(q.question)
+    else:
+        system = prompts.AGGREGATOR_SYSTEM
+        user = prompts.aggregator_user(q.question, [m.content for m in solutions], skeptical)
     return _llm_message(
         llm, q,
         agent_id="aggregator",
         role="aggregator",
-        system=prompts.AGGREGATOR_SYSTEM,
-        user=prompts.aggregator_user(q.question, [m.content for m in solutions]),
+        system=system,
+        user=user,
         sees=[m.agent_id for m in solutions],
+        base_seed=base_seed,
+        temperature=temperature,
+    )
+
+
+def run_verifier(
+    llm: LLMClient,
+    q: Question,
+    target: Message,
+    *,
+    base_seed: int,
+    temperature: float | None = None,
+) -> Message:
+    """Checks one solver message; verifier i checks solver i (its seed follows the checked agent)."""
+    return _llm_message(
+        llm, q,
+        agent_id=target.agent_id.replace("solver", "verifier"),
+        role="verifier",
+        system=prompts.VERIFIER_SYSTEM,
+        user=prompts.verifier_user(q.question, target.content),
+        sees=[target.agent_id],
         base_seed=base_seed,
         temperature=temperature,
     )

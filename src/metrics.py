@@ -330,3 +330,58 @@ def summarize(records: list[dict]) -> dict:
         "completion_tokens_per_q": float(np.mean([r["completion_tokens"] for r in records])),
         "latency_per_call": float(np.mean([m["latency"] for m in msgs])) if msgs else float("nan"),
     }
+
+
+def verifier_stats(records: list[dict]) -> dict:
+    """Verdicts of the verifier against the truth of the checked solver message.
+
+    Positive = the checked message is wrong (answer != gold, or no valid answer).
+    recall: wrong messages flagged INVALID; precision: flagged messages that are wrong;
+    false_positive_rate: correct messages flagged, i.e. dropped although right;
+    fault_recall: injected faulty messages flagged; unparsed: no verdict line (the message
+    is kept); all_dropped: runs where no solution reached the aggregator.
+    Ratios are pooled over verdicts, with CIs from resampling questions.
+    """
+    per_q = []
+    for r in records:
+        msgs = {m["agent_id"]: m for m in r["messages"]}
+        c = Counter()
+        for v in r.get("verdicts", []):
+            target = msgs[v["target"]]
+            wrong = not answers_match(target["parsed_answer"], r["gold"])
+            flagged = v["verdict"] == "INVALID"
+            c["n"] += 1
+            c["wrong"] += wrong
+            c["correct"] += not wrong
+            c["flagged"] += flagged
+            c["tp"] += wrong and flagged
+            c["fp"] += flagged and not wrong
+            c["faulty"] += target["is_faulty"]
+            c["faulty_flagged"] += target["is_faulty"] and flagged
+            c["unparsed"] += v["verdict"] is None
+        c["all_dropped"] = int(bool(c["n"]) and not final_message(r)["sees"])
+        per_q.append(c)
+
+    def ratio(num, den):
+        return bootstrap_ratio_ci([c[num] for c in per_q], [c[den] for c in per_q])
+
+    return {
+        "n_verdicts": sum(c["n"] for c in per_q), "n_wrong": sum(c["wrong"] for c in per_q),
+        "recall": ratio("tp", "wrong"), "precision": ratio("tp", "flagged"),
+        "false_positive_rate": ratio("fp", "correct"), "fault_recall": ratio("faulty_flagged", "faulty"),
+        "unparsed": ratio("unparsed", "n"), "all_dropped": bootstrap_ci([c["all_dropped"] for c in per_q]),
+    }
+
+
+def majority_adopted(r: dict, lenient: bool = False) -> bool:
+    return bool(r.get("fault")) and answers_match(majority_answer(r, lenient), r["fault"]["wrong_answer"])
+
+
+def majority_correct(r: dict, lenient: bool = False) -> bool:
+    return answers_match(majority_answer(r, lenient), r["gold"])
+
+
+def solver_cost(r: dict) -> tuple[int, int]:
+    """(LLM calls, tokens) of the solvers alone: the cost of a majority vote."""
+    msgs = [m for m in r["messages"] if m["role"] == "solver" and not m["is_faulty"]]
+    return len(msgs), sum(m["prompt_tokens"] + m["completion_tokens"] for m in msgs)
