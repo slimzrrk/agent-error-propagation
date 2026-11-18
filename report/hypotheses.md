@@ -24,6 +24,7 @@ and to formulate these hypotheses; they are not used as evidence.
   (H0: mean difference = 0; 100,000 permutations, seed 0). Effect size: mean difference
   with a 95% bootstrap confidence interval over questions.
 - **Multiplicity:** Holm correction over H1–H4, family-wise alpha = 0.05.
+  *Amendment 2: over H1–H7.*
 - Code: `python -m scripts.confirmatory results/test/<log>.jsonl`.
 
 ## Hypotheses
@@ -63,6 +64,7 @@ accuracy and cost against the single agent.
 
 Hypotheses about the defenses (research question 3) will be added to this file as a dated
 amendment, after the defense design is fixed on dev and before any run on the test split.
+*Done in amendment 2 (H5–H7).*
 
 ## Amendment 1 (2026-11-18, before any run on the test split)
 
@@ -81,6 +83,43 @@ amendment, after the defense design is fixed on dev and before any run on the te
    fault (`test-198`), whose steps follow the problem sentence by sentence, could not be
    rewritten and is kept, flagged `style_check_failed`. The fault messages hash becomes
    **`3655c7b6f668`**; the test run must use it.
+
+## Amendment 2 (2026-11-18, after the defenses were fixed on dev, before any run on the test split)
+
+Three hypotheses are added; the confirmatory family becomes **H1–H7**, with the Holm
+correction over all seven (family-wise alpha = 0.05). Outcome, unit of analysis, test
+(sign-flip permutation, 100,000 permutations, seed 0) and effect size are unchanged.
+
+- Defense prompts: `src/prompts.py` at the commit of this amendment (prompts hash
+  `7cad7f5851d8`), tuned on dev as documented in `report/defense_tuning.md`. Protocol
+  hash of the test run (prompts, parser, agents, topologies, faults, defenses, splits):
+  `58917055adcf`.
+- The **eight fault cells** of the main design: `chain-{neutral,persuasive}-p{1,2,3}-<d>`
+  and `star-{neutral,persuasive}-p1-<d>`, for each defense `<d>` in none, skeptical,
+  verifier.
+
+**H5 — Verifier vs no defense.** The verifier lowers team adoption. Per question: mean
+over the eight cells of adoption(none) minus adoption(verifier). One-sided, alternative:
+difference > 0.
+
+**H6 — Verifier vs skeptical instruction.** Their team adoption differs. Per question:
+mean over the eight cells of adoption(skeptical) minus adoption(verifier). Two-sided,
+alternative: difference ≠ 0.
+
+**H7 — Majority vote vs LLM aggregator.** Without defense, a majority vote over the three
+solver answers adopts the error less often than the LLM aggregator of the same runs. The
+majority answer is the answer given by at least two of the three solvers (the faulty one
+included); with three different answers there is no majority, which counts as not
+adopted. Per question: mean over the eight no-defense cells of adoption(aggregator) minus
+adoption(majority vote). One-sided, alternative: difference > 0. The `chain_rotated`
+configs are not included (they are used by H3).
+
+Everything else stays exploratory, in particular: the skeptical instruction against no
+defense; accuracy with and without fault for each defense; cost (LLM calls, tokens); the
+verifier's recall, precision and false positives (correct messages dropped), overall and
+without fault; the defenses against the majority vote; and the correction of the error by
+downstream solvers (in `chain_rotated`, at equal rank, adoption with the faulty solver at
+p3 compared with p1).
 
 ## Deviations
 

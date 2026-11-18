@@ -140,9 +140,10 @@ output file (`results/<split>/<config name>.jsonl`).
   robustness check. For every team config we also compute the counterfactual answer of a
   *majority vote* over the same solver answers (no extra LLM call) and compare it with
   the LLM aggregator.
-- **Pre-registration** — the confirmatory hypotheses, their tests and the Holm
+- **Pre-registration** — the confirmatory hypotheses H1–H7, their tests and the Holm
   correction are fixed in `report/hypotheses.md` and `scripts/confirmatory.py`, committed
-  before any run on the test split. Everything else is reported as exploratory.
+  before any run on the test split; later changes are dated amendments, also made before
+  the test run. Everything else is reported as exploratory.
 
 ## Reproducibility
 

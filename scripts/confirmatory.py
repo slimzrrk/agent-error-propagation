@@ -1,11 +1,13 @@
-"""Pre-registered confirmatory tests (report/hypotheses.md), with Holm correction.
+"""Pre-registered confirmatory tests (report/hypotheses.md), with Holm correction over H1-H7.
 
     python -m scripts.confirmatory results/test/grid.jsonl
+
+Several logs can be given (dev dry runs): a config is taken from the first log that has it.
 
 Outcome: team adoption = the team's final answer is the injected wrong answer (strict
 parser). Unit of analysis: the question. Each hypothesis is a sign-flip permutation test
 on per-question differences, averaged over the two fault styles; one-sided or two-sided
-as pre-registered (H2 and H4 two-sided since amendment 1).
+as pre-registered (H2 and H4 two-sided since amendment 1; H5-H7 added by amendment 2).
 """
 
 from __future__ import annotations
@@ -18,7 +20,7 @@ import numpy as np
 import pandas as pd
 
 from src.logging_utils import read_records
-from src.metrics import bootstrap_ci, holm, paired_permutation_test, team_adopted
+from src.metrics import bootstrap_ci, holm, majority_adopted, paired_permutation_test, team_adopted
 
 STYLES = ("neutral", "persuasive")
 ALPHA = 0.05
@@ -27,19 +29,31 @@ HYPOTHESES = {
     "H2": "persuasive vs neutral team adoption differ (chain p1-p3 and star)",
     "H3": "primacy: team adoption higher when the faulty solution is shown first (chain_rotated)",
     "H4": "chain (chronological) vs star team adoption differ",
+    "H5": "the verifier lowers team adoption compared with no defense",
+    "H6": "verifier vs skeptical instruction team adoption differ",
+    "H7": "a majority vote adopts the error less than the LLM aggregator (no defense)",
 }
 # "greater": the difference is positive; "two-sided": it is not zero.
-ALTERNATIVES = {"H1": "greater", "H2": "two-sided", "H3": "greater", "H4": "two-sided"}
+ALTERNATIVES = {"H1": "greater", "H2": "two-sided", "H3": "greater", "H4": "two-sided",
+                "H5": "greater", "H6": "two-sided", "H7": "greater"}
+# The eight fault cells of the main design: chain p1-p3 and star p1, two styles.
+CELLS = [(t, s, p) for t, ps in (("chain", (1, 2, 3)), ("star", (1,))) for s in STYLES for p in ps]
 
 
-def adoption_by_question(records: list[dict]) -> tuple[dict, dict]:
-    """{config_id: {question_id: 0/1 team adoption}} and {config_id: {question_id: shown rank}}."""
-    adopted, rank = defaultdict(dict), defaultdict(dict)
+def cell(topology: str, style: str, position: int, defense: str = "none") -> str:
+    return f"{topology}-{style}-p{position}-{defense}"
+
+
+def adoption_by_question(records: list[dict]) -> tuple[dict, dict, dict]:
+    """{config_id: {question_id: value}} for team adoption, majority-vote adoption and the
+    rank at which the faulty solution was shown."""
+    adopted, majority, rank = defaultdict(dict), defaultdict(dict), defaultdict(dict)
     for r in records:
         if r.get("fault"):
             adopted[r["config_id"]][r["question_id"]] = float(team_adopted(r))
+            majority[r["config_id"]][r["question_id"]] = float(majority_adopted(r))
             rank[r["config_id"]][r["question_id"]] = r["fault"]["shown_at"]
-    return adopted, rank
+    return adopted, majority, rank
 
 
 def diffs_h1(a: dict, qids: list[str]) -> np.ndarray:
@@ -70,16 +84,31 @@ def diffs_h4(a: dict, qids: list[str]) -> np.ndarray:
                      - np.mean([a[f"star-{s}-p1-none"][q] for s in STYLES]) for q in qids])
 
 
+def diffs_defense(a: dict, qids: list[str], minus: str, defense: str) -> np.ndarray:
+    """Mean over the eight cells of adoption(minus) - adoption(defense)."""
+    return np.array([np.mean([a[cell(*c, minus)][q] - a[cell(*c, defense)][q] for c in CELLS]) for q in qids])
+
+
+def diffs_h7(a: dict, majority: dict, qids: list[str]) -> np.ndarray:
+    """Mean over the eight no-defense cells of adoption(aggregator) - adoption(majority vote)."""
+    return np.array([np.mean([a[cell(*c)][q] - majority[cell(*c)][q] for c in CELLS]) for q in qids])
+
+
+def needed_configs() -> list[str]:
+    return ([cell(*c, d) for d in ("none", "skeptical", "verifier") for c in CELLS]
+            + [f"chain_rotated-{s}-p{p}-none" for s in STYLES for p in (1, 2, 3)])
+
+
 def run(records: list[dict], n_perm: int = 100_000) -> pd.DataFrame:
-    a, rank = adoption_by_question(records)
-    needed = ([f"chain-{s}-p{p}-none" for s in STYLES for p in (1, 2, 3)]
-              + [f"chain_rotated-{s}-p{p}-none" for s in STYLES for p in (1, 2, 3)]
-              + [f"star-{s}-p1-none" for s in STYLES])
+    a, majority, rank = adoption_by_question(records)
+    needed = needed_configs()
     missing = [c for c in needed if c not in a]
     if missing:
         raise SystemExit(f"missing configs: {missing}")
     qids = sorted(set.intersection(*(set(a[c]) for c in needed)))
-    diffs = {"H1": diffs_h1(a, qids), "H2": diffs_h2(a, qids), "H3": diffs_h3(a, rank, qids), "H4": diffs_h4(a, qids)}
+    diffs = {"H1": diffs_h1(a, qids), "H2": diffs_h2(a, qids), "H3": diffs_h3(a, rank, qids), "H4": diffs_h4(a, qids),
+             "H5": diffs_defense(a, qids, "none", "verifier"), "H6": diffs_defense(a, qids, "skeptical", "verifier"),
+             "H7": diffs_h7(a, majority, qids)}
     pvals = {h: paired_permutation_test(d, ALTERNATIVES[h], n_perm=n_perm, seed=0) for h, d in diffs.items()}
     adjusted = holm(pvals)
     rows = []
@@ -94,16 +123,22 @@ def run(records: list[dict], n_perm: int = 100_000) -> pd.DataFrame:
 
 def main(argv=None):
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    p.add_argument("log")
-    p.add_argument("--save", action="store_true", help="write <log>_confirmatory.csv")
+    p.add_argument("logs", nargs="+")
+    p.add_argument("--save", action="store_true", help="write <first log>_confirmatory.csv")
     args = p.parse_args(argv)
-    df = run(read_records(args.log))
+    records, seen = [], set()
+    for log in args.logs:
+        recs = read_records(log)
+        new = {r["config_id"] for r in recs} - seen
+        records += [r for r in recs if r["config_id"] in new]
+        seen |= new
+    df = run(records)
     for r in df.itertuples():
         print(f"{r.hypothesis}  {r.description}\n    n={r.n_questions}  difference {r.mean_difference:+.3f} "
               f"[{r.ci_low:+.3f}, {r.ci_high:+.3f}]  p ({r.alternative})={r.p_value:.4f}  Holm p={r.p_holm:.4f}  "
               f"{'supported' if r.supported else 'not supported'} at alpha={ALPHA}")
     if args.save:
-        out = f"{Path(args.log).with_suffix('')}_confirmatory.csv"
+        out = f"{Path(args.logs[0]).with_suffix('')}_confirmatory.csv"
         df.to_csv(out, index=False, float_format="%.4f")
         print(f"saved {out}")
 
