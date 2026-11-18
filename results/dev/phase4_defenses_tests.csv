@@ -1,0 +1,29 @@
+comparison,outcome,n,rate_a,rate_b,only_a,only_b,p_value
+chain-*-p1-none,team adopted,50,0.3600,0.3000,12,9,0.6636
+chain-*-p1-none,recovery,50,0.5400,0.5800,9,11,0.8238
+chain-*-p1-skeptical,team adopted,50,0.3600,0.2600,14,9,0.4049
+chain-*-p1-skeptical,recovery,50,0.5600,0.6400,10,14,0.5413
+chain-*-p1-verifier,team adopted,50,0.0800,0.0600,2,1,1.0000
+chain-*-p1-verifier,recovery,50,0.7600,0.8200,1,4,0.3750
+chain-*-p2-none,team adopted,50,0.0400,0.0800,2,4,0.6875
+chain-*-p2-none,recovery,50,0.8800,0.8200,6,3,0.5078
+chain-*-p2-skeptical,team adopted,50,0.0200,0.0200,1,1,1.0000
+chain-*-p2-skeptical,recovery,50,0.8400,0.9000,1,4,0.3750
+chain-*-p2-verifier,team adopted,50,0.0600,0.0800,1,2,1.0000
+chain-*-p2-verifier,recovery,50,0.8000,0.7800,2,1,1.0000
+chain-*-p3-none,team adopted,50,0.1000,0.1000,5,5,1.0000
+chain-*-p3-none,recovery,50,0.7400,0.7800,6,8,0.7905
+chain-*-p3-skeptical,team adopted,50,0.1400,0.1800,6,8,0.7905
+chain-*-p3-skeptical,recovery,50,0.7200,0.6400,11,7,0.4807
+chain-*-p3-verifier,team adopted,50,0.0000,0.0000,0,0,1.0000
+chain-*-p3-verifier,recovery,50,0.9000,0.9000,0,0,1.0000
+star-*-p1-none,team adopted,50,0.1800,0.2800,4,9,0.2668
+star-*-p1-none,recovery,50,0.7200,0.6000,8,2,0.1094
+star-*-p1-skeptical,team adopted,50,0.1400,0.1200,6,5,1.0000
+star-*-p1-skeptical,recovery,50,0.8000,0.7800,7,6,1.0000
+star-*-p1-verifier,team adopted,50,0.0400,0.0400,2,2,1.0000
+star-*-p1-verifier,recovery,50,0.8600,0.8600,3,3,1.0000
+chain (all positions),team adopted,450,0.1289,0.1200,43,39,0.7407
+chain (all positions),recovery,450,0.7489,0.7622,46,52,0.6137
+star (all positions),team adopted,150,0.1200,0.1467,12,16,0.5716
+star (all positions),recovery,150,0.7933,0.7467,18,11,0.2649

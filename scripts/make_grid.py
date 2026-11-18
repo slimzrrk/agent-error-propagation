@@ -29,6 +29,10 @@ def call_kind(m: dict) -> str:
     return m["role"]
 
 
+def llm_messages(r: dict) -> list[dict]:
+    return [m for m in r["messages"] if not m["is_faulty"]] + r.get("verdicts", [])
+
+
 def measured_call_costs(log: str | Path) -> dict[str, float]:
     """Effective wall seconds per LLM call, by kind of call (runs copied from another log are left out)."""
     records = [r for r in read_records(log, None) if not r.get("reused_from")]
@@ -36,7 +40,7 @@ def measured_call_costs(log: str | Path) -> dict[str, float]:
     latency_sum = defaultdict(float)
     for r in records:
         if r["record_type"] == "run" and r["session_id"] in walls:
-            latency_sum[r["session_id"]] += sum(m["latency"] for m in r["messages"] if not m["is_faulty"])
+            latency_sum[r["session_id"]] += sum(m["latency"] for m in llm_messages(r))
 
     costs = defaultdict(list)
     for r in records:
@@ -44,15 +48,13 @@ def measured_call_costs(log: str | Path) -> dict[str, float]:
         if r["record_type"] != "run" or sid not in walls or not latency_sum[sid]:
             continue
         scale = walls[sid] / latency_sum[sid]
-        for m in r["messages"]:
-            if not m["is_faulty"]:
-                costs[call_kind(m)].append(m["latency"] * scale)
+        for m in llm_messages(r):
+            costs[call_kind(m)].append(m["latency"] * scale)
     return {k: float(np.mean(v)) for k, v in costs.items()}
 
 
 def estimate(grid, costs: dict[str, float]) -> dict:
-    # Verifier calls are not measured yet: a verifier reads the problem and one solution,
-    # like a chained solver, so we use that cost.
+    # Without a measured verifier call, use a chained solver (it also reads one solution).
     costs = {**costs, "verifier": costs.get("verifier", costs["chained"])}
     per_question = sum(sum(n * costs[k] for k, n in call_kinds(e).items()) for e in grid)
     return {split: per_question * n / 3600 for split, n in SPLIT_SIZES.items()}

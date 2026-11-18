@@ -31,7 +31,18 @@
   (they pair by question); the pairing is just a little looser than exact common random
   numbers. The dev rerun after faults revision 3 copied the 766 runs with unchanged
   inputs and redid the 84 others; a sample of 24 copied runs rerun as a check gave 19
-  identical texts and 23 identical answers.
+  identical texts and 23 identical answers. Between two sessions (the 550 no-defense
+  runs of phases 3 and 4 on dev), 75% of the runs are identical and 94% end with the same
+  team answer: differences of a few points between configs on dev are within this noise.
+- **Defenses.** The verifier is strong against the injected slips (it rejects 86% of
+  them, and only 2% of correct messages) because it solves the problem again: its errors
+  are correlated with the solvers' own errors (recall 48% on their natural wrong answers
+  without fault), and its verdict is an answer comparison made in code, not a judgement
+  of the model (the model could not compare answers reliably, see
+  `report/defense_tuning.md`). It doubles the number of calls. The skeptical instruction
+  was tuned on aggregator reruns only, and the majority vote, which costs nothing, is
+  computed on the same solver answers: both are counterfactual or proxy comparisons, not
+  separate runs.
 - **Scale.** One small model (Qwen2.5-1.5B-Instruct), one task (GSM8K), three agents.
   The dev split (50 questions) is only used for development; with 200 test questions,
   differences of a few points remain within the confidence intervals.

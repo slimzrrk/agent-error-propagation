@@ -1,0 +1,7934 @@
+{
+ "majority": {
+  "chain-neutral-p1-none": {
+   "n": 50,
+   "aggregator_acc": [
+    0.58,
+    0.44,
+    0.72
+   ],
+   "majority_acc": [
+    0.78,
+    0.66,
+    0.88
+   ],
+   "acc_test": {
+    "only_a": 3,
+    "only_b": 13,
+    "p_value": 0.021270751953125
+   },
+   "aggregator_adopted": [
+    0.3,
+    0.18,
+    0.44
+   ],
+   "majority_adopted": [
+    0.06,
+    0.0,
+    0.14
+   ],
+   "adopt_test": {
+    "only_a": 13,
+    "only_b": 1,
+    "p_value": 0.0018310546875
+   }
+  },
+  "chain-neutral-p1-skeptical": {
+   "n": 50,
+   "aggregator_acc": [
+    0.64,
+    0.5,
+    0.78
+   ],
+   "majority_acc": [
+    0.82,
+    0.7,
+    0.92
+   ],
+   "acc_test": {
+    "only_a": 3,
+    "only_b": 12,
+    "p_value": 0.03515625
+   },
+   "aggregator_adopted": [
+    0.26,
+    0.14,
+    0.38
+   ],
+   "majority_adopted": [
+    0.06,
+    0.0,
+    0.14
+   ],
+   "adopt_test": {
+    "only_a": 11,
+    "only_b": 1,
+    "p_value": 0.00634765625
+   }
+  },
+  "chain-neutral-p1-verifier": {
+   "n": 50,
+   "aggregator_acc": [
+    0.82,
+    0.7,
+    0.92
+   ],
+   "majority_acc": [
+    0.76,
+    0.64,
+    0.88
+   ],
+   "acc_test": {
+    "only_a": 6,
+    "only_b": 3,
+    "p_value": 0.5078125
+   },
+   "aggregator_adopted": [
+    0.06,
+    0.0,
+    0.14
+   ],
+   "majority_adopted": [
+    0.06,
+    0.0,
+    0.14
+   ],
+   "adopt_test": {
+    "only_a": 1,
+    "only_b": 1,
+    "p_value": 1.0
+   }
+  },
+  "chain-neutral-p2-none": {
+   "n": 50,
+   "aggregator_acc": [
+    0.82,
+    0.7,
+    0.92
+   ],
+   "majority_acc": [
+    0.78,
+    0.66,
+    0.88
+   ],
+   "acc_test": {
+    "only_a": 5,
+    "only_b": 3,
+    "p_value": 0.7265625
+   },
+   "aggregator_adopted": [
+    0.08,
+    0.02,
+    0.16
+   ],
+   "majority_adopted": [
+    0.02,
+    0.0,
+    0.06
+   ],
+   "adopt_test": {
+    "only_a": 4,
+    "only_b": 1,
+    "p_value": 0.375
+   }
+  },
+  "chain-neutral-p2-skeptical": {
+   "n": 50,
+   "aggregator_acc": [
+    0.9,
+    0.82,
+    0.98
+   ],
+   "majority_acc": [
+    0.82,
+    0.7,
+    0.92
+   ],
+   "acc_test": {
+    "only_a": 5,
+    "only_b": 1,
+    "p_value": 0.21875
+   },
+   "aggregator_adopted": [
+    0.02,
+    0.0,
+    0.06
+   ],
+   "majority_adopted": [
+    0.02,
+    0.0,
+    0.06
+   ],
+   "adopt_test": {
+    "only_a": 1,
+    "only_b": 1,
+    "p_value": 1.0
+   }
+  },
+  "chain-neutral-p2-verifier": {
+   "n": 50,
+   "aggregator_acc": [
+    0.78,
+    0.66,
+    0.88
+   ],
+   "majority_acc": [
+    0.76,
+    0.64,
+    0.88
+   ],
+   "acc_test": {
+    "only_a": 5,
+    "only_b": 4,
+    "p_value": 1.0
+   },
+   "aggregator_adopted": [
+    0.08,
+    0.02,
+    0.16
+   ],
+   "majority_adopted": [
+    0.02,
+    0.0,
+    0.06
+   ],
+   "adopt_test": {
+    "only_a": 4,
+    "only_b": 1,
+    "p_value": 0.375
+   }
+  },
+  "chain-neutral-p3-none": {
+   "n": 50,
+   "aggregator_acc": [
+    0.78,
+    0.66,
+    0.88
+   ],
+   "majority_acc": [
+    0.78,
+    0.66,
+    0.88
+   ],
+   "acc_test": {
+    "only_a": 5,
+    "only_b": 5,
+    "p_value": 1.0
+   },
+   "aggregator_adopted": [
+    0.1,
+    0.02,
+    0.18
+   ],
+   "majority_adopted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "adopt_test": {
+    "only_a": 5,
+    "only_b": 0,
+    "p_value": 0.0625
+   }
+  },
+  "chain-neutral-p3-skeptical": {
+   "n": 50,
+   "aggregator_acc": [
+    0.64,
+    0.5,
+    0.76
+   ],
+   "majority_acc": [
+    0.8,
+    0.68,
+    0.9
+   ],
+   "acc_test": {
+    "only_a": 3,
+    "only_b": 11,
+    "p_value": 0.057373046875
+   },
+   "aggregator_adopted": [
+    0.18,
+    0.08,
+    0.3
+   ],
+   "majority_adopted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "adopt_test": {
+    "only_a": 9,
+    "only_b": 0,
+    "p_value": 0.00390625
+   }
+  },
+  "chain-neutral-p3-verifier": {
+   "n": 50,
+   "aggregator_acc": [
+    0.9,
+    0.8,
+    0.98
+   ],
+   "majority_acc": [
+    0.78,
+    0.66,
+    0.88
+   ],
+   "acc_test": {
+    "only_a": 7,
+    "only_b": 1,
+    "p_value": 0.0703125
+   },
+   "aggregator_adopted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "majority_adopted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "adopt_test": {
+    "only_a": 0,
+    "only_b": 0,
+    "p_value": 1.0
+   }
+  },
+  "chain-none-none": {
+   "n": 50,
+   "aggregator_acc": [
+    0.84,
+    0.74,
+    0.94
+   ],
+   "majority_acc": [
+    0.84,
+    0.74,
+    0.94
+   ],
+   "acc_test": {
+    "only_a": 1,
+    "only_b": 1,
+    "p_value": 1.0
+   }
+  },
+  "chain-none-skeptical": {
+   "n": 50,
+   "aggregator_acc": [
+    0.9,
+    0.8,
+    0.98
+   ],
+   "majority_acc": [
+    0.88,
+    0.78,
+    0.96
+   ],
+   "acc_test": {
+    "only_a": 2,
+    "only_b": 1,
+    "p_value": 1.0
+   }
+  },
+  "chain-none-verifier": {
+   "n": 50,
+   "aggregator_acc": [
+    0.9,
+    0.82,
+    0.98
+   ],
+   "majority_acc": [
+    0.88,
+    0.78,
+    0.96
+   ],
+   "acc_test": {
+    "only_a": 1,
+    "only_b": 0,
+    "p_value": 1.0
+   }
+  },
+  "chain-persuasive-p1-none": {
+   "n": 50,
+   "aggregator_acc": [
+    0.54,
+    0.4,
+    0.68
+   ],
+   "majority_acc": [
+    0.82,
+    0.7,
+    0.92
+   ],
+   "acc_test": {
+    "only_a": 2,
+    "only_b": 16,
+    "p_value": 0.001312255859375
+   },
+   "aggregator_adopted": [
+    0.36,
+    0.22,
+    0.5
+   ],
+   "majority_adopted": [
+    0.04,
+    0.0,
+    0.1
+   ],
+   "adopt_test": {
+    "only_a": 16,
+    "only_b": 0,
+    "p_value": 3.0517578125e-05
+   }
+  },
+  "chain-persuasive-p1-skeptical": {
+   "n": 50,
+   "aggregator_acc": [
+    0.56,
+    0.42,
+    0.7
+   ],
+   "majority_acc": [
+    0.74,
+    0.62,
+    0.86
+   ],
+   "acc_test": {
+    "only_a": 2,
+    "only_b": 11,
+    "p_value": 0.0224609375
+   },
+   "aggregator_adopted": [
+    0.36,
+    0.24,
+    0.5
+   ],
+   "majority_adopted": [
+    0.04,
+    0.0,
+    0.1
+   ],
+   "adopt_test": {
+    "only_a": 16,
+    "only_b": 0,
+    "p_value": 3.0517578125e-05
+   }
+  },
+  "chain-persuasive-p1-verifier": {
+   "n": 50,
+   "aggregator_acc": [
+    0.76,
+    0.64,
+    0.88
+   ],
+   "majority_acc": [
+    0.76,
+    0.64,
+    0.88
+   ],
+   "acc_test": {
+    "only_a": 5,
+    "only_b": 5,
+    "p_value": 1.0
+   },
+   "aggregator_adopted": [
+    0.08,
+    0.02,
+    0.16
+   ],
+   "majority_adopted": [
+    0.02,
+    0.0,
+    0.06
+   ],
+   "adopt_test": {
+    "only_a": 3,
+    "only_b": 0,
+    "p_value": 0.25
+   }
+  },
+  "chain-persuasive-p2-none": {
+   "n": 50,
+   "aggregator_acc": [
+    0.88,
+    0.78,
+    0.96
+   ],
+   "majority_acc": [
+    0.78,
+    0.66,
+    0.88
+   ],
+   "acc_test": {
+    "only_a": 6,
+    "only_b": 1,
+    "p_value": 0.125
+   },
+   "aggregator_adopted": [
+    0.04,
+    0.0,
+    0.1
+   ],
+   "majority_adopted": [
+    0.02,
+    0.0,
+    0.06
+   ],
+   "adopt_test": {
+    "only_a": 2,
+    "only_b": 1,
+    "p_value": 1.0
+   }
+  },
+  "chain-persuasive-p2-skeptical": {
+   "n": 50,
+   "aggregator_acc": [
+    0.84,
+    0.74,
+    0.94
+   ],
+   "majority_acc": [
+    0.76,
+    0.64,
+    0.88
+   ],
+   "acc_test": {
+    "only_a": 7,
+    "only_b": 3,
+    "p_value": 0.34375
+   },
+   "aggregator_adopted": [
+    0.02,
+    0.0,
+    0.06
+   ],
+   "majority_adopted": [
+    0.02,
+    0.0,
+    0.06
+   ],
+   "adopt_test": {
+    "only_a": 1,
+    "only_b": 1,
+    "p_value": 1.0
+   }
+  },
+  "chain-persuasive-p2-verifier": {
+   "n": 50,
+   "aggregator_acc": [
+    0.8,
+    0.68,
+    0.9
+   ],
+   "majority_acc": [
+    0.82,
+    0.7,
+    0.92
+   ],
+   "acc_test": {
+    "only_a": 2,
+    "only_b": 3,
+    "p_value": 1.0
+   },
+   "aggregator_adopted": [
+    0.06,
+    0.0,
+    0.14
+   ],
+   "majority_adopted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "adopt_test": {
+    "only_a": 3,
+    "only_b": 0,
+    "p_value": 0.25
+   }
+  },
+  "chain-persuasive-p3-none": {
+   "n": 50,
+   "aggregator_acc": [
+    0.74,
+    0.62,
+    0.86
+   ],
+   "majority_acc": [
+    0.78,
+    0.66,
+    0.88
+   ],
+   "acc_test": {
+    "only_a": 3,
+    "only_b": 5,
+    "p_value": 0.7265625
+   },
+   "aggregator_adopted": [
+    0.1,
+    0.02,
+    0.18
+   ],
+   "majority_adopted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "adopt_test": {
+    "only_a": 5,
+    "only_b": 0,
+    "p_value": 0.0625
+   }
+  },
+  "chain-persuasive-p3-skeptical": {
+   "n": 50,
+   "aggregator_acc": [
+    0.72,
+    0.6,
+    0.84
+   ],
+   "majority_acc": [
+    0.8,
+    0.68,
+    0.9
+   ],
+   "acc_test": {
+    "only_a": 4,
+    "only_b": 8,
+    "p_value": 0.3876953125
+   },
+   "aggregator_adopted": [
+    0.14,
+    0.06,
+    0.24
+   ],
+   "majority_adopted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "adopt_test": {
+    "only_a": 7,
+    "only_b": 0,
+    "p_value": 0.015625
+   }
+  },
+  "chain-persuasive-p3-verifier": {
+   "n": 50,
+   "aggregator_acc": [
+    0.9,
+    0.8,
+    0.98
+   ],
+   "majority_acc": [
+    0.78,
+    0.66,
+    0.88
+   ],
+   "acc_test": {
+    "only_a": 7,
+    "only_b": 1,
+    "p_value": 0.0703125
+   },
+   "aggregator_adopted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "majority_adopted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "adopt_test": {
+    "only_a": 0,
+    "only_b": 0,
+    "p_value": 1.0
+   }
+  },
+  "star-neutral-p1-none": {
+   "n": 50,
+   "aggregator_acc": [
+    0.6,
+    0.46,
+    0.74
+   ],
+   "majority_acc": [
+    0.66,
+    0.52,
+    0.78
+   ],
+   "acc_test": {
+    "only_a": 6,
+    "only_b": 9,
+    "p_value": 0.6072387695312499
+   },
+   "aggregator_adopted": [
+    0.28,
+    0.16,
+    0.4
+   ],
+   "majority_adopted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "adopt_test": {
+    "only_a": 14,
+    "only_b": 0,
+    "p_value": 0.0001220703125
+   }
+  },
+  "star-neutral-p1-skeptical": {
+   "n": 50,
+   "aggregator_acc": [
+    0.78,
+    0.66,
+    0.88
+   ],
+   "majority_acc": [
+    0.68,
+    0.54,
+    0.8
+   ],
+   "acc_test": {
+    "only_a": 9,
+    "only_b": 4,
+    "p_value": 0.266845703125
+   },
+   "aggregator_adopted": [
+    0.12,
+    0.04,
+    0.22
+   ],
+   "majority_adopted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "adopt_test": {
+    "only_a": 6,
+    "only_b": 0,
+    "p_value": 0.03125
+   }
+  },
+  "star-neutral-p1-verifier": {
+   "n": 50,
+   "aggregator_acc": [
+    0.86,
+    0.76,
+    0.94
+   ],
+   "majority_acc": [
+    0.64,
+    0.5,
+    0.76
+   ],
+   "acc_test": {
+    "only_a": 13,
+    "only_b": 2,
+    "p_value": 0.00738525390625
+   },
+   "aggregator_adopted": [
+    0.04,
+    0.0,
+    0.1
+   ],
+   "majority_adopted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "adopt_test": {
+    "only_a": 2,
+    "only_b": 0,
+    "p_value": 0.5
+   }
+  },
+  "star-none-none": {
+   "n": 50,
+   "aggregator_acc": [
+    0.94,
+    0.86,
+    1.0
+   ],
+   "majority_acc": [
+    0.84,
+    0.74,
+    0.94
+   ],
+   "acc_test": {
+    "only_a": 5,
+    "only_b": 0,
+    "p_value": 0.0625
+   }
+  },
+  "star-none-skeptical": {
+   "n": 50,
+   "aggregator_acc": [
+    0.88,
+    0.78,
+    0.96
+   ],
+   "majority_acc": [
+    0.86,
+    0.76,
+    0.94
+   ],
+   "acc_test": {
+    "only_a": 3,
+    "only_b": 2,
+    "p_value": 1.0
+   }
+  },
+  "star-none-verifier": {
+   "n": 50,
+   "aggregator_acc": [
+    0.9,
+    0.82,
+    0.98
+   ],
+   "majority_acc": [
+    0.86,
+    0.76,
+    0.94
+   ],
+   "acc_test": {
+    "only_a": 4,
+    "only_b": 2,
+    "p_value": 0.6875
+   }
+  },
+  "star-persuasive-p1-none": {
+   "n": 50,
+   "aggregator_acc": [
+    0.72,
+    0.6,
+    0.84
+   ],
+   "majority_acc": [
+    0.66,
+    0.52,
+    0.78
+   ],
+   "acc_test": {
+    "only_a": 8,
+    "only_b": 5,
+    "p_value": 0.5810546875
+   },
+   "aggregator_adopted": [
+    0.18,
+    0.08,
+    0.3
+   ],
+   "majority_adopted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "adopt_test": {
+    "only_a": 9,
+    "only_b": 0,
+    "p_value": 0.00390625
+   }
+  },
+  "star-persuasive-p1-skeptical": {
+   "n": 50,
+   "aggregator_acc": [
+    0.8,
+    0.68,
+    0.9
+   ],
+   "majority_acc": [
+    0.68,
+    0.54,
+    0.8
+   ],
+   "acc_test": {
+    "only_a": 10,
+    "only_b": 4,
+    "p_value": 0.1795654296875
+   },
+   "aggregator_adopted": [
+    0.14,
+    0.06,
+    0.24
+   ],
+   "majority_adopted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "adopt_test": {
+    "only_a": 7,
+    "only_b": 0,
+    "p_value": 0.015625
+   }
+  },
+  "star-persuasive-p1-verifier": {
+   "n": 50,
+   "aggregator_acc": [
+    0.86,
+    0.76,
+    0.94
+   ],
+   "majority_acc": [
+    0.66,
+    0.52,
+    0.78
+   ],
+   "acc_test": {
+    "only_a": 11,
+    "only_b": 1,
+    "p_value": 0.00634765625
+   },
+   "aggregator_adopted": [
+    0.04,
+    0.0,
+    0.1
+   ],
+   "majority_adopted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "adopt_test": {
+    "only_a": 2,
+    "only_b": 0,
+    "p_value": 0.5
+   }
+  }
+ },
+ "defenses": {
+  "chain-neutral-p1": [
+   {
+    "method": "none",
+    "n": 50,
+    "outcome": "team adopted",
+    "rate": [
+     0.3,
+     0.18,
+     0.44
+    ],
+    "recovery": [
+     0.58,
+     0.44,
+     0.72
+    ],
+    "calls_per_q": 3.0,
+    "tokens_per_q": 1871.5,
+    "vs_none": null,
+    "vs_majority": {
+     "only_a": 13,
+     "only_b": 1,
+     "p_value": 0.0018310546875
+    }
+   },
+   {
+    "method": "majority vote",
+    "n": 50,
+    "outcome": "team adopted",
+    "rate": [
+     0.06,
+     0.0,
+     0.14
+    ],
+    "recovery": [
+     0.78,
+     0.66,
+     0.9
+    ],
+    "calls_per_q": 2.0,
+    "tokens_per_q": 1038.62,
+    "vs_none": {
+     "only_a": 1,
+     "only_b": 13,
+     "p_value": 0.0018310546875
+    },
+    "vs_majority": null
+   },
+   {
+    "method": "skeptical",
+    "n": 50,
+    "outcome": "team adopted",
+    "rate": [
+     0.26,
+     0.14,
+     0.38
+    ],
+    "recovery": [
+     0.64,
+     0.5,
+     0.76
+    ],
+    "calls_per_q": 3.0,
+    "tokens_per_q": 2083.0,
+    "vs_none": {
+     "only_a": 6,
+     "only_b": 8,
+     "p_value": 0.79052734375
+    },
+    "vs_majority": {
+     "only_a": 11,
+     "only_b": 1,
+     "p_value": 0.00634765625
+    }
+   },
+   {
+    "method": "verifier",
+    "n": 50,
+    "outcome": "team adopted",
+    "rate": [
+     0.06,
+     0.0,
+     0.14
+    ],
+    "recovery": [
+     0.82,
+     0.7,
+     0.92
+    ],
+    "calls_per_q": 6.0,
+    "tokens_per_q": 3223.12,
+    "vs_none": {
+     "only_a": 0,
+     "only_b": 12,
+     "p_value": 0.00048828125
+    },
+    "vs_majority": {
+     "only_a": 1,
+     "only_b": 1,
+     "p_value": 1.0
+    }
+   }
+  ],
+  "chain-neutral-p2": [
+   {
+    "method": "none",
+    "n": 50,
+    "outcome": "team adopted",
+    "rate": [
+     0.08,
+     0.02,
+     0.16
+    ],
+    "recovery": [
+     0.82,
+     0.7,
+     0.92
+    ],
+    "calls_per_q": 3.0,
+    "tokens_per_q": 1667.2,
+    "vs_none": null,
+    "vs_majority": {
+     "only_a": 4,
+     "only_b": 1,
+     "p_value": 0.375
+    }
+   },
+   {
+    "method": "majority vote",
+    "n": 50,
+    "outcome": "team adopted",
+    "rate": [
+     0.02,
+     0.0,
+     0.06
+    ],
+    "recovery": [
+     0.78,
+     0.66,
+     0.88
+    ],
+    "calls_per_q": 2.0,
+    "tokens_per_q": 829.08,
+    "vs_none": {
+     "only_a": 1,
+     "only_b": 4,
+     "p_value": 0.375
+    },
+    "vs_majority": null
+   },
+   {
+    "method": "skeptical",
+    "n": 50,
+    "outcome": "team adopted",
+    "rate": [
+     0.02,
+     0.0,
+     0.06
+    ],
+    "recovery": [
+     0.9,
+     0.82,
+     0.98
+    ],
+    "calls_per_q": 3.0,
+    "tokens_per_q": 1814.2,
+    "vs_none": {
+     "only_a": 1,
+     "only_b": 4,
+     "p_value": 0.375
+    },
+    "vs_majority": {
+     "only_a": 1,
+     "only_b": 1,
+     "p_value": 1.0
+    }
+   },
+   {
+    "method": "verifier",
+    "n": 50,
+    "outcome": "team adopted",
+    "rate": [
+     0.08,
+     0.02,
+     0.16
+    ],
+    "recovery": [
+     0.78,
+     0.66,
+     0.88
+    ],
+    "calls_per_q": 6.0,
+    "tokens_per_q": 3345.74,
+    "vs_none": {
+     "only_a": 3,
+     "only_b": 3,
+     "p_value": 1.0
+    },
+    "vs_majority": {
+     "only_a": 4,
+     "only_b": 1,
+     "p_value": 0.375
+    }
+   }
+  ],
+  "chain-neutral-p3": [
+   {
+    "method": "none",
+    "n": 50,
+    "outcome": "team adopted",
+    "rate": [
+     0.1,
+     0.02,
+     0.18049999999999272
+    ],
+    "recovery": [
+     0.78,
+     0.66,
+     0.88
+    ],
+    "calls_per_q": 3.0,
+    "tokens_per_q": 1730.14,
+    "vs_none": null,
+    "vs_majority": {
+     "only_a": 5,
+     "only_b": 0,
+     "p_value": 0.0625
+    }
+   },
+   {
+    "method": "majority vote",
+    "n": 50,
+    "outcome": "team adopted",
+    "rate": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "recovery": [
+     0.78,
+     0.66,
+     0.88
+    ],
+    "calls_per_q": 2.0,
+    "tokens_per_q": 903.1,
+    "vs_none": {
+     "only_a": 0,
+     "only_b": 5,
+     "p_value": 0.0625
+    },
+    "vs_majority": null
+   },
+   {
+    "method": "skeptical",
+    "n": 50,
+    "outcome": "team adopted",
+    "rate": [
+     0.18,
+     0.08,
+     0.3
+    ],
+    "recovery": [
+     0.64,
+     0.5,
+     0.76
+    ],
+    "calls_per_q": 3.0,
+    "tokens_per_q": 1913.22,
+    "vs_none": {
+     "only_a": 8,
+     "only_b": 4,
+     "p_value": 0.3876953125
+    },
+    "vs_majority": {
+     "only_a": 9,
+     "only_b": 0,
+     "p_value": 0.00390625
+    }
+   },
+   {
+    "method": "verifier",
+    "n": 50,
+    "outcome": "team adopted",
+    "rate": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "recovery": [
+     0.9,
+     0.82,
+     0.98
+    ],
+    "calls_per_q": 6.0,
+    "tokens_per_q": 3255.36,
+    "vs_none": {
+     "only_a": 0,
+     "only_b": 5,
+     "p_value": 0.0625
+    },
+    "vs_majority": {
+     "only_a": 0,
+     "only_b": 0,
+     "p_value": 1.0
+    }
+   }
+  ],
+  "chain-none": [
+   {
+    "method": "none",
+    "n": 50,
+    "outcome": "accuracy",
+    "rate": [
+     0.84,
+     0.74,
+     0.94
+    ],
+    "recovery": null,
+    "calls_per_q": 4.0,
+    "tokens_per_q": 2434.5,
+    "vs_none": null,
+    "vs_majority": {
+     "only_a": 1,
+     "only_b": 1,
+     "p_value": 1.0
+    }
+   },
+   {
+    "method": "majority vote",
+    "n": 50,
+    "outcome": "accuracy",
+    "rate": [
+     0.84,
+     0.74,
+     0.94
+    ],
+    "recovery": null,
+    "calls_per_q": 3.0,
+    "tokens_per_q": 1515.3,
+    "vs_none": {
+     "only_a": 1,
+     "only_b": 1,
+     "p_value": 1.0
+    },
+    "vs_majority": null
+   },
+   {
+    "method": "skeptical",
+    "n": 50,
+    "outcome": "accuracy",
+    "rate": [
+     0.9,
+     0.82,
+     0.98
+    ],
+    "recovery": null,
+    "calls_per_q": 4.0,
+    "tokens_per_q": 2739.34,
+    "vs_none": {
+     "only_a": 4,
+     "only_b": 1,
+     "p_value": 0.375
+    },
+    "vs_majority": {
+     "only_a": 4,
+     "only_b": 1,
+     "p_value": 0.375
+    }
+   },
+   {
+    "method": "verifier",
+    "n": 50,
+    "outcome": "accuracy",
+    "rate": [
+     0.9,
+     0.82,
+     0.98
+    ],
+    "recovery": null,
+    "calls_per_q": 7.0,
+    "tokens_per_q": 4177.6,
+    "vs_none": {
+     "only_a": 3,
+     "only_b": 0,
+     "p_value": 0.25
+    },
+    "vs_majority": {
+     "only_a": 3,
+     "only_b": 0,
+     "p_value": 0.25
+    }
+   }
+  ],
+  "chain-persuasive-p1": [
+   {
+    "method": "none",
+    "n": 50,
+    "outcome": "team adopted",
+    "rate": [
+     0.36,
+     0.22,
+     0.5
+    ],
+    "recovery": [
+     0.54,
+     0.4,
+     0.68
+    ],
+    "calls_per_q": 3.0,
+    "tokens_per_q": 1925.46,
+    "vs_none": null,
+    "vs_majority": {
+     "only_a": 16,
+     "only_b": 0,
+     "p_value": 3.0517578125e-05
+    }
+   },
+   {
+    "method": "majority vote",
+    "n": 50,
+    "outcome": "team adopted",
+    "rate": [
+     0.04,
+     0.0,
+     0.1
+    ],
+    "recovery": [
+     0.82,
+     0.7,
+     0.92
+    ],
+    "calls_per_q": 2.0,
+    "tokens_per_q": 1081.02,
+    "vs_none": {
+     "only_a": 0,
+     "only_b": 16,
+     "p_value": 3.0517578125e-05
+    },
+    "vs_majority": null
+   },
+   {
+    "method": "skeptical",
+    "n": 50,
+    "outcome": "team adopted",
+    "rate": [
+     0.36,
+     0.24,
+     0.5
+    ],
+    "recovery": [
+     0.56,
+     0.42,
+     0.7
+    ],
+    "calls_per_q": 3.0,
+    "tokens_per_q": 2143.1,
+    "vs_none": {
+     "only_a": 10,
+     "only_b": 10,
+     "p_value": 1.0
+    },
+    "vs_majority": {
+     "only_a": 17,
+     "only_b": 1,
+     "p_value": 0.00014495849609375
+    }
+   },
+   {
+    "method": "verifier",
+    "n": 50,
+    "outcome": "team adopted",
+    "rate": [
+     0.08,
+     0.02,
+     0.16
+    ],
+    "recovery": [
+     0.76,
+     0.64,
+     0.88
+    ],
+    "calls_per_q": 6.0,
+    "tokens_per_q": 3281.62,
+    "vs_none": {
+     "only_a": 0,
+     "only_b": 14,
+     "p_value": 0.0001220703125
+    },
+    "vs_majority": {
+     "only_a": 3,
+     "only_b": 1,
+     "p_value": 0.625
+    }
+   }
+  ],
+  "chain-persuasive-p2": [
+   {
+    "method": "none",
+    "n": 50,
+    "outcome": "team adopted",
+    "rate": [
+     0.04,
+     0.0,
+     0.1
+    ],
+    "recovery": [
+     0.88,
+     0.78,
+     0.96
+    ],
+    "calls_per_q": 3.0,
+    "tokens_per_q": 1724.52,
+    "vs_none": null,
+    "vs_majority": {
+     "only_a": 2,
+     "only_b": 1,
+     "p_value": 1.0
+    }
+   },
+   {
+    "method": "majority vote",
+    "n": 50,
+    "outcome": "team adopted",
+    "rate": [
+     0.02,
+     0.0,
+     0.06
+    ],
+    "recovery": [
+     0.78,
+     0.66,
+     0.88
+    ],
+    "calls_per_q": 2.0,
+    "tokens_per_q": 857.7,
+    "vs_none": {
+     "only_a": 1,
+     "only_b": 2,
+     "p_value": 1.0
+    },
+    "vs_majority": null
+   },
+   {
+    "method": "skeptical",
+    "n": 50,
+    "outcome": "team adopted",
+    "rate": [
+     0.02,
+     0.0,
+     0.06
+    ],
+    "recovery": [
+     0.84,
+     0.74,
+     0.94
+    ],
+    "calls_per_q": 3.0,
+    "tokens_per_q": 1856.22,
+    "vs_none": {
+     "only_a": 1,
+     "only_b": 2,
+     "p_value": 1.0
+    },
+    "vs_majority": {
+     "only_a": 0,
+     "only_b": 0,
+     "p_value": 1.0
+    }
+   },
+   {
+    "method": "verifier",
+    "n": 50,
+    "outcome": "team adopted",
+    "rate": [
+     0.06,
+     0.0,
+     0.14
+    ],
+    "recovery": [
+     0.8,
+     0.68,
+     0.9
+    ],
+    "calls_per_q": 6.0,
+    "tokens_per_q": 3381.68,
+    "vs_none": {
+     "only_a": 3,
+     "only_b": 2,
+     "p_value": 1.0
+    },
+    "vs_majority": {
+     "only_a": 3,
+     "only_b": 1,
+     "p_value": 0.625
+    }
+   }
+  ],
+  "chain-persuasive-p3": [
+   {
+    "method": "none",
+    "n": 50,
+    "outcome": "team adopted",
+    "rate": [
+     0.1,
+     0.02,
+     0.18
+    ],
+    "recovery": [
+     0.74,
+     0.62,
+     0.86
+    ],
+    "calls_per_q": 3.0,
+    "tokens_per_q": 1746.08,
+    "vs_none": null,
+    "vs_majority": {
+     "only_a": 5,
+     "only_b": 0,
+     "p_value": 0.0625
+    }
+   },
+   {
+    "method": "majority vote",
+    "n": 50,
+    "outcome": "team adopted",
+    "rate": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "recovery": [
+     0.78,
+     0.66,
+     0.88
+    ],
+    "calls_per_q": 2.0,
+    "tokens_per_q": 901.3,
+    "vs_none": {
+     "only_a": 0,
+     "only_b": 5,
+     "p_value": 0.0625
+    },
+    "vs_majority": null
+   },
+   {
+    "method": "skeptical",
+    "n": 50,
+    "outcome": "team adopted",
+    "rate": [
+     0.14,
+     0.06,
+     0.24
+    ],
+    "recovery": [
+     0.72,
+     0.6,
+     0.84
+    ],
+    "calls_per_q": 3.0,
+    "tokens_per_q": 1932.58,
+    "vs_none": {
+     "only_a": 6,
+     "only_b": 4,
+     "p_value": 0.75390625
+    },
+    "vs_majority": {
+     "only_a": 7,
+     "only_b": 0,
+     "p_value": 0.015625
+    }
+   },
+   {
+    "method": "verifier",
+    "n": 50,
+    "outcome": "team adopted",
+    "rate": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "recovery": [
+     0.9,
+     0.82,
+     0.98
+    ],
+    "calls_per_q": 6.0,
+    "tokens_per_q": 3296.24,
+    "vs_none": {
+     "only_a": 0,
+     "only_b": 5,
+     "p_value": 0.0625
+    },
+    "vs_majority": {
+     "only_a": 0,
+     "only_b": 0,
+     "p_value": 1.0
+    }
+   }
+  ],
+  "star-neutral-p1": [
+   {
+    "method": "none",
+    "n": 50,
+    "outcome": "team adopted",
+    "rate": [
+     0.28,
+     0.16,
+     0.4
+    ],
+    "recovery": [
+     0.6,
+     0.46,
+     0.74
+    ],
+    "calls_per_q": 3.0,
+    "tokens_per_q": 1481.08,
+    "vs_none": null,
+    "vs_majority": {
+     "only_a": 14,
+     "only_b": 0,
+     "p_value": 0.0001220703125
+    }
+   },
+   {
+    "method": "majority vote",
+    "n": 50,
+    "outcome": "team adopted",
+    "rate": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "recovery": [
+     0.66,
+     0.52,
+     0.78
+    ],
+    "calls_per_q": 2.0,
+    "tokens_per_q": 662.38,
+    "vs_none": {
+     "only_a": 0,
+     "only_b": 14,
+     "p_value": 0.0001220703125
+    },
+    "vs_majority": null
+   },
+   {
+    "method": "skeptical",
+    "n": 50,
+    "outcome": "team adopted",
+    "rate": [
+     0.12,
+     0.04,
+     0.22
+    ],
+    "recovery": [
+     0.78,
+     0.66,
+     0.88
+    ],
+    "calls_per_q": 3.0,
+    "tokens_per_q": 1601.0,
+    "vs_none": {
+     "only_a": 5,
+     "only_b": 13,
+     "p_value": 0.09625244140625
+    },
+    "vs_majority": {
+     "only_a": 6,
+     "only_b": 0,
+     "p_value": 0.03125
+    }
+   },
+   {
+    "method": "verifier",
+    "n": 50,
+    "outcome": "team adopted",
+    "rate": [
+     0.04,
+     0.0,
+     0.1
+    ],
+    "recovery": [
+     0.86,
+     0.76,
+     0.94
+    ],
+    "calls_per_q": 6.0,
+    "tokens_per_q": 2939.24,
+    "vs_none": {
+     "only_a": 0,
+     "only_b": 12,
+     "p_value": 0.00048828125
+    },
+    "vs_majority": {
+     "only_a": 2,
+     "only_b": 0,
+     "p_value": 0.5
+    }
+   }
+  ],
+  "star-none": [
+   {
+    "method": "none",
+    "n": 50,
+    "outcome": "accuracy",
+    "rate": [
+     0.94,
+     0.86,
+     1.0
+    ],
+    "recovery": null,
+    "calls_per_q": 4.0,
+    "tokens_per_q": 1853.48,
+    "vs_none": null,
+    "vs_majority": {
+     "only_a": 5,
+     "only_b": 0,
+     "p_value": 0.0625
+    }
+   },
+   {
+    "method": "majority vote",
+    "n": 50,
+    "outcome": "accuracy",
+    "rate": [
+     0.84,
+     0.74,
+     0.94
+    ],
+    "recovery": null,
+    "calls_per_q": 3.0,
+    "tokens_per_q": 988.9,
+    "vs_none": {
+     "only_a": 0,
+     "only_b": 5,
+     "p_value": 0.0625
+    },
+    "vs_majority": null
+   },
+   {
+    "method": "skeptical",
+    "n": 50,
+    "outcome": "accuracy",
+    "rate": [
+     0.88,
+     0.78,
+     0.96
+    ],
+    "recovery": null,
+    "calls_per_q": 4.0,
+    "tokens_per_q": 1945.48,
+    "vs_none": {
+     "only_a": 0,
+     "only_b": 3,
+     "p_value": 0.25
+    },
+    "vs_majority": {
+     "only_a": 4,
+     "only_b": 2,
+     "p_value": 0.6875
+    }
+   },
+   {
+    "method": "verifier",
+    "n": 50,
+    "outcome": "accuracy",
+    "rate": [
+     0.9,
+     0.82,
+     0.98
+    ],
+    "recovery": null,
+    "calls_per_q": 7.0,
+    "tokens_per_q": 3515.98,
+    "vs_none": {
+     "only_a": 0,
+     "only_b": 2,
+     "p_value": 0.5
+    },
+    "vs_majority": {
+     "only_a": 5,
+     "only_b": 2,
+     "p_value": 0.453125
+    }
+   }
+  ],
+  "star-persuasive-p1": [
+   {
+    "method": "none",
+    "n": 50,
+    "outcome": "team adopted",
+    "rate": [
+     0.18,
+     0.08,
+     0.3
+    ],
+    "recovery": [
+     0.72,
+     0.6,
+     0.84
+    ],
+    "calls_per_q": 3.0,
+    "tokens_per_q": 1492.48,
+    "vs_none": null,
+    "vs_majority": {
+     "only_a": 9,
+     "only_b": 0,
+     "p_value": 0.00390625
+    }
+   },
+   {
+    "method": "majority vote",
+    "n": 50,
+    "outcome": "team adopted",
+    "rate": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "recovery": [
+     0.66,
+     0.52,
+     0.78
+    ],
+    "calls_per_q": 2.0,
+    "tokens_per_q": 659.92,
+    "vs_none": {
+     "only_a": 0,
+     "only_b": 9,
+     "p_value": 0.00390625
+    },
+    "vs_majority": null
+   },
+   {
+    "method": "skeptical",
+    "n": 50,
+    "outcome": "team adopted",
+    "rate": [
+     0.14,
+     0.06,
+     0.24
+    ],
+    "recovery": [
+     0.8,
+     0.68,
+     0.9
+    ],
+    "calls_per_q": 3.0,
+    "tokens_per_q": 1588.16,
+    "vs_none": {
+     "only_a": 4,
+     "only_b": 6,
+     "p_value": 0.75390625
+    },
+    "vs_majority": {
+     "only_a": 7,
+     "only_b": 0,
+     "p_value": 0.015625
+    }
+   },
+   {
+    "method": "verifier",
+    "n": 50,
+    "outcome": "team adopted",
+    "rate": [
+     0.04,
+     0.0,
+     0.1
+    ],
+    "recovery": [
+     0.86,
+     0.76,
+     0.94
+    ],
+    "calls_per_q": 6.0,
+    "tokens_per_q": 2948.78,
+    "vs_none": {
+     "only_a": 1,
+     "only_b": 8,
+     "p_value": 0.0390625
+    },
+    "vs_majority": {
+     "only_a": 2,
+     "only_b": 0,
+     "p_value": 0.5
+    }
+   }
+  ],
+  "chain-all faults": [
+   {
+    "method": "none",
+    "n": 300,
+    "outcome": "team adopted",
+    "rate": [
+     0.16333333333333333,
+     0.12333333333333334,
+     0.20666666666666667
+    ],
+    "recovery": [
+     0.7233333333333334,
+     0.67,
+     0.7733333333333333
+    ],
+    "calls_per_q": 3.0,
+    "tokens_per_q": 1777.4833333333333,
+    "vs_none": null,
+    "vs_majority": {
+     "only_a": 45,
+     "only_b": 3,
+     "p_value": 1.312585595769633e-10
+    }
+   },
+   {
+    "method": "majority vote",
+    "n": 300,
+    "outcome": "team adopted",
+    "rate": [
+     0.023333333333333334,
+     0.01,
+     0.043333333333333335
+    ],
+    "recovery": [
+     0.7866666666666666,
+     0.74,
+     0.8333333333333334
+    ],
+    "calls_per_q": 2.0,
+    "tokens_per_q": 935.1366666666667,
+    "vs_none": {
+     "only_a": 3,
+     "only_b": 45,
+     "p_value": 1.312585595769633e-10
+    },
+    "vs_majority": null
+   },
+   {
+    "method": "skeptical",
+    "n": 300,
+    "outcome": "team adopted",
+    "rate": [
+     0.16333333333333333,
+     0.12333333333333334,
+     0.20666666666666667
+    ],
+    "recovery": [
+     0.7166666666666667,
+     0.6633333333333333,
+     0.7666666666666667
+    ],
+    "calls_per_q": 3.0,
+    "tokens_per_q": 1957.0533333333333,
+    "vs_none": {
+     "only_a": 32,
+     "only_b": 32,
+     "p_value": 1.0
+    },
+    "vs_majority": {
+     "only_a": 45,
+     "only_b": 3,
+     "p_value": 1.312585595769633e-10
+    }
+   },
+   {
+    "method": "verifier",
+    "n": 300,
+    "outcome": "team adopted",
+    "rate": [
+     0.04666666666666667,
+     0.023333333333333334,
+     0.07333333333333333
+    ],
+    "recovery": [
+     0.8266666666666667,
+     0.7833333333333333,
+     0.87
+    ],
+    "calls_per_q": 6.0,
+    "tokens_per_q": 3297.2933333333335,
+    "vs_none": {
+     "only_a": 6,
+     "only_b": 41,
+     "p_value": 1.7716986633331544e-07
+    },
+    "vs_majority": {
+     "only_a": 11,
+     "only_b": 4,
+     "p_value": 0.11846923828124999
+    }
+   }
+  ],
+  "star-all faults": [
+   {
+    "method": "none",
+    "n": 100,
+    "outcome": "team adopted",
+    "rate": [
+     0.23,
+     0.15,
+     0.31
+    ],
+    "recovery": [
+     0.66,
+     0.56,
+     0.75
+    ],
+    "calls_per_q": 3.0,
+    "tokens_per_q": 1486.78,
+    "vs_none": null,
+    "vs_majority": {
+     "only_a": 23,
+     "only_b": 0,
+     "p_value": 2.384185791015625e-07
+    }
+   },
+   {
+    "method": "majority vote",
+    "n": 100,
+    "outcome": "team adopted",
+    "rate": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "recovery": [
+     0.66,
+     0.56,
+     0.75
+    ],
+    "calls_per_q": 2.0,
+    "tokens_per_q": 661.15,
+    "vs_none": {
+     "only_a": 0,
+     "only_b": 23,
+     "p_value": 2.384185791015625e-07
+    },
+    "vs_majority": null
+   },
+   {
+    "method": "skeptical",
+    "n": 100,
+    "outcome": "team adopted",
+    "rate": [
+     0.13,
+     0.07,
+     0.2
+    ],
+    "recovery": [
+     0.79,
+     0.71,
+     0.87
+    ],
+    "calls_per_q": 3.0,
+    "tokens_per_q": 1594.58,
+    "vs_none": {
+     "only_a": 9,
+     "only_b": 19,
+     "p_value": 0.08715855330228806
+    },
+    "vs_majority": {
+     "only_a": 13,
+     "only_b": 0,
+     "p_value": 0.000244140625
+    }
+   },
+   {
+    "method": "verifier",
+    "n": 100,
+    "outcome": "team adopted",
+    "rate": [
+     0.04,
+     0.01,
+     0.08
+    ],
+    "recovery": [
+     0.86,
+     0.79,
+     0.92
+    ],
+    "calls_per_q": 6.0,
+    "tokens_per_q": 2944.01,
+    "vs_none": {
+     "only_a": 1,
+     "only_b": 20,
+     "p_value": 2.09808349609375e-05
+    },
+    "vs_majority": {
+     "only_a": 4,
+     "only_b": 0,
+     "p_value": 0.125
+    }
+   }
+  ]
+ },
+ "verifier": {
+  "all verifier configs": {
+   "n_verdicts": 1500,
+   "n_wrong": 602,
+   "recall": [
+    0.7308970099667774,
+    0.6890617967471359,
+    0.772020725388601
+   ],
+   "precision": [
+    0.962800875273523,
+    0.9451209047273539,
+    0.9785407725321889
+   ],
+   "false_positive_rate": [
+    0.01893095768374165,
+    0.010810810810810811,
+    0.028540849929433895
+   ],
+   "fault_recall": [
+    0.8575,
+    0.8229659105823957,
+    0.890818858560794
+   ],
+   "unparsed": [
+    0.02666666666666667,
+    0.018666666666666668,
+    0.035333333333333335
+   ],
+   "all_dropped": [
+    0.03,
+    0.016,
+    0.046
+   ]
+  },
+  "chain-neutral-p1-verifier": {
+   "n_verdicts": 150,
+   "n_wrong": 70,
+   "recall": [
+    0.7714285714285715,
+    0.6515063424947146,
+    0.890625
+   ],
+   "precision": [
+    0.9642857142857143,
+    0.9152542372881356,
+    1.0
+   ],
+   "false_positive_rate": [
+    0.025,
+    0.0,
+    0.06452660242982808
+   ],
+   "fault_recall": [
+    0.86,
+    0.76,
+    0.94
+   ],
+   "unparsed": [
+    0.02,
+    0.0,
+    0.04666666666666667
+   ],
+   "all_dropped": [
+    0.06,
+    0.0,
+    0.14
+   ]
+  },
+  "chain-neutral-p2-verifier": {
+   "n_verdicts": 150,
+   "n_wrong": 67,
+   "recall": [
+    0.7014925373134329,
+    0.5733333333333334,
+    0.8307692307692308
+   ],
+   "precision": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "false_positive_rate": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "fault_recall": [
+    0.78,
+    0.66,
+    0.88
+   ],
+   "unparsed": [
+    0.03333333333333333,
+    0.006666666666666667,
+    0.07333333333333333
+   ],
+   "all_dropped": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "chain-neutral-p3-verifier": {
+   "n_verdicts": 150,
+   "n_wrong": 67,
+   "recall": [
+    0.746268656716418,
+    0.6172839506172839,
+    0.8709677419354839
+   ],
+   "precision": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "false_positive_rate": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "fault_recall": [
+    0.86,
+    0.76,
+    0.94
+   ],
+   "unparsed": [
+    0.013333333333333334,
+    0.0,
+    0.03333333333333333
+   ],
+   "all_dropped": [
+    0.02,
+    0.0,
+    0.06
+   ]
+  },
+  "chain-none-verifier": {
+   "n_verdicts": 150,
+   "n_wrong": 23,
+   "recall": [
+    0.43478260869565216,
+    0.16666666666666666,
+    0.75
+   ],
+   "precision": [
+    0.9090909090909091,
+    0.7142857142857143,
+    1.0
+   ],
+   "false_positive_rate": [
+    0.007874015748031496,
+    0.0,
+    0.025423728813559324
+   ],
+   "fault_recall": [
+    null,
+    null,
+    null
+   ],
+   "unparsed": [
+    0.013333333333333334,
+    0.0,
+    0.03333333333333333
+   ],
+   "all_dropped": [
+    0.02,
+    0.0,
+    0.06
+   ]
+  },
+  "chain-persuasive-p1-verifier": {
+   "n_verdicts": 150,
+   "n_wrong": 68,
+   "recall": [
+    0.7794117647058824,
+    0.6710484676882078,
+    0.8923076923076924
+   ],
+   "precision": [
+    0.9636363636363636,
+    0.9122807017543859,
+    1.0
+   ],
+   "false_positive_rate": [
+    0.024390243902439025,
+    0.0,
+    0.06329113924050633
+   ],
+   "fault_recall": [
+    0.9,
+    0.82,
+    0.98
+   ],
+   "unparsed": [
+    0.03333333333333333,
+    0.006666666666666667,
+    0.06
+   ],
+   "all_dropped": [
+    0.04,
+    0.0,
+    0.1
+   ]
+  },
+  "chain-persuasive-p2-verifier": {
+   "n_verdicts": 150,
+   "n_wrong": 64,
+   "recall": [
+    0.75,
+    0.6438356164383562,
+    0.8666666666666667
+   ],
+   "precision": [
+    0.96,
+    0.9038461538461539,
+    1.0
+   ],
+   "false_positive_rate": [
+    0.023255813953488372,
+    0.0,
+    0.060259330002938316
+   ],
+   "fault_recall": [
+    0.86,
+    0.76,
+    0.94
+   ],
+   "unparsed": [
+    0.06666666666666667,
+    0.02666666666666667,
+    0.11333333333333333
+   ],
+   "all_dropped": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "chain-persuasive-p3-verifier": {
+   "n_verdicts": 150,
+   "n_wrong": 67,
+   "recall": [
+    0.7611940298507462,
+    0.631578947368421,
+    0.8840579710144928
+   ],
+   "precision": [
+    0.9807692307692307,
+    0.9387755102040817,
+    1.0
+   ],
+   "false_positive_rate": [
+    0.012048192771084338,
+    0.0,
+    0.03896103896103896
+   ],
+   "fault_recall": [
+    0.86,
+    0.76,
+    0.94
+   ],
+   "unparsed": [
+    0.02,
+    0.0,
+    0.04666666666666667
+   ],
+   "all_dropped": [
+    0.04,
+    0.0,
+    0.1
+   ]
+  },
+  "no-fault configs": {
+   "n_verdicts": 300,
+   "n_wrong": 54,
+   "recall": [
+    0.48148148148148145,
+    0.3064516129032258,
+    0.6666666666666666
+   ],
+   "precision": [
+    0.8666666666666667,
+    0.7391304347826086,
+    0.96875
+   ],
+   "false_positive_rate": [
+    0.016260162601626018,
+    0.00390625,
+    0.03361344537815126
+   ],
+   "fault_recall": [
+    null,
+    null,
+    null
+   ],
+   "unparsed": [
+    0.016666666666666666,
+    0.0033333333333333335,
+    0.03333333333333333
+   ],
+   "all_dropped": [
+    0.02,
+    0.0,
+    0.05
+   ]
+  },
+  "star-neutral-p1-verifier": {
+   "n_verdicts": 150,
+   "n_wrong": 73,
+   "recall": [
+    0.7397260273972602,
+    0.6172839506172839,
+    0.859375
+   ],
+   "precision": [
+    0.9473684210526315,
+    0.890625,
+    1.0
+   ],
+   "false_positive_rate": [
+    0.03896103896103896,
+    0.0,
+    0.08695652173913043
+   ],
+   "fault_recall": [
+    0.84,
+    0.74,
+    0.94
+   ],
+   "unparsed": [
+    0.02,
+    0.0,
+    0.04666666666666667
+   ],
+   "all_dropped": [
+    0.06,
+    0.0,
+    0.14
+   ]
+  },
+  "star-none-verifier": {
+   "n_verdicts": 150,
+   "n_wrong": 31,
+   "recall": [
+    0.5161290322580645,
+    0.2903225806451613,
+    0.7586206896551724
+   ],
+   "precision": [
+    0.8421052631578947,
+    0.6666666666666666,
+    1.0
+   ],
+   "false_positive_rate": [
+    0.025210084033613446,
+    0.0,
+    0.056910569105691054
+   ],
+   "fault_recall": [
+    null,
+    null,
+    null
+   ],
+   "unparsed": [
+    0.02,
+    0.0,
+    0.04666666666666667
+   ],
+   "all_dropped": [
+    0.02,
+    0.0,
+    0.06
+   ]
+  },
+  "star-persuasive-p1-verifier": {
+   "n_verdicts": 150,
+   "n_wrong": 72,
+   "recall": [
+    0.7916666666666666,
+    0.6962025316455697,
+    0.8873630672926442
+   ],
+   "precision": [
+    0.95,
+    0.8947368421052632,
+    1.0
+   ],
+   "false_positive_rate": [
+    0.038461538461538464,
+    0.0,
+    0.08641975308641975
+   ],
+   "fault_recall": [
+    0.9,
+    0.82,
+    0.98
+   ],
+   "unparsed": [
+    0.02666666666666667,
+    0.006666666666666667,
+    0.05333333333333334
+   ],
+   "all_dropped": [
+    0.04,
+    0.0,
+    0.1
+   ]
+  }
+ },
+ "natural": {
+  "chain-none-none": {
+   "source": "solver1",
+   "lenient": false,
+   "n_cases": 5,
+   "adoption_rate": 0.6,
+   "adoption_ci": [
+    0.26666666666666666,
+    0.9333333333333333
+   ],
+   "control_rate": null,
+   "control_ci": [
+    null,
+    null
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 5,
+     "adopted": 0.8,
+     "correct": 0.0
+    },
+    {
+     "agent_id": "solver2",
+     "relation": "downstream",
+     "n": 5,
+     "adopted": 0.6,
+     "correct": 0.0
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "downstream",
+     "n": 5,
+     "adopted": 0.4,
+     "correct": 0.2
+    }
+   ]
+  },
+  "chain-none-none|lenient": {
+   "source": "solver1",
+   "lenient": true,
+   "n_cases": 5,
+   "adoption_rate": 0.6666666666666666,
+   "adoption_ci": [
+    0.3333333333333333,
+    0.9333333333333333
+   ],
+   "control_rate": null,
+   "control_ci": [
+    null,
+    null
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 5,
+     "adopted": 0.8,
+     "correct": 0.0
+    },
+    {
+     "agent_id": "solver2",
+     "relation": "downstream",
+     "n": 5,
+     "adopted": 0.8,
+     "correct": 0.0
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "downstream",
+     "n": 5,
+     "adopted": 0.4,
+     "correct": 0.2
+    }
+   ]
+  },
+  "chain-none-skeptical": {
+   "source": "solver1",
+   "lenient": false,
+   "n_cases": 5,
+   "adoption_rate": 0.3333333333333333,
+   "adoption_ci": [
+    0.06666666666666667,
+    0.6666666666666666
+   ],
+   "control_rate": null,
+   "control_ci": [
+    null,
+    null
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 5,
+     "adopted": 0.4,
+     "correct": 0.2
+    },
+    {
+     "agent_id": "solver2",
+     "relation": "downstream",
+     "n": 5,
+     "adopted": 0.4,
+     "correct": 0.2
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "downstream",
+     "n": 5,
+     "adopted": 0.2,
+     "correct": 0.2
+    }
+   ]
+  },
+  "chain-none-skeptical|lenient": {
+   "source": "solver1",
+   "lenient": true,
+   "n_cases": 5,
+   "adoption_rate": 0.3333333333333333,
+   "adoption_ci": [
+    0.06666666666666667,
+    0.6666666666666666
+   ],
+   "control_rate": null,
+   "control_ci": [
+    null,
+    null
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 5,
+     "adopted": 0.4,
+     "correct": 0.2
+    },
+    {
+     "agent_id": "solver2",
+     "relation": "downstream",
+     "n": 5,
+     "adopted": 0.4,
+     "correct": 0.2
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "downstream",
+     "n": 5,
+     "adopted": 0.2,
+     "correct": 0.2
+    }
+   ]
+  },
+  "chain-none-verifier": {
+   "source": "solver1",
+   "lenient": false,
+   "n_cases": 5,
+   "adoption_rate": 0.8888888888888888,
+   "adoption_ci": [
+    0.6666666666666666,
+    1.0
+   ],
+   "control_rate": 0.0,
+   "control_ci": [
+    0.0,
+    0.0
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 3,
+     "adopted": 1.0,
+     "correct": 0.0
+    },
+    {
+     "agent_id": "aggregator",
+     "relation": "independent",
+     "n": 2,
+     "adopted": 0.0,
+     "correct": 0.5
+    },
+    {
+     "agent_id": "solver2",
+     "relation": "downstream",
+     "n": 3,
+     "adopted": 1.0,
+     "correct": 0.0
+    },
+    {
+     "agent_id": "solver2",
+     "relation": "independent",
+     "n": 2,
+     "adopted": 0.0,
+     "correct": 0.5
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "downstream",
+     "n": 3,
+     "adopted": 0.6666666666666666,
+     "correct": 0.3333333333333333
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "independent",
+     "n": 2,
+     "adopted": 0.0,
+     "correct": 0.5
+    }
+   ]
+  },
+  "chain-none-verifier|lenient": {
+   "source": "solver1",
+   "lenient": true,
+   "n_cases": 5,
+   "adoption_rate": 0.8888888888888888,
+   "adoption_ci": [
+    0.6666666666666666,
+    1.0
+   ],
+   "control_rate": 0.0,
+   "control_ci": [
+    0.0,
+    0.0
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 3,
+     "adopted": 1.0,
+     "correct": 0.0
+    },
+    {
+     "agent_id": "aggregator",
+     "relation": "independent",
+     "n": 2,
+     "adopted": 0.0,
+     "correct": 0.5
+    },
+    {
+     "agent_id": "solver2",
+     "relation": "downstream",
+     "n": 3,
+     "adopted": 1.0,
+     "correct": 0.0
+    },
+    {
+     "agent_id": "solver2",
+     "relation": "independent",
+     "n": 2,
+     "adopted": 0.0,
+     "correct": 0.5
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "downstream",
+     "n": 3,
+     "adopted": 0.6666666666666666,
+     "correct": 0.3333333333333333
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "independent",
+     "n": 2,
+     "adopted": 0.0,
+     "correct": 0.5
+    }
+   ]
+  },
+  "star-none-none": {
+   "source": "solver1",
+   "lenient": false,
+   "n_cases": 5,
+   "adoption_rate": 0.0,
+   "adoption_ci": [
+    0.0,
+    0.0
+   ],
+   "control_rate": 0.0,
+   "control_ci": [
+    0.0,
+    0.0
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 5,
+     "adopted": 0.0,
+     "correct": 0.4
+    },
+    {
+     "agent_id": "solver2",
+     "relation": "independent",
+     "n": 5,
+     "adopted": 0.0,
+     "correct": 0.2
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "independent",
+     "n": 5,
+     "adopted": 0.0,
+     "correct": 0.4
+    }
+   ]
+  },
+  "star-none-none|lenient": {
+   "source": "solver1",
+   "lenient": true,
+   "n_cases": 5,
+   "adoption_rate": 0.0,
+   "adoption_ci": [
+    0.0,
+    0.0
+   ],
+   "control_rate": 0.0,
+   "control_ci": [
+    0.0,
+    0.0
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 5,
+     "adopted": 0.0,
+     "correct": 0.4
+    },
+    {
+     "agent_id": "solver2",
+     "relation": "independent",
+     "n": 5,
+     "adopted": 0.0,
+     "correct": 0.2
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "independent",
+     "n": 5,
+     "adopted": 0.0,
+     "correct": 0.4
+    }
+   ]
+  },
+  "star-none-skeptical": {
+   "source": "solver1",
+   "lenient": false,
+   "n_cases": 5,
+   "adoption_rate": 0.2,
+   "adoption_ci": [
+    0.0,
+    0.6
+   ],
+   "control_rate": 0.0,
+   "control_ci": [
+    0.0,
+    0.0
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 5,
+     "adopted": 0.2,
+     "correct": 0.2
+    },
+    {
+     "agent_id": "solver2",
+     "relation": "independent",
+     "n": 5,
+     "adopted": 0.0,
+     "correct": 0.2
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "independent",
+     "n": 5,
+     "adopted": 0.0,
+     "correct": 0.4
+    }
+   ]
+  },
+  "star-none-skeptical|lenient": {
+   "source": "solver1",
+   "lenient": true,
+   "n_cases": 5,
+   "adoption_rate": 0.2,
+   "adoption_ci": [
+    0.0,
+    0.6
+   ],
+   "control_rate": 0.0,
+   "control_ci": [
+    0.0,
+    0.0
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 5,
+     "adopted": 0.2,
+     "correct": 0.2
+    },
+    {
+     "agent_id": "solver2",
+     "relation": "independent",
+     "n": 5,
+     "adopted": 0.0,
+     "correct": 0.2
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "independent",
+     "n": 5,
+     "adopted": 0.0,
+     "correct": 0.4
+    }
+   ]
+  },
+  "star-none-verifier": {
+   "source": "solver1",
+   "lenient": false,
+   "n_cases": 5,
+   "adoption_rate": 0.0,
+   "adoption_ci": [
+    0.0,
+    0.0
+   ],
+   "control_rate": 0.0,
+   "control_ci": [
+    0.0,
+    0.0
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 3,
+     "adopted": 0.0,
+     "correct": 0.3333333333333333
+    },
+    {
+     "agent_id": "aggregator",
+     "relation": "independent",
+     "n": 2,
+     "adopted": 0.0,
+     "correct": 0.5
+    },
+    {
+     "agent_id": "solver2",
+     "relation": "independent",
+     "n": 5,
+     "adopted": 0.0,
+     "correct": 0.2
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "independent",
+     "n": 5,
+     "adopted": 0.0,
+     "correct": 0.4
+    }
+   ]
+  },
+  "star-none-verifier|lenient": {
+   "source": "solver1",
+   "lenient": true,
+   "n_cases": 5,
+   "adoption_rate": 0.0,
+   "adoption_ci": [
+    0.0,
+    0.0
+   ],
+   "control_rate": 0.0,
+   "control_ci": [
+    0.0,
+    0.0
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 3,
+     "adopted": 0.0,
+     "correct": 0.3333333333333333
+    },
+    {
+     "agent_id": "aggregator",
+     "relation": "independent",
+     "n": 2,
+     "adopted": 0.0,
+     "correct": 0.5
+    },
+    {
+     "agent_id": "solver2",
+     "relation": "independent",
+     "n": 5,
+     "adopted": 0.0,
+     "correct": 0.2
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "independent",
+     "n": 5,
+     "adopted": 0.0,
+     "correct": 0.4
+    }
+   ]
+  }
+ },
+ "faults": {
+  "chain-neutral-p1-none": {
+   "source": "solver1",
+   "n": 50,
+   "recovery": [
+    0.58,
+    0.44,
+    0.72
+   ],
+   "team_adopted": [
+    0.3,
+    0.18,
+    0.44
+   ],
+   "downstream_adoption": [
+    0.13333333333333333,
+    0.07333333333333333,
+    0.20666666666666667
+   ],
+   "coincidence": [
+    null,
+    null,
+    null
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.3,
+     "correct": 0.58
+    },
+    {
+     "agent_id": "solver2",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.06,
+     "correct": 0.84
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.04,
+     "correct": 0.8
+    }
+   ]
+  },
+  "chain-neutral-p1-none|lenient": {
+   "source": "solver1",
+   "n": 50,
+   "recovery": [
+    0.62,
+    0.48,
+    0.74
+   ],
+   "team_adopted": [
+    0.3,
+    0.18,
+    0.44
+   ],
+   "downstream_adoption": [
+    0.13333333333333333,
+    0.07333333333333333,
+    0.20666666666666667
+   ],
+   "coincidence": [
+    null,
+    null,
+    null
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.3,
+     "correct": 0.62
+    },
+    {
+     "agent_id": "solver2",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.06,
+     "correct": 0.84
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.04,
+     "correct": 0.8
+    }
+   ]
+  },
+  "chain-neutral-p1-skeptical": {
+   "source": "solver1",
+   "n": 50,
+   "recovery": [
+    0.64,
+    0.5,
+    0.78
+   ],
+   "team_adopted": [
+    0.26,
+    0.14,
+    0.38
+   ],
+   "downstream_adoption": [
+    0.11333333333333333,
+    0.06,
+    0.17333333333333334
+   ],
+   "coincidence": [
+    null,
+    null,
+    null
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.26,
+     "correct": 0.64
+    },
+    {
+     "agent_id": "solver2",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.06,
+     "correct": 0.86
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.02,
+     "correct": 0.9
+    }
+   ]
+  },
+  "chain-neutral-p1-skeptical|lenient": {
+   "source": "solver1",
+   "n": 50,
+   "recovery": [
+    0.68,
+    0.54,
+    0.8
+   ],
+   "team_adopted": [
+    0.28,
+    0.16,
+    0.4
+   ],
+   "downstream_adoption": [
+    0.12,
+    0.06666666666666667,
+    0.18666666666666668
+   ],
+   "coincidence": [
+    null,
+    null,
+    null
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.28,
+     "correct": 0.68
+    },
+    {
+     "agent_id": "solver2",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.06,
+     "correct": 0.86
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.02,
+     "correct": 0.9
+    }
+   ]
+  },
+  "chain-neutral-p1-verifier": {
+   "source": "solver1",
+   "n": 50,
+   "recovery": [
+    0.82,
+    0.7,
+    0.92
+   ],
+   "team_adopted": [
+    0.06,
+    0.0,
+    0.14
+   ],
+   "downstream_adoption": [
+    0.42857142857142855,
+    0.08333333333333333,
+    0.7777777777777778
+   ],
+   "coincidence": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 7,
+     "adopted": 0.42857142857142855,
+     "correct": 0.5714285714285714
+    },
+    {
+     "agent_id": "aggregator",
+     "relation": "independent",
+     "n": 43,
+     "adopted": 0.0,
+     "correct": 0.8604651162790697
+    },
+    {
+     "agent_id": "solver2",
+     "relation": "downstream",
+     "n": 7,
+     "adopted": 0.42857142857142855,
+     "correct": 0.5714285714285714
+    },
+    {
+     "agent_id": "solver2",
+     "relation": "independent",
+     "n": 43,
+     "adopted": 0.0,
+     "correct": 0.8372093023255814
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "downstream",
+     "n": 7,
+     "adopted": 0.42857142857142855,
+     "correct": 0.5714285714285714
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "independent",
+     "n": 43,
+     "adopted": 0.0,
+     "correct": 0.8372093023255814
+    }
+   ]
+  },
+  "chain-neutral-p1-verifier|lenient": {
+   "source": "solver1",
+   "n": 50,
+   "recovery": [
+    0.86,
+    0.76,
+    0.96
+   ],
+   "team_adopted": [
+    0.06,
+    0.0,
+    0.14
+   ],
+   "downstream_adoption": [
+    0.42857142857142855,
+    0.08333333333333333,
+    0.7777777777777778
+   ],
+   "coincidence": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 7,
+     "adopted": 0.42857142857142855,
+     "correct": 0.5714285714285714
+    },
+    {
+     "agent_id": "aggregator",
+     "relation": "independent",
+     "n": 43,
+     "adopted": 0.0,
+     "correct": 0.9069767441860465
+    },
+    {
+     "agent_id": "solver2",
+     "relation": "downstream",
+     "n": 7,
+     "adopted": 0.42857142857142855,
+     "correct": 0.5714285714285714
+    },
+    {
+     "agent_id": "solver2",
+     "relation": "independent",
+     "n": 43,
+     "adopted": 0.0,
+     "correct": 0.8604651162790697
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "downstream",
+     "n": 7,
+     "adopted": 0.42857142857142855,
+     "correct": 0.5714285714285714
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "independent",
+     "n": 43,
+     "adopted": 0.0,
+     "correct": 0.8837209302325582
+    }
+   ]
+  },
+  "chain-neutral-p2-none": {
+   "source": "solver2",
+   "n": 50,
+   "recovery": [
+    0.82,
+    0.7,
+    0.92
+   ],
+   "team_adopted": [
+    0.08,
+    0.02,
+    0.16
+   ],
+   "downstream_adoption": [
+    0.05,
+    0.01,
+    0.09
+   ],
+   "coincidence": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.08,
+     "correct": 0.82
+    },
+    {
+     "agent_id": "solver1",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.84
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.02,
+     "correct": 0.86
+    }
+   ]
+  },
+  "chain-neutral-p2-none|lenient": {
+   "source": "solver2",
+   "n": 50,
+   "recovery": [
+    0.86,
+    0.76,
+    0.94
+   ],
+   "team_adopted": [
+    0.08,
+    0.02,
+    0.16
+   ],
+   "downstream_adoption": [
+    0.05,
+    0.01,
+    0.09
+   ],
+   "coincidence": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.08,
+     "correct": 0.86
+    },
+    {
+     "agent_id": "solver1",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.9
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.02,
+     "correct": 0.88
+    }
+   ]
+  },
+  "chain-neutral-p2-skeptical": {
+   "source": "solver2",
+   "n": 50,
+   "recovery": [
+    0.9,
+    0.82,
+    0.98
+   ],
+   "team_adopted": [
+    0.02,
+    0.0,
+    0.06
+   ],
+   "downstream_adoption": [
+    0.02,
+    0.0,
+    0.05
+   ],
+   "coincidence": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.02,
+     "correct": 0.9
+    },
+    {
+     "agent_id": "solver1",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.84
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.02,
+     "correct": 0.92
+    }
+   ]
+  },
+  "chain-neutral-p2-skeptical|lenient": {
+   "source": "solver2",
+   "n": 50,
+   "recovery": [
+    0.9,
+    0.82,
+    0.98
+   ],
+   "team_adopted": [
+    0.02,
+    0.0,
+    0.06
+   ],
+   "downstream_adoption": [
+    0.02,
+    0.0,
+    0.05
+   ],
+   "coincidence": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.02,
+     "correct": 0.9
+    },
+    {
+     "agent_id": "solver1",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.9
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.02,
+     "correct": 0.92
+    }
+   ]
+  },
+  "chain-neutral-p2-verifier": {
+   "source": "solver2",
+   "n": 50,
+   "recovery": [
+    0.78,
+    0.66,
+    0.88
+   ],
+   "team_adopted": [
+    0.08,
+    0.02,
+    0.16
+   ],
+   "downstream_adoption": [
+    0.22727272727272727,
+    0.07142857142857142,
+    0.38461538461538464
+   ],
+   "coincidence": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 11,
+     "adopted": 0.36363636363636365,
+     "correct": 0.5454545454545454
+    },
+    {
+     "agent_id": "aggregator",
+     "relation": "independent",
+     "n": 39,
+     "adopted": 0.0,
+     "correct": 0.8461538461538461
+    },
+    {
+     "agent_id": "solver1",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.84
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "downstream",
+     "n": 11,
+     "adopted": 0.09090909090909091,
+     "correct": 0.5454545454545454
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "independent",
+     "n": 39,
+     "adopted": 0.0,
+     "correct": 0.8974358974358975
+    }
+   ]
+  },
+  "chain-neutral-p2-verifier|lenient": {
+   "source": "solver2",
+   "n": 50,
+   "recovery": [
+    0.86,
+    0.76,
+    0.94
+   ],
+   "team_adopted": [
+    0.08,
+    0.02,
+    0.16
+   ],
+   "downstream_adoption": [
+    0.22727272727272727,
+    0.07142857142857142,
+    0.38461538461538464
+   ],
+   "coincidence": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 11,
+     "adopted": 0.36363636363636365,
+     "correct": 0.5454545454545454
+    },
+    {
+     "agent_id": "aggregator",
+     "relation": "independent",
+     "n": 39,
+     "adopted": 0.0,
+     "correct": 0.9487179487179487
+    },
+    {
+     "agent_id": "solver1",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.9
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "downstream",
+     "n": 11,
+     "adopted": 0.09090909090909091,
+     "correct": 0.6363636363636364
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "independent",
+     "n": 39,
+     "adopted": 0.0,
+     "correct": 0.9743589743589743
+    }
+   ]
+  },
+  "chain-neutral-p3-none": {
+   "source": "solver3",
+   "n": 50,
+   "recovery": [
+    0.78,
+    0.66,
+    0.88
+   ],
+   "team_adopted": [
+    0.1,
+    0.02,
+    0.18
+   ],
+   "downstream_adoption": [
+    0.1,
+    0.02,
+    0.18
+   ],
+   "coincidence": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.1,
+     "correct": 0.78
+    },
+    {
+     "agent_id": "solver1",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.84
+    },
+    {
+     "agent_id": "solver2",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.8
+    }
+   ]
+  },
+  "chain-neutral-p3-none|lenient": {
+   "source": "solver3",
+   "n": 50,
+   "recovery": [
+    0.78,
+    0.66,
+    0.88
+   ],
+   "team_adopted": [
+    0.1,
+    0.02,
+    0.18
+   ],
+   "downstream_adoption": [
+    0.1,
+    0.02,
+    0.18
+   ],
+   "coincidence": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.1,
+     "correct": 0.78
+    },
+    {
+     "agent_id": "solver1",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.9
+    },
+    {
+     "agent_id": "solver2",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.82
+    }
+   ]
+  },
+  "chain-neutral-p3-skeptical": {
+   "source": "solver3",
+   "n": 50,
+   "recovery": [
+    0.64,
+    0.5,
+    0.76
+   ],
+   "team_adopted": [
+    0.18,
+    0.08,
+    0.3
+   ],
+   "downstream_adoption": [
+    0.18,
+    0.08,
+    0.3
+   ],
+   "coincidence": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.18,
+     "correct": 0.64
+    },
+    {
+     "agent_id": "solver1",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.84
+    },
+    {
+     "agent_id": "solver2",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.86
+    }
+   ]
+  },
+  "chain-neutral-p3-skeptical|lenient": {
+   "source": "solver3",
+   "n": 50,
+   "recovery": [
+    0.64,
+    0.5,
+    0.76
+   ],
+   "team_adopted": [
+    0.22,
+    0.12,
+    0.34
+   ],
+   "downstream_adoption": [
+    0.22,
+    0.12,
+    0.34
+   ],
+   "coincidence": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.22,
+     "correct": 0.64
+    },
+    {
+     "agent_id": "solver1",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.9
+    },
+    {
+     "agent_id": "solver2",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.88
+    }
+   ]
+  },
+  "chain-neutral-p3-verifier": {
+   "source": "solver3",
+   "n": 50,
+   "recovery": [
+    0.9,
+    0.8,
+    0.98
+   ],
+   "team_adopted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "downstream_adoption": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "coincidence": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 7,
+     "adopted": 0.0,
+     "correct": 0.7142857142857143
+    },
+    {
+     "agent_id": "aggregator",
+     "relation": "independent",
+     "n": 43,
+     "adopted": 0.0,
+     "correct": 0.9302325581395349
+    },
+    {
+     "agent_id": "solver1",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.84
+    },
+    {
+     "agent_id": "solver2",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.82
+    }
+   ]
+  },
+  "chain-neutral-p3-verifier|lenient": {
+   "source": "solver3",
+   "n": 50,
+   "recovery": [
+    0.92,
+    0.84,
+    0.98
+   ],
+   "team_adopted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "downstream_adoption": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "coincidence": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 7,
+     "adopted": 0.0,
+     "correct": 0.7142857142857143
+    },
+    {
+     "agent_id": "aggregator",
+     "relation": "independent",
+     "n": 43,
+     "adopted": 0.0,
+     "correct": 0.9534883720930233
+    },
+    {
+     "agent_id": "solver1",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.9
+    },
+    {
+     "agent_id": "solver2",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.86
+    }
+   ]
+  },
+  "chain-persuasive-p1-none": {
+   "source": "solver1",
+   "n": 50,
+   "recovery": [
+    0.54,
+    0.4,
+    0.68
+   ],
+   "team_adopted": [
+    0.36,
+    0.22,
+    0.5
+   ],
+   "downstream_adoption": [
+    0.13333333333333333,
+    0.08,
+    0.18666666666666668
+   ],
+   "coincidence": [
+    null,
+    null,
+    null
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.36,
+     "correct": 0.54
+    },
+    {
+     "agent_id": "solver2",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.04,
+     "correct": 0.84
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.86
+    }
+   ]
+  },
+  "chain-persuasive-p1-none|lenient": {
+   "source": "solver1",
+   "n": 50,
+   "recovery": [
+    0.54,
+    0.4,
+    0.68
+   ],
+   "team_adopted": [
+    0.36,
+    0.22,
+    0.5
+   ],
+   "downstream_adoption": [
+    0.13333333333333333,
+    0.08,
+    0.18666666666666668
+   ],
+   "coincidence": [
+    null,
+    null,
+    null
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.36,
+     "correct": 0.54
+    },
+    {
+     "agent_id": "solver2",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.04,
+     "correct": 0.84
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.86
+    }
+   ]
+  },
+  "chain-persuasive-p1-skeptical": {
+   "source": "solver1",
+   "n": 50,
+   "recovery": [
+    0.56,
+    0.42,
+    0.7
+   ],
+   "team_adopted": [
+    0.36,
+    0.24,
+    0.5
+   ],
+   "downstream_adoption": [
+    0.14,
+    0.08666666666666667,
+    0.2
+   ],
+   "coincidence": [
+    null,
+    null,
+    null
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.36,
+     "correct": 0.56
+    },
+    {
+     "agent_id": "solver2",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.04,
+     "correct": 0.76
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.02,
+     "correct": 0.82
+    }
+   ]
+  },
+  "chain-persuasive-p1-skeptical|lenient": {
+   "source": "solver1",
+   "n": 50,
+   "recovery": [
+    0.56,
+    0.42,
+    0.7
+   ],
+   "team_adopted": [
+    0.36,
+    0.24,
+    0.5
+   ],
+   "downstream_adoption": [
+    0.14,
+    0.08666666666666667,
+    0.2
+   ],
+   "coincidence": [
+    null,
+    null,
+    null
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.36,
+     "correct": 0.56
+    },
+    {
+     "agent_id": "solver2",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.04,
+     "correct": 0.78
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.02,
+     "correct": 0.84
+    }
+   ]
+  },
+  "chain-persuasive-p1-verifier": {
+   "source": "solver1",
+   "n": 50,
+   "recovery": [
+    0.76,
+    0.64,
+    0.88
+   ],
+   "team_adopted": [
+    0.08,
+    0.02,
+    0.16
+   ],
+   "downstream_adoption": [
+    0.3333333333333333,
+    0.13333333333333333,
+    0.5555555555555556
+   ],
+   "coincidence": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 5,
+     "adopted": 0.8,
+     "correct": 0.2
+    },
+    {
+     "agent_id": "aggregator",
+     "relation": "independent",
+     "n": 45,
+     "adopted": 0.0,
+     "correct": 0.8222222222222222
+    },
+    {
+     "agent_id": "solver2",
+     "relation": "downstream",
+     "n": 5,
+     "adopted": 0.2,
+     "correct": 0.8
+    },
+    {
+     "agent_id": "solver2",
+     "relation": "independent",
+     "n": 45,
+     "adopted": 0.0,
+     "correct": 0.8
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "downstream",
+     "n": 5,
+     "adopted": 0.0,
+     "correct": 1.0
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "independent",
+     "n": 45,
+     "adopted": 0.0,
+     "correct": 0.8222222222222222
+    }
+   ]
+  },
+  "chain-persuasive-p1-verifier|lenient": {
+   "source": "solver1",
+   "n": 50,
+   "recovery": [
+    0.8,
+    0.68,
+    0.9
+   ],
+   "team_adopted": [
+    0.08,
+    0.02,
+    0.16
+   ],
+   "downstream_adoption": [
+    0.3333333333333333,
+    0.13333333333333333,
+    0.5555555555555556
+   ],
+   "coincidence": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 5,
+     "adopted": 0.8,
+     "correct": 0.2
+    },
+    {
+     "agent_id": "aggregator",
+     "relation": "independent",
+     "n": 45,
+     "adopted": 0.0,
+     "correct": 0.8666666666666667
+    },
+    {
+     "agent_id": "solver2",
+     "relation": "downstream",
+     "n": 5,
+     "adopted": 0.2,
+     "correct": 0.8
+    },
+    {
+     "agent_id": "solver2",
+     "relation": "independent",
+     "n": 45,
+     "adopted": 0.0,
+     "correct": 0.8222222222222222
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "downstream",
+     "n": 5,
+     "adopted": 0.0,
+     "correct": 1.0
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "independent",
+     "n": 45,
+     "adopted": 0.0,
+     "correct": 0.8444444444444444
+    }
+   ]
+  },
+  "chain-persuasive-p2-none": {
+   "source": "solver2",
+   "n": 50,
+   "recovery": [
+    0.88,
+    0.78,
+    0.96
+   ],
+   "team_adopted": [
+    0.04,
+    0.0,
+    0.1
+   ],
+   "downstream_adoption": [
+    0.03,
+    0.0,
+    0.07
+   ],
+   "coincidence": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.04,
+     "correct": 0.88
+    },
+    {
+     "agent_id": "solver1",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.84
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.02,
+     "correct": 0.9
+    }
+   ]
+  },
+  "chain-persuasive-p2-none|lenient": {
+   "source": "solver2",
+   "n": 50,
+   "recovery": [
+    0.9,
+    0.82,
+    0.98
+   ],
+   "team_adopted": [
+    0.04,
+    0.0,
+    0.1
+   ],
+   "downstream_adoption": [
+    0.03,
+    0.0,
+    0.07
+   ],
+   "coincidence": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.04,
+     "correct": 0.9
+    },
+    {
+     "agent_id": "solver1",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.9
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.02,
+     "correct": 0.9
+    }
+   ]
+  },
+  "chain-persuasive-p2-skeptical": {
+   "source": "solver2",
+   "n": 50,
+   "recovery": [
+    0.84,
+    0.74,
+    0.94
+   ],
+   "team_adopted": [
+    0.02,
+    0.0,
+    0.06
+   ],
+   "downstream_adoption": [
+    0.02,
+    0.0,
+    0.05
+   ],
+   "coincidence": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.02,
+     "correct": 0.84
+    },
+    {
+     "agent_id": "solver1",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.84
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.02,
+     "correct": 0.86
+    }
+   ]
+  },
+  "chain-persuasive-p2-skeptical|lenient": {
+   "source": "solver2",
+   "n": 50,
+   "recovery": [
+    0.9,
+    0.8,
+    0.98
+   ],
+   "team_adopted": [
+    0.02,
+    0.0,
+    0.06
+   ],
+   "downstream_adoption": [
+    0.02,
+    0.0,
+    0.05
+   ],
+   "coincidence": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.02,
+     "correct": 0.9
+    },
+    {
+     "agent_id": "solver1",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.9
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.02,
+     "correct": 0.86
+    }
+   ]
+  },
+  "chain-persuasive-p2-verifier": {
+   "source": "solver2",
+   "n": 50,
+   "recovery": [
+    0.8,
+    0.68,
+    0.9
+   ],
+   "team_adopted": [
+    0.06,
+    0.0,
+    0.14
+   ],
+   "downstream_adoption": [
+    0.21428571428571427,
+    0.0,
+    0.4166666666666667
+   ],
+   "coincidence": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 7,
+     "adopted": 0.42857142857142855,
+     "correct": 0.5714285714285714
+    },
+    {
+     "agent_id": "aggregator",
+     "relation": "independent",
+     "n": 43,
+     "adopted": 0.0,
+     "correct": 0.8372093023255814
+    },
+    {
+     "agent_id": "solver1",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.84
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "downstream",
+     "n": 7,
+     "adopted": 0.0,
+     "correct": 0.8571428571428571
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "independent",
+     "n": 43,
+     "adopted": 0.0,
+     "correct": 0.8837209302325582
+    }
+   ]
+  },
+  "chain-persuasive-p2-verifier|lenient": {
+   "source": "solver2",
+   "n": 50,
+   "recovery": [
+    0.86,
+    0.76,
+    0.94
+   ],
+   "team_adopted": [
+    0.06,
+    0.0,
+    0.14
+   ],
+   "downstream_adoption": [
+    0.21428571428571427,
+    0.0,
+    0.4166666666666667
+   ],
+   "coincidence": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 7,
+     "adopted": 0.42857142857142855,
+     "correct": 0.5714285714285714
+    },
+    {
+     "agent_id": "aggregator",
+     "relation": "independent",
+     "n": 43,
+     "adopted": 0.0,
+     "correct": 0.9069767441860465
+    },
+    {
+     "agent_id": "solver1",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.9
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "downstream",
+     "n": 7,
+     "adopted": 0.0,
+     "correct": 0.8571428571428571
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "independent",
+     "n": 43,
+     "adopted": 0.0,
+     "correct": 0.9302325581395349
+    }
+   ]
+  },
+  "chain-persuasive-p3-none": {
+   "source": "solver3",
+   "n": 50,
+   "recovery": [
+    0.74,
+    0.62,
+    0.86
+   ],
+   "team_adopted": [
+    0.1,
+    0.02,
+    0.18
+   ],
+   "downstream_adoption": [
+    0.1,
+    0.02,
+    0.18
+   ],
+   "coincidence": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.1,
+     "correct": 0.74
+    },
+    {
+     "agent_id": "solver1",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.84
+    },
+    {
+     "agent_id": "solver2",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.8
+    }
+   ]
+  },
+  "chain-persuasive-p3-none|lenient": {
+   "source": "solver3",
+   "n": 50,
+   "recovery": [
+    0.8,
+    0.68,
+    0.9
+   ],
+   "team_adopted": [
+    0.1,
+    0.02,
+    0.18
+   ],
+   "downstream_adoption": [
+    0.1,
+    0.02,
+    0.18
+   ],
+   "coincidence": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.1,
+     "correct": 0.8
+    },
+    {
+     "agent_id": "solver1",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.9
+    },
+    {
+     "agent_id": "solver2",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.82
+    }
+   ]
+  },
+  "chain-persuasive-p3-skeptical": {
+   "source": "solver3",
+   "n": 50,
+   "recovery": [
+    0.72,
+    0.6,
+    0.84
+   ],
+   "team_adopted": [
+    0.14,
+    0.06,
+    0.24
+   ],
+   "downstream_adoption": [
+    0.14,
+    0.06,
+    0.24
+   ],
+   "coincidence": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.14,
+     "correct": 0.72
+    },
+    {
+     "agent_id": "solver1",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.84
+    },
+    {
+     "agent_id": "solver2",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.86
+    }
+   ]
+  },
+  "chain-persuasive-p3-skeptical|lenient": {
+   "source": "solver3",
+   "n": 50,
+   "recovery": [
+    0.74,
+    0.62,
+    0.86
+   ],
+   "team_adopted": [
+    0.14,
+    0.06,
+    0.24
+   ],
+   "downstream_adoption": [
+    0.14,
+    0.06,
+    0.24
+   ],
+   "coincidence": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.14,
+     "correct": 0.74
+    },
+    {
+     "agent_id": "solver1",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.9
+    },
+    {
+     "agent_id": "solver2",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.88
+    }
+   ]
+  },
+  "chain-persuasive-p3-verifier": {
+   "source": "solver3",
+   "n": 50,
+   "recovery": [
+    0.9,
+    0.8,
+    0.98
+   ],
+   "team_adopted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "downstream_adoption": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "coincidence": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 7,
+     "adopted": 0.0,
+     "correct": 0.7142857142857143
+    },
+    {
+     "agent_id": "aggregator",
+     "relation": "independent",
+     "n": 43,
+     "adopted": 0.0,
+     "correct": 0.9302325581395349
+    },
+    {
+     "agent_id": "solver1",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.84
+    },
+    {
+     "agent_id": "solver2",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.82
+    }
+   ]
+  },
+  "chain-persuasive-p3-verifier|lenient": {
+   "source": "solver3",
+   "n": 50,
+   "recovery": [
+    0.92,
+    0.84,
+    0.98
+   ],
+   "team_adopted": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "downstream_adoption": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "coincidence": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 7,
+     "adopted": 0.0,
+     "correct": 0.7142857142857143
+    },
+    {
+     "agent_id": "aggregator",
+     "relation": "independent",
+     "n": 43,
+     "adopted": 0.0,
+     "correct": 0.9534883720930233
+    },
+    {
+     "agent_id": "solver1",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.9
+    },
+    {
+     "agent_id": "solver2",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.86
+    }
+   ]
+  },
+  "star-neutral-p1-none": {
+   "source": "solver1",
+   "n": 50,
+   "recovery": [
+    0.6,
+    0.46,
+    0.74
+   ],
+   "team_adopted": [
+    0.28,
+    0.16,
+    0.4
+   ],
+   "downstream_adoption": [
+    0.28,
+    0.16,
+    0.4
+   ],
+   "coincidence": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.28,
+     "correct": 0.6
+    },
+    {
+     "agent_id": "solver2",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.8
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.76
+    }
+   ]
+  },
+  "star-neutral-p1-none|lenient": {
+   "source": "solver1",
+   "n": 50,
+   "recovery": [
+    0.6,
+    0.46,
+    0.74
+   ],
+   "team_adopted": [
+    0.28,
+    0.16,
+    0.4
+   ],
+   "downstream_adoption": [
+    0.28,
+    0.16,
+    0.4
+   ],
+   "coincidence": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.28,
+     "correct": 0.6
+    },
+    {
+     "agent_id": "solver2",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.82
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.88
+    }
+   ]
+  },
+  "star-neutral-p1-skeptical": {
+   "source": "solver1",
+   "n": 50,
+   "recovery": [
+    0.78,
+    0.66,
+    0.88
+   ],
+   "team_adopted": [
+    0.12,
+    0.04,
+    0.22
+   ],
+   "downstream_adoption": [
+    0.12,
+    0.04,
+    0.22
+   ],
+   "coincidence": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.12,
+     "correct": 0.78
+    },
+    {
+     "agent_id": "solver2",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.8
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.76
+    }
+   ]
+  },
+  "star-neutral-p1-skeptical|lenient": {
+   "source": "solver1",
+   "n": 50,
+   "recovery": [
+    0.8,
+    0.68,
+    0.9
+   ],
+   "team_adopted": [
+    0.12,
+    0.04,
+    0.22
+   ],
+   "downstream_adoption": [
+    0.12,
+    0.04,
+    0.22
+   ],
+   "coincidence": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.12,
+     "correct": 0.8
+    },
+    {
+     "agent_id": "solver2",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.82
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.88
+    }
+   ]
+  },
+  "star-neutral-p1-verifier": {
+   "source": "solver1",
+   "n": 50,
+   "recovery": [
+    0.86,
+    0.76,
+    0.94
+   ],
+   "team_adopted": [
+    0.04,
+    0.0,
+    0.1
+   ],
+   "downstream_adoption": [
+    0.25,
+    0.0,
+    0.6
+   ],
+   "coincidence": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 8,
+     "adopted": 0.25,
+     "correct": 0.5
+    },
+    {
+     "agent_id": "aggregator",
+     "relation": "independent",
+     "n": 42,
+     "adopted": 0.0,
+     "correct": 0.9285714285714286
+    },
+    {
+     "agent_id": "solver2",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.8
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.74
+    }
+   ]
+  },
+  "star-neutral-p1-verifier|lenient": {
+   "source": "solver1",
+   "n": 50,
+   "recovery": [
+    0.86,
+    0.76,
+    0.94
+   ],
+   "team_adopted": [
+    0.04,
+    0.0,
+    0.1
+   ],
+   "downstream_adoption": [
+    0.25,
+    0.0,
+    0.6
+   ],
+   "coincidence": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 8,
+     "adopted": 0.25,
+     "correct": 0.5
+    },
+    {
+     "agent_id": "aggregator",
+     "relation": "independent",
+     "n": 42,
+     "adopted": 0.0,
+     "correct": 0.9285714285714286
+    },
+    {
+     "agent_id": "solver2",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.82
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.86
+    }
+   ]
+  },
+  "star-persuasive-p1-none": {
+   "source": "solver1",
+   "n": 50,
+   "recovery": [
+    0.72,
+    0.6,
+    0.84
+   ],
+   "team_adopted": [
+    0.18,
+    0.08,
+    0.3
+   ],
+   "downstream_adoption": [
+    0.18,
+    0.08,
+    0.3
+   ],
+   "coincidence": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.18,
+     "correct": 0.72
+    },
+    {
+     "agent_id": "solver2",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.8
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.76
+    }
+   ]
+  },
+  "star-persuasive-p1-none|lenient": {
+   "source": "solver1",
+   "n": 50,
+   "recovery": [
+    0.72,
+    0.6,
+    0.84
+   ],
+   "team_adopted": [
+    0.2,
+    0.1,
+    0.32
+   ],
+   "downstream_adoption": [
+    0.2,
+    0.1,
+    0.32
+   ],
+   "coincidence": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.2,
+     "correct": 0.72
+    },
+    {
+     "agent_id": "solver2",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.82
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.88
+    }
+   ]
+  },
+  "star-persuasive-p1-skeptical": {
+   "source": "solver1",
+   "n": 50,
+   "recovery": [
+    0.8,
+    0.68,
+    0.9
+   ],
+   "team_adopted": [
+    0.14,
+    0.06,
+    0.24
+   ],
+   "downstream_adoption": [
+    0.14,
+    0.06,
+    0.24
+   ],
+   "coincidence": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.14,
+     "correct": 0.8
+    },
+    {
+     "agent_id": "solver2",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.8
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.78
+    }
+   ]
+  },
+  "star-persuasive-p1-skeptical|lenient": {
+   "source": "solver1",
+   "n": 50,
+   "recovery": [
+    0.82,
+    0.72,
+    0.92
+   ],
+   "team_adopted": [
+    0.14,
+    0.06,
+    0.24
+   ],
+   "downstream_adoption": [
+    0.14,
+    0.06,
+    0.24
+   ],
+   "coincidence": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 50,
+     "adopted": 0.14,
+     "correct": 0.82
+    },
+    {
+     "agent_id": "solver2",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.82
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.9
+    }
+   ]
+  },
+  "star-persuasive-p1-verifier": {
+   "source": "solver1",
+   "n": 50,
+   "recovery": [
+    0.86,
+    0.76,
+    0.94
+   ],
+   "team_adopted": [
+    0.04,
+    0.0,
+    0.1
+   ],
+   "downstream_adoption": [
+    0.4,
+    0.0,
+    1.0
+   ],
+   "coincidence": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 5,
+     "adopted": 0.4,
+     "correct": 0.6
+    },
+    {
+     "agent_id": "aggregator",
+     "relation": "independent",
+     "n": 45,
+     "adopted": 0.0,
+     "correct": 0.8888888888888888
+    },
+    {
+     "agent_id": "solver2",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.8
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.76
+    }
+   ]
+  },
+  "star-persuasive-p1-verifier|lenient": {
+   "source": "solver1",
+   "n": 50,
+   "recovery": [
+    0.86,
+    0.76,
+    0.94
+   ],
+   "team_adopted": [
+    0.04,
+    0.0,
+    0.1
+   ],
+   "downstream_adoption": [
+    0.4,
+    0.0,
+    1.0
+   ],
+   "coincidence": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "agents": [
+    {
+     "agent_id": "aggregator",
+     "relation": "downstream",
+     "n": 5,
+     "adopted": 0.4,
+     "correct": 0.6
+    },
+    {
+     "agent_id": "aggregator",
+     "relation": "independent",
+     "n": 45,
+     "adopted": 0.0,
+     "correct": 0.8888888888888888
+    },
+    {
+     "agent_id": "solver2",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.82
+    },
+    {
+     "agent_id": "solver3",
+     "relation": "independent",
+     "n": 50,
+     "adopted": 0.0,
+     "correct": 0.88
+    }
+   ]
+  }
+ },
+ "slots": {
+  "star-neutral-p1-none": [
+   {
+    "group": 1,
+    "n": 17,
+    "team_adopted": [
+     0.5882352941176471,
+     0.35294117647058826,
+     0.8235294117647058
+    ],
+    "recovery": [
+     0.23529411764705882,
+     0.058823529411764705,
+     0.47058823529411764
+    ],
+    "downstream_adoption": [
+     0.5882352941176471,
+     0.35294117647058826,
+     0.8235294117647058
+    ]
+   },
+   {
+    "group": 2,
+    "n": 17,
+    "team_adopted": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "recovery": [
+     0.9411764705882353,
+     0.8235294117647058,
+     1.0
+    ],
+    "downstream_adoption": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "group": 3,
+    "n": 16,
+    "team_adopted": [
+     0.25,
+     0.0625,
+     0.4375
+    ],
+    "recovery": [
+     0.625,
+     0.375,
+     0.875
+    ],
+    "downstream_adoption": [
+     0.25,
+     0.0625,
+     0.4375
+    ]
+   }
+  ],
+  "star-neutral-p1-skeptical": [
+   {
+    "group": 1,
+    "n": 17,
+    "team_adopted": [
+     0.058823529411764705,
+     0.0,
+     0.17647058823529413
+    ],
+    "recovery": [
+     0.7647058823529411,
+     0.5294117647058824,
+     0.9411764705882353
+    ],
+    "downstream_adoption": [
+     0.058823529411764705,
+     0.0,
+     0.17647058823529413
+    ]
+   },
+   {
+    "group": 2,
+    "n": 17,
+    "team_adopted": [
+     0.17647058823529413,
+     0.0,
+     0.35294117647058826
+    ],
+    "recovery": [
+     0.8235294117647058,
+     0.6470588235294118,
+     1.0
+    ],
+    "downstream_adoption": [
+     0.17647058823529413,
+     0.0,
+     0.35294117647058826
+    ]
+   },
+   {
+    "group": 3,
+    "n": 16,
+    "team_adopted": [
+     0.125,
+     0.0,
+     0.3125
+    ],
+    "recovery": [
+     0.75,
+     0.5,
+     0.9375
+    ],
+    "downstream_adoption": [
+     0.125,
+     0.0,
+     0.3125
+    ]
+   }
+  ],
+  "star-neutral-p1-verifier": [
+   {
+    "group": 1,
+    "n": 6,
+    "team_adopted": [
+     0.3333333333333333,
+     0.0,
+     0.6666666666666666
+    ],
+    "recovery": [
+     0.3333333333333333,
+     0.0,
+     0.6666666666666666
+    ],
+    "downstream_adoption": [
+     0.3333333333333333,
+     0.0,
+     0.6666666666666666
+    ]
+   },
+   {
+    "group": 2,
+    "n": 1,
+    "team_adopted": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "recovery": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "downstream_adoption": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "group": 3,
+    "n": 1,
+    "team_adopted": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "recovery": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "downstream_adoption": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "group": null,
+    "n": 42,
+    "team_adopted": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "recovery": [
+     0.9285714285714286,
+     0.8333333333333334,
+     1.0
+    ],
+    "downstream_adoption": [
+     null,
+     null,
+     null
+    ]
+   }
+  ],
+  "star-persuasive-p1-none": [
+   {
+    "group": 1,
+    "n": 17,
+    "team_adopted": [
+     0.4117647058823529,
+     0.17647058823529413,
+     0.6470588235294118
+    ],
+    "recovery": [
+     0.4117647058823529,
+     0.17647058823529413,
+     0.6470588235294118
+    ],
+    "downstream_adoption": [
+     0.4117647058823529,
+     0.17647058823529413,
+     0.6470588235294118
+    ]
+   },
+   {
+    "group": 2,
+    "n": 17,
+    "team_adopted": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "recovery": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "downstream_adoption": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "group": 3,
+    "n": 16,
+    "team_adopted": [
+     0.125,
+     0.0,
+     0.3125
+    ],
+    "recovery": [
+     0.75,
+     0.5,
+     0.9375
+    ],
+    "downstream_adoption": [
+     0.125,
+     0.0,
+     0.3125
+    ]
+   }
+  ],
+  "star-persuasive-p1-skeptical": [
+   {
+    "group": 1,
+    "n": 17,
+    "team_adopted": [
+     0.29411764705882354,
+     0.11764705882352941,
+     0.5294117647058824
+    ],
+    "recovery": [
+     0.7058823529411765,
+     0.47058823529411764,
+     0.8823529411764706
+    ],
+    "downstream_adoption": [
+     0.29411764705882354,
+     0.11764705882352941,
+     0.5294117647058824
+    ]
+   },
+   {
+    "group": 2,
+    "n": 17,
+    "team_adopted": [
+     0.058823529411764705,
+     0.0,
+     0.17647058823529413
+    ],
+    "recovery": [
+     0.9411764705882353,
+     0.8235294117647058,
+     1.0
+    ],
+    "downstream_adoption": [
+     0.058823529411764705,
+     0.0,
+     0.17647058823529413
+    ]
+   },
+   {
+    "group": 3,
+    "n": 16,
+    "team_adopted": [
+     0.0625,
+     0.0,
+     0.1875
+    ],
+    "recovery": [
+     0.75,
+     0.5,
+     0.9375
+    ],
+    "downstream_adoption": [
+     0.0625,
+     0.0,
+     0.1875
+    ]
+   }
+  ],
+  "star-persuasive-p1-verifier": [
+   {
+    "group": 1,
+    "n": 4,
+    "team_adopted": [
+     0.5,
+     0.0,
+     1.0
+    ],
+    "recovery": [
+     0.5,
+     0.0,
+     1.0
+    ],
+    "downstream_adoption": [
+     0.5,
+     0.0,
+     1.0
+    ]
+   },
+   {
+    "group": 3,
+    "n": 1,
+    "team_adopted": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "recovery": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "downstream_adoption": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "group": null,
+    "n": 45,
+    "team_adopted": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "recovery": [
+     0.8888888888888888,
+     0.8,
+     0.9777777777777777
+    ],
+    "downstream_adoption": [
+     null,
+     null,
+     null
+    ]
+   }
+  ],
+  "star (both styles)": [
+   {
+    "group": 1,
+    "n": 78,
+    "team_adopted": [
+     0.34615384615384615,
+     0.24358974358974358,
+     0.44871794871794873
+    ],
+    "recovery": [
+     0.5128205128205128,
+     0.3974358974358974,
+     0.6282051282051282
+    ],
+    "downstream_adoption": [
+     0.34615384615384615,
+     0.24358974358974358,
+     0.44871794871794873
+    ]
+   },
+   {
+    "group": 2,
+    "n": 69,
+    "team_adopted": [
+     0.057971014492753624,
+     0.014492753623188406,
+     0.11594202898550725
+    ],
+    "recovery": [
+     0.927536231884058,
+     0.855072463768116,
+     0.9855072463768116
+    ],
+    "downstream_adoption": [
+     0.057971014492753624,
+     0.014492753623188406,
+     0.11594202898550725
+    ]
+   },
+   {
+    "group": 3,
+    "n": 66,
+    "team_adopted": [
+     0.13636363636363635,
+     0.06060606060606061,
+     0.22727272727272727
+    ],
+    "recovery": [
+     0.7272727272727273,
+     0.6212121212121212,
+     0.8333333333333334
+    ],
+    "downstream_adoption": [
+     0.13636363636363635,
+     0.06060606060606061,
+     0.22727272727272727
+    ]
+   },
+   {
+    "group": null,
+    "n": 87,
+    "team_adopted": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "recovery": [
+     0.9080459770114943,
+     0.8390804597701149,
+     0.9655172413793104
+    ],
+    "downstream_adoption": [
+     null,
+     null,
+     null
+    ]
+   }
+  ]
+ },
+ "position_rank": {},
+ "slip_position": {
+  "all fault configs": [
+   {
+    "group": "early",
+    "n": 960,
+    "team_adopted": [
+     0.13020833333333334,
+     0.10833333333333334,
+     0.15104166666666666
+    ],
+    "recovery": [
+     0.75625,
+     0.7291666666666666,
+     0.7833333333333333
+    ],
+    "downstream_adoption": [
+     0.1830601092896175,
+     0.15412917945115132,
+     0.21438882016539879
+    ]
+   },
+   {
+    "group": "late",
+    "n": 240,
+    "team_adopted": [
+     0.1125,
+     0.075,
+     0.15
+    ],
+    "recovery": [
+     0.7708333333333334,
+     0.7166666666666667,
+     0.8208333333333333
+    ],
+    "downstream_adoption": [
+     0.2613065326633166,
+     0.18518518518518517,
+     0.3409090909090909
+    ]
+   }
+  ],
+  "chain-neutral-p1-none": [
+   {
+    "group": "early",
+    "n": 40,
+    "team_adopted": [
+     0.275,
+     0.15,
+     0.425
+    ],
+    "recovery": [
+     0.575,
+     0.425,
+     0.725
+    ],
+    "downstream_adoption": [
+     0.10833333333333334,
+     0.05,
+     0.175
+    ]
+   },
+   {
+    "group": "late",
+    "n": 10,
+    "team_adopted": [
+     0.4,
+     0.1,
+     0.7
+    ],
+    "recovery": [
+     0.6,
+     0.3,
+     0.9
+    ],
+    "downstream_adoption": [
+     0.23333333333333334,
+     0.06666666666666667,
+     0.43333333333333335
+    ]
+   }
+  ],
+  "chain-neutral-p1-skeptical": [
+   {
+    "group": "early",
+    "n": 40,
+    "team_adopted": [
+     0.225,
+     0.1,
+     0.375
+    ],
+    "recovery": [
+     0.7,
+     0.55,
+     0.825
+    ],
+    "downstream_adoption": [
+     0.08333333333333333,
+     0.03333333333333333,
+     0.14166666666666666
+    ]
+   },
+   {
+    "group": "late",
+    "n": 10,
+    "team_adopted": [
+     0.4,
+     0.1,
+     0.7
+    ],
+    "recovery": [
+     0.4,
+     0.1,
+     0.7
+    ],
+    "downstream_adoption": [
+     0.23333333333333334,
+     0.06666666666666667,
+     0.43333333333333335
+    ]
+   }
+  ],
+  "chain-neutral-p1-verifier": [
+   {
+    "group": "early",
+    "n": 40,
+    "team_adopted": [
+     0.05,
+     0.0,
+     0.125
+    ],
+    "recovery": [
+     0.825,
+     0.7,
+     0.925
+    ],
+    "downstream_adoption": [
+     0.3333333333333333,
+     0.0,
+     1.0
+    ]
+   },
+   {
+    "group": "late",
+    "n": 10,
+    "team_adopted": [
+     0.1,
+     0.0,
+     0.3
+    ],
+    "recovery": [
+     0.8,
+     0.5,
+     1.0
+    ],
+    "downstream_adoption": [
+     0.5555555555555556,
+     0.0,
+     1.0
+    ]
+   }
+  ],
+  "chain-neutral-p2-none": [
+   {
+    "group": "early",
+    "n": 40,
+    "team_adopted": [
+     0.1,
+     0.025,
+     0.2
+    ],
+    "recovery": [
+     0.775,
+     0.65,
+     0.9
+    ],
+    "downstream_adoption": [
+     0.0625,
+     0.0125,
+     0.1125
+    ]
+   },
+   {
+    "group": "late",
+    "n": 10,
+    "team_adopted": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "recovery": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "downstream_adoption": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   }
+  ],
+  "chain-neutral-p2-skeptical": [
+   {
+    "group": "early",
+    "n": 40,
+    "team_adopted": [
+     0.025,
+     0.0,
+     0.075
+    ],
+    "recovery": [
+     0.875,
+     0.775,
+     0.975
+    ],
+    "downstream_adoption": [
+     0.025,
+     0.0,
+     0.0625
+    ]
+   },
+   {
+    "group": "late",
+    "n": 10,
+    "team_adopted": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "recovery": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "downstream_adoption": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   }
+  ],
+  "chain-neutral-p2-verifier": [
+   {
+    "group": "early",
+    "n": 40,
+    "team_adopted": [
+     0.1,
+     0.025,
+     0.2
+    ],
+    "recovery": [
+     0.775,
+     0.65,
+     0.9
+    ],
+    "downstream_adoption": [
+     0.35714285714285715,
+     0.16666666666666666,
+     0.5
+    ]
+   },
+   {
+    "group": "late",
+    "n": 10,
+    "team_adopted": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "recovery": [
+     0.8,
+     0.5,
+     1.0
+    ],
+    "downstream_adoption": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   }
+  ],
+  "chain-neutral-p3-none": [
+   {
+    "group": "early",
+    "n": 40,
+    "team_adopted": [
+     0.125,
+     0.025,
+     0.225
+    ],
+    "recovery": [
+     0.75,
+     0.625,
+     0.875
+    ],
+    "downstream_adoption": [
+     0.125,
+     0.025,
+     0.225
+    ]
+   },
+   {
+    "group": "late",
+    "n": 10,
+    "team_adopted": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "recovery": [
+     0.9,
+     0.7,
+     1.0
+    ],
+    "downstream_adoption": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   }
+  ],
+  "chain-neutral-p3-skeptical": [
+   {
+    "group": "early",
+    "n": 40,
+    "team_adopted": [
+     0.15,
+     0.05,
+     0.275
+    ],
+    "recovery": [
+     0.7,
+     0.55,
+     0.825
+    ],
+    "downstream_adoption": [
+     0.15,
+     0.05,
+     0.275
+    ]
+   },
+   {
+    "group": "late",
+    "n": 10,
+    "team_adopted": [
+     0.3,
+     0.0,
+     0.6
+    ],
+    "recovery": [
+     0.4,
+     0.1,
+     0.7
+    ],
+    "downstream_adoption": [
+     0.3,
+     0.0,
+     0.6
+    ]
+   }
+  ],
+  "chain-neutral-p3-verifier": [
+   {
+    "group": "early",
+    "n": 40,
+    "team_adopted": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "recovery": [
+     0.9,
+     0.8,
+     0.975
+    ],
+    "downstream_adoption": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "group": "late",
+    "n": 10,
+    "team_adopted": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "recovery": [
+     0.9,
+     0.7,
+     1.0
+    ],
+    "downstream_adoption": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   }
+  ],
+  "chain-persuasive-p1-none": [
+   {
+    "group": "early",
+    "n": 40,
+    "team_adopted": [
+     0.4,
+     0.25,
+     0.55
+    ],
+    "recovery": [
+     0.475,
+     0.325,
+     0.625
+    ],
+    "downstream_adoption": [
+     0.14166666666666666,
+     0.09166666666666666,
+     0.2
+    ]
+   },
+   {
+    "group": "late",
+    "n": 10,
+    "team_adopted": [
+     0.2,
+     0.0,
+     0.5
+    ],
+    "recovery": [
+     0.8,
+     0.5,
+     1.0
+    ],
+    "downstream_adoption": [
+     0.1,
+     0.0,
+     0.23333333333333334
+    ]
+   }
+  ],
+  "chain-persuasive-p1-skeptical": [
+   {
+    "group": "early",
+    "n": 40,
+    "team_adopted": [
+     0.375,
+     0.225,
+     0.525
+    ],
+    "recovery": [
+     0.525,
+     0.375,
+     0.675
+    ],
+    "downstream_adoption": [
+     0.125,
+     0.075,
+     0.175
+    ]
+   },
+   {
+    "group": "late",
+    "n": 10,
+    "team_adopted": [
+     0.3,
+     0.0,
+     0.6
+    ],
+    "recovery": [
+     0.7,
+     0.4,
+     1.0
+    ],
+    "downstream_adoption": [
+     0.2,
+     0.0,
+     0.43333333333333335
+    ]
+   }
+  ],
+  "chain-persuasive-p1-verifier": [
+   {
+    "group": "early",
+    "n": 40,
+    "team_adopted": [
+     0.075,
+     0.0,
+     0.175
+    ],
+    "recovery": [
+     0.775,
+     0.65,
+     0.9
+    ],
+    "downstream_adoption": [
+     0.3333333333333333,
+     0.3333333333333333,
+     0.3333333333333333
+    ]
+   },
+   {
+    "group": "late",
+    "n": 10,
+    "team_adopted": [
+     0.1,
+     0.0,
+     0.3
+    ],
+    "recovery": [
+     0.7,
+     0.4,
+     1.0
+    ],
+    "downstream_adoption": [
+     0.3333333333333333,
+     0.0,
+     0.6666666666666666
+    ]
+   }
+  ],
+  "chain-persuasive-p2-none": [
+   {
+    "group": "early",
+    "n": 40,
+    "team_adopted": [
+     0.05,
+     0.0,
+     0.125
+    ],
+    "recovery": [
+     0.85,
+     0.725,
+     0.95
+    ],
+    "downstream_adoption": [
+     0.0375,
+     0.0,
+     0.0875
+    ]
+   },
+   {
+    "group": "late",
+    "n": 10,
+    "team_adopted": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "recovery": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "downstream_adoption": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   }
+  ],
+  "chain-persuasive-p2-skeptical": [
+   {
+    "group": "early",
+    "n": 40,
+    "team_adopted": [
+     0.025,
+     0.0,
+     0.075
+    ],
+    "recovery": [
+     0.875,
+     0.775,
+     0.975
+    ],
+    "downstream_adoption": [
+     0.0125,
+     0.0,
+     0.0375
+    ]
+   },
+   {
+    "group": "late",
+    "n": 10,
+    "team_adopted": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "recovery": [
+     0.7,
+     0.4,
+     1.0
+    ],
+    "downstream_adoption": [
+     0.05,
+     0.0,
+     0.15
+    ]
+   }
+  ],
+  "chain-persuasive-p2-verifier": [
+   {
+    "group": "early",
+    "n": 40,
+    "team_adopted": [
+     0.075,
+     0.0,
+     0.175
+    ],
+    "recovery": [
+     0.8,
+     0.675,
+     0.925
+    ],
+    "downstream_adoption": [
+     0.25,
+     0.0,
+     0.5
+    ]
+   },
+   {
+    "group": "late",
+    "n": 10,
+    "team_adopted": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "recovery": [
+     0.8,
+     0.5,
+     1.0
+    ],
+    "downstream_adoption": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   }
+  ],
+  "chain-persuasive-p3-none": [
+   {
+    "group": "early",
+    "n": 40,
+    "team_adopted": [
+     0.1,
+     0.025,
+     0.2
+    ],
+    "recovery": [
+     0.775,
+     0.65,
+     0.9
+    ],
+    "downstream_adoption": [
+     0.1,
+     0.025,
+     0.2
+    ]
+   },
+   {
+    "group": "late",
+    "n": 10,
+    "team_adopted": [
+     0.1,
+     0.0,
+     0.3
+    ],
+    "recovery": [
+     0.6,
+     0.3,
+     0.9
+    ],
+    "downstream_adoption": [
+     0.1,
+     0.0,
+     0.3
+    ]
+   }
+  ],
+  "chain-persuasive-p3-skeptical": [
+   {
+    "group": "early",
+    "n": 40,
+    "team_adopted": [
+     0.175,
+     0.075,
+     0.3
+    ],
+    "recovery": [
+     0.725,
+     0.575,
+     0.85
+    ],
+    "downstream_adoption": [
+     0.175,
+     0.075,
+     0.3
+    ]
+   },
+   {
+    "group": "late",
+    "n": 10,
+    "team_adopted": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "recovery": [
+     0.7,
+     0.4,
+     1.0
+    ],
+    "downstream_adoption": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   }
+  ],
+  "chain-persuasive-p3-verifier": [
+   {
+    "group": "early",
+    "n": 40,
+    "team_adopted": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "recovery": [
+     0.9,
+     0.8,
+     0.975
+    ],
+    "downstream_adoption": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "group": "late",
+    "n": 10,
+    "team_adopted": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "recovery": [
+     0.9,
+     0.7,
+     1.0
+    ],
+    "downstream_adoption": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   }
+  ],
+  "star-neutral-p1-none": [
+   {
+    "group": "early",
+    "n": 40,
+    "team_adopted": [
+     0.275,
+     0.15,
+     0.425
+    ],
+    "recovery": [
+     0.6,
+     0.45,
+     0.75
+    ],
+    "downstream_adoption": [
+     0.275,
+     0.15,
+     0.425
+    ]
+   },
+   {
+    "group": "late",
+    "n": 10,
+    "team_adopted": [
+     0.3,
+     0.0,
+     0.6
+    ],
+    "recovery": [
+     0.6,
+     0.3,
+     0.9
+    ],
+    "downstream_adoption": [
+     0.3,
+     0.0,
+     0.6
+    ]
+   }
+  ],
+  "star-neutral-p1-skeptical": [
+   {
+    "group": "early",
+    "n": 40,
+    "team_adopted": [
+     0.125,
+     0.025,
+     0.225
+    ],
+    "recovery": [
+     0.75,
+     0.6,
+     0.875
+    ],
+    "downstream_adoption": [
+     0.125,
+     0.025,
+     0.225
+    ]
+   },
+   {
+    "group": "late",
+    "n": 10,
+    "team_adopted": [
+     0.1,
+     0.0,
+     0.3
+    ],
+    "recovery": [
+     0.9,
+     0.7,
+     1.0
+    ],
+    "downstream_adoption": [
+     0.1,
+     0.0,
+     0.3
+    ]
+   }
+  ],
+  "star-neutral-p1-verifier": [
+   {
+    "group": "early",
+    "n": 40,
+    "team_adopted": [
+     0.05,
+     0.0,
+     0.125
+    ],
+    "recovery": [
+     0.825,
+     0.7,
+     0.925
+    ],
+    "downstream_adoption": [
+     0.4,
+     0.0,
+     1.0
+    ]
+   },
+   {
+    "group": "late",
+    "n": 10,
+    "team_adopted": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "recovery": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "downstream_adoption": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   }
+  ],
+  "star-persuasive-p1-none": [
+   {
+    "group": "early",
+    "n": 40,
+    "team_adopted": [
+     0.175,
+     0.075,
+     0.3
+    ],
+    "recovery": [
+     0.725,
+     0.575,
+     0.85
+    ],
+    "downstream_adoption": [
+     0.175,
+     0.075,
+     0.3
+    ]
+   },
+   {
+    "group": "late",
+    "n": 10,
+    "team_adopted": [
+     0.2,
+     0.0,
+     0.5
+    ],
+    "recovery": [
+     0.7,
+     0.4,
+     1.0
+    ],
+    "downstream_adoption": [
+     0.2,
+     0.0,
+     0.5
+    ]
+   }
+  ],
+  "star-persuasive-p1-skeptical": [
+   {
+    "group": "early",
+    "n": 40,
+    "team_adopted": [
+     0.15,
+     0.05,
+     0.275
+    ],
+    "recovery": [
+     0.8,
+     0.675,
+     0.925
+    ],
+    "downstream_adoption": [
+     0.15,
+     0.05,
+     0.275
+    ]
+   },
+   {
+    "group": "late",
+    "n": 10,
+    "team_adopted": [
+     0.1,
+     0.0,
+     0.3
+    ],
+    "recovery": [
+     0.8,
+     0.5,
+     1.0
+    ],
+    "downstream_adoption": [
+     0.1,
+     0.0,
+     0.3
+    ]
+   }
+  ],
+  "star-persuasive-p1-verifier": [
+   {
+    "group": "early",
+    "n": 40,
+    "team_adopted": [
+     0.025,
+     0.0,
+     0.075
+    ],
+    "recovery": [
+     0.875,
+     0.775,
+     0.975
+    ],
+    "downstream_adoption": [
+     0.3333333333333333,
+     0.0,
+     1.0
+    ]
+   },
+   {
+    "group": "late",
+    "n": 10,
+    "team_adopted": [
+     0.1,
+     0.0,
+     0.3
+    ],
+    "recovery": [
+     0.8,
+     0.5,
+     1.0
+    ],
+    "downstream_adoption": [
+     0.5,
+     0.0,
+     1.0
+    ]
+   }
+  ]
+ },
+ "obvious": {
+  "all fault configs": [
+   {
+    "group": false,
+    "n": 1032,
+    "team_adopted": [
+     0.1375968992248062,
+     0.11724806201550388,
+     0.15891472868217055
+    ],
+    "recovery": [
+     0.7374031007751938,
+     0.7102713178294574,
+     0.7635658914728682
+    ],
+    "downstream_adoption": [
+     0.21717791411042944,
+     0.18518409329140462,
+     0.2502994372266298
+    ]
+   },
+   {
+    "group": true,
+    "n": 168,
+    "team_adopted": [
+     0.05952380952380952,
+     0.023809523809523808,
+     0.09523809523809523
+    ],
+    "recovery": [
+     0.8928571428571429,
+     0.8452380952380952,
+     0.9345238095238095
+    ],
+    "downstream_adoption": [
+     0.07758620689655173,
+     0.03278688524590164,
+     0.1276595744680851
+    ]
+   }
+  ],
+  "chain-neutral-p1-none": [
+   {
+    "group": false,
+    "n": 43,
+    "team_adopted": [
+     0.32558139534883723,
+     0.18604651162790697,
+     0.46511627906976744
+    ],
+    "recovery": [
+     0.5348837209302325,
+     0.3953488372093023,
+     0.6744186046511628
+    ],
+    "downstream_adoption": [
+     0.14728682170542637,
+     0.08527131782945736,
+     0.2248062015503876
+    ]
+   },
+   {
+    "group": true,
+    "n": 7,
+    "team_adopted": [
+     0.14285714285714285,
+     0.0,
+     0.42857142857142855
+    ],
+    "recovery": [
+     0.8571428571428571,
+     0.5714285714285714,
+     1.0
+    ],
+    "downstream_adoption": [
+     0.047619047619047616,
+     0.0,
+     0.14285714285714285
+    ]
+   }
+  ],
+  "chain-neutral-p1-skeptical": [
+   {
+    "group": false,
+    "n": 43,
+    "team_adopted": [
+     0.27906976744186046,
+     0.16279069767441862,
+     0.4186046511627907
+    ],
+    "recovery": [
+     0.6046511627906976,
+     0.46511627906976744,
+     0.7441860465116279
+    ],
+    "downstream_adoption": [
+     0.12403100775193798,
+     0.06201550387596899,
+     0.1937984496124031
+    ]
+   },
+   {
+    "group": true,
+    "n": 7,
+    "team_adopted": [
+     0.14285714285714285,
+     0.0,
+     0.42857142857142855
+    ],
+    "recovery": [
+     0.8571428571428571,
+     0.5714285714285714,
+     1.0
+    ],
+    "downstream_adoption": [
+     0.047619047619047616,
+     0.0,
+     0.14285714285714285
+    ]
+   }
+  ],
+  "chain-neutral-p1-verifier": [
+   {
+    "group": false,
+    "n": 43,
+    "team_adopted": [
+     0.06976744186046512,
+     0.0,
+     0.16279069767441862
+    ],
+    "recovery": [
+     0.7906976744186046,
+     0.6744186046511628,
+     0.9069767441860465
+    ],
+    "downstream_adoption": [
+     0.5,
+     0.1111111111111111,
+     0.8888888888888888
+    ]
+   },
+   {
+    "group": true,
+    "n": 7,
+    "team_adopted": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "recovery": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "downstream_adoption": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   }
+  ],
+  "chain-neutral-p2-none": [
+   {
+    "group": false,
+    "n": 43,
+    "team_adopted": [
+     0.09302325581395349,
+     0.023255813953488372,
+     0.18604651162790697
+    ],
+    "recovery": [
+     0.7906976744186046,
+     0.6744186046511628,
+     0.9069767441860465
+    ],
+    "downstream_adoption": [
+     0.05813953488372093,
+     0.011627906976744186,
+     0.10465116279069768
+    ]
+   },
+   {
+    "group": true,
+    "n": 7,
+    "team_adopted": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "recovery": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "downstream_adoption": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   }
+  ],
+  "chain-neutral-p2-skeptical": [
+   {
+    "group": false,
+    "n": 43,
+    "team_adopted": [
+     0.023255813953488372,
+     0.0,
+     0.06976744186046512
+    ],
+    "recovery": [
+     0.8837209302325582,
+     0.7906976744186046,
+     0.9767441860465116
+    ],
+    "downstream_adoption": [
+     0.023255813953488372,
+     0.0,
+     0.05813953488372093
+    ]
+   },
+   {
+    "group": true,
+    "n": 7,
+    "team_adopted": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "recovery": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "downstream_adoption": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   }
+  ],
+  "chain-neutral-p2-verifier": [
+   {
+    "group": false,
+    "n": 43,
+    "team_adopted": [
+     0.09302325581395349,
+     0.023255813953488372,
+     0.18604651162790697
+    ],
+    "recovery": [
+     0.7441860465116279,
+     0.6046511627906976,
+     0.8604651162790697
+    ],
+    "downstream_adoption": [
+     0.22727272727272727,
+     0.07142857142857142,
+     0.375
+    ]
+   },
+   {
+    "group": true,
+    "n": 7,
+    "team_adopted": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "recovery": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "downstream_adoption": [
+     null,
+     null,
+     null
+    ]
+   }
+  ],
+  "chain-neutral-p3-none": [
+   {
+    "group": false,
+    "n": 43,
+    "team_adopted": [
+     0.11627906976744186,
+     0.023255813953488372,
+     0.20930232558139536
+    ],
+    "recovery": [
+     0.7674418604651163,
+     0.627906976744186,
+     0.8837209302325582
+    ],
+    "downstream_adoption": [
+     0.11627906976744186,
+     0.023255813953488372,
+     0.20930232558139536
+    ]
+   },
+   {
+    "group": true,
+    "n": 7,
+    "team_adopted": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "recovery": [
+     0.8571428571428571,
+     0.5714285714285714,
+     1.0
+    ],
+    "downstream_adoption": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   }
+  ],
+  "chain-neutral-p3-skeptical": [
+   {
+    "group": false,
+    "n": 43,
+    "team_adopted": [
+     0.20930232558139536,
+     0.09302325581395349,
+     0.32558139534883723
+    ],
+    "recovery": [
+     0.5813953488372093,
+     0.4418604651162791,
+     0.7209302325581395
+    ],
+    "downstream_adoption": [
+     0.20930232558139536,
+     0.09302325581395349,
+     0.32558139534883723
+    ]
+   },
+   {
+    "group": true,
+    "n": 7,
+    "team_adopted": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "recovery": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "downstream_adoption": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   }
+  ],
+  "chain-neutral-p3-verifier": [
+   {
+    "group": false,
+    "n": 43,
+    "team_adopted": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "recovery": [
+     0.8837209302325582,
+     0.7674418604651163,
+     0.9767441860465116
+    ],
+    "downstream_adoption": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "group": true,
+    "n": 7,
+    "team_adopted": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "recovery": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "downstream_adoption": [
+     null,
+     null,
+     null
+    ]
+   }
+  ],
+  "chain-persuasive-p1-none": [
+   {
+    "group": false,
+    "n": 43,
+    "team_adopted": [
+     0.37209302325581395,
+     0.23255813953488372,
+     0.5116279069767442
+    ],
+    "recovery": [
+     0.5348837209302325,
+     0.3953488372093023,
+     0.6744186046511628
+    ],
+    "downstream_adoption": [
+     0.13953488372093023,
+     0.08527131782945736,
+     0.20155038759689922
+    ]
+   },
+   {
+    "group": true,
+    "n": 7,
+    "team_adopted": [
+     0.2857142857142857,
+     0.0,
+     0.5714285714285714
+    ],
+    "recovery": [
+     0.5714285714285714,
+     0.14285714285714285,
+     0.8571428571428571
+    ],
+    "downstream_adoption": [
+     0.09523809523809523,
+     0.0,
+     0.19047619047619047
+    ]
+   }
+  ],
+  "chain-persuasive-p1-skeptical": [
+   {
+    "group": false,
+    "n": 43,
+    "team_adopted": [
+     0.3953488372093023,
+     0.2558139534883721,
+     0.5348837209302325
+    ],
+    "recovery": [
+     0.5116279069767442,
+     0.37209302325581395,
+     0.6511627906976745
+    ],
+    "downstream_adoption": [
+     0.15503875968992248,
+     0.09302325581395349,
+     0.2248062015503876
+    ]
+   },
+   {
+    "group": true,
+    "n": 7,
+    "team_adopted": [
+     0.14285714285714285,
+     0.0,
+     0.42857142857142855
+    ],
+    "recovery": [
+     0.8571428571428571,
+     0.5714285714285714,
+     1.0
+    ],
+    "downstream_adoption": [
+     0.047619047619047616,
+     0.0,
+     0.14285714285714285
+    ]
+   }
+  ],
+  "chain-persuasive-p1-verifier": [
+   {
+    "group": false,
+    "n": 43,
+    "team_adopted": [
+     0.09302325581395349,
+     0.023255813953488372,
+     0.18604651162790697
+    ],
+    "recovery": [
+     0.7441860465116279,
+     0.6046511627906976,
+     0.8604651162790697
+    ],
+    "downstream_adoption": [
+     0.3333333333333333,
+     0.1111111111111111,
+     0.5416666666666666
+    ]
+   },
+   {
+    "group": true,
+    "n": 7,
+    "team_adopted": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "recovery": [
+     0.8571428571428571,
+     0.5714285714285714,
+     1.0
+    ],
+    "downstream_adoption": [
+     null,
+     null,
+     null
+    ]
+   }
+  ],
+  "chain-persuasive-p2-none": [
+   {
+    "group": false,
+    "n": 43,
+    "team_adopted": [
+     0.046511627906976744,
+     0.0,
+     0.11627906976744186
+    ],
+    "recovery": [
+     0.8604651162790697,
+     0.7441860465116279,
+     0.9534883720930233
+    ],
+    "downstream_adoption": [
+     0.03488372093023256,
+     0.0,
+     0.08139534883720931
+    ]
+   },
+   {
+    "group": true,
+    "n": 7,
+    "team_adopted": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "recovery": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "downstream_adoption": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   }
+  ],
+  "chain-persuasive-p2-skeptical": [
+   {
+    "group": false,
+    "n": 43,
+    "team_adopted": [
+     0.023255813953488372,
+     0.0,
+     0.06976744186046512
+    ],
+    "recovery": [
+     0.813953488372093,
+     0.6976744186046512,
+     0.9302325581395349
+    ],
+    "downstream_adoption": [
+     0.023255813953488372,
+     0.0,
+     0.05813953488372093
+    ]
+   },
+   {
+    "group": true,
+    "n": 7,
+    "team_adopted": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "recovery": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "downstream_adoption": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   }
+  ],
+  "chain-persuasive-p2-verifier": [
+   {
+    "group": false,
+    "n": 43,
+    "team_adopted": [
+     0.06976744186046512,
+     0.0,
+     0.16279069767441862
+    ],
+    "recovery": [
+     0.7674418604651163,
+     0.627906976744186,
+     0.8837209302325582
+    ],
+    "downstream_adoption": [
+     0.21428571428571427,
+     0.0,
+     0.4166666666666667
+    ]
+   },
+   {
+    "group": true,
+    "n": 7,
+    "team_adopted": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "recovery": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "downstream_adoption": [
+     null,
+     null,
+     null
+    ]
+   }
+  ],
+  "chain-persuasive-p3-none": [
+   {
+    "group": false,
+    "n": 43,
+    "team_adopted": [
+     0.11627906976744186,
+     0.023255813953488372,
+     0.20930232558139536
+    ],
+    "recovery": [
+     0.6976744186046512,
+     0.5581395348837209,
+     0.8372093023255814
+    ],
+    "downstream_adoption": [
+     0.11627906976744186,
+     0.023255813953488372,
+     0.20930232558139536
+    ]
+   },
+   {
+    "group": true,
+    "n": 7,
+    "team_adopted": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "recovery": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "downstream_adoption": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   }
+  ],
+  "chain-persuasive-p3-skeptical": [
+   {
+    "group": false,
+    "n": 43,
+    "team_adopted": [
+     0.13953488372093023,
+     0.046511627906976744,
+     0.2558139534883721
+    ],
+    "recovery": [
+     0.7209302325581395,
+     0.5813953488372093,
+     0.8372093023255814
+    ],
+    "downstream_adoption": [
+     0.13953488372093023,
+     0.046511627906976744,
+     0.2558139534883721
+    ]
+   },
+   {
+    "group": true,
+    "n": 7,
+    "team_adopted": [
+     0.14285714285714285,
+     0.0,
+     0.42857142857142855
+    ],
+    "recovery": [
+     0.7142857142857143,
+     0.42857142857142855,
+     1.0
+    ],
+    "downstream_adoption": [
+     0.14285714285714285,
+     0.0,
+     0.42857142857142855
+    ]
+   }
+  ],
+  "chain-persuasive-p3-verifier": [
+   {
+    "group": false,
+    "n": 43,
+    "team_adopted": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "recovery": [
+     0.8837209302325582,
+     0.7906976744186046,
+     0.9767441860465116
+    ],
+    "downstream_adoption": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   {
+    "group": true,
+    "n": 7,
+    "team_adopted": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "recovery": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "downstream_adoption": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   }
+  ],
+  "star-neutral-p1-none": [
+   {
+    "group": false,
+    "n": 43,
+    "team_adopted": [
+     0.3023255813953488,
+     0.16279069767441862,
+     0.4418604651162791
+    ],
+    "recovery": [
+     0.5813953488372093,
+     0.4418604651162791,
+     0.7209302325581395
+    ],
+    "downstream_adoption": [
+     0.3023255813953488,
+     0.16279069767441862,
+     0.4418604651162791
+    ]
+   },
+   {
+    "group": true,
+    "n": 7,
+    "team_adopted": [
+     0.14285714285714285,
+     0.0,
+     0.42857142857142855
+    ],
+    "recovery": [
+     0.7142857142857143,
+     0.42857142857142855,
+     1.0
+    ],
+    "downstream_adoption": [
+     0.14285714285714285,
+     0.0,
+     0.42857142857142855
+    ]
+   }
+  ],
+  "star-neutral-p1-skeptical": [
+   {
+    "group": false,
+    "n": 43,
+    "team_adopted": [
+     0.13953488372093023,
+     0.046511627906976744,
+     0.2558139534883721
+    ],
+    "recovery": [
+     0.7674418604651163,
+     0.627906976744186,
+     0.8837209302325582
+    ],
+    "downstream_adoption": [
+     0.13953488372093023,
+     0.046511627906976744,
+     0.2558139534883721
+    ]
+   },
+   {
+    "group": true,
+    "n": 7,
+    "team_adopted": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "recovery": [
+     0.8571428571428571,
+     0.5714285714285714,
+     1.0
+    ],
+    "downstream_adoption": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   }
+  ],
+  "star-neutral-p1-verifier": [
+   {
+    "group": false,
+    "n": 43,
+    "team_adopted": [
+     0.046511627906976744,
+     0.0,
+     0.11627906976744186
+    ],
+    "recovery": [
+     0.8604651162790697,
+     0.7441860465116279,
+     0.9534883720930233
+    ],
+    "downstream_adoption": [
+     0.2857142857142857,
+     0.0,
+     0.6666666666666666
+    ]
+   },
+   {
+    "group": true,
+    "n": 7,
+    "team_adopted": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "recovery": [
+     0.8571428571428571,
+     0.5714285714285714,
+     1.0
+    ],
+    "downstream_adoption": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   }
+  ],
+  "star-persuasive-p1-none": [
+   {
+    "group": false,
+    "n": 43,
+    "team_adopted": [
+     0.16279069767441862,
+     0.06976744186046512,
+     0.27906976744186046
+    ],
+    "recovery": [
+     0.7209302325581395,
+     0.5813953488372093,
+     0.8604651162790697
+    ],
+    "downstream_adoption": [
+     0.16279069767441862,
+     0.06976744186046512,
+     0.27906976744186046
+    ]
+   },
+   {
+    "group": true,
+    "n": 7,
+    "team_adopted": [
+     0.2857142857142857,
+     0.0,
+     0.5714285714285714
+    ],
+    "recovery": [
+     0.7142857142857143,
+     0.42857142857142855,
+     1.0
+    ],
+    "downstream_adoption": [
+     0.2857142857142857,
+     0.0,
+     0.5714285714285714
+    ]
+   }
+  ],
+  "star-persuasive-p1-skeptical": [
+   {
+    "group": false,
+    "n": 43,
+    "team_adopted": [
+     0.13953488372093023,
+     0.046511627906976744,
+     0.2558139534883721
+    ],
+    "recovery": [
+     0.813953488372093,
+     0.6976744186046512,
+     0.9302325581395349
+    ],
+    "downstream_adoption": [
+     0.13953488372093023,
+     0.046511627906976744,
+     0.2558139534883721
+    ]
+   },
+   {
+    "group": true,
+    "n": 7,
+    "team_adopted": [
+     0.14285714285714285,
+     0.0,
+     0.42857142857142855
+    ],
+    "recovery": [
+     0.7142857142857143,
+     0.42857142857142855,
+     1.0
+    ],
+    "downstream_adoption": [
+     0.14285714285714285,
+     0.0,
+     0.42857142857142855
+    ]
+   }
+  ],
+  "star-persuasive-p1-verifier": [
+   {
+    "group": false,
+    "n": 43,
+    "team_adopted": [
+     0.046511627906976744,
+     0.0,
+     0.11627906976744186
+    ],
+    "recovery": [
+     0.8372093023255814,
+     0.7209302325581395,
+     0.9302325581395349
+    ],
+    "downstream_adoption": [
+     0.4,
+     0.0,
+     1.0
+    ]
+   },
+   {
+    "group": true,
+    "n": 7,
+    "team_adopted": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "recovery": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "downstream_adoption": [
+     null,
+     null,
+     null
+    ]
+   }
+  ]
+ }
+}
