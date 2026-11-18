@@ -30,9 +30,8 @@ def call_kind(m: dict) -> str:
 
 
 def measured_call_costs(log: str | Path) -> dict[str, float]:
-    """Effective wall seconds per LLM call, by kind of call (runs copied from another log,
-    or rerun before the timed part of a session, are left out)."""
-    records = [r for r in read_records(log, None) if not (r.get("reused_from") or r.get("reuse_check"))]
+    """Effective wall seconds per LLM call, by kind of call (runs copied from another log are left out)."""
+    records = [r for r in read_records(log, None) if not r.get("reused_from")]
     walls = {r["session_id"]: r["wall_s"] for r in records if r["record_type"] == "session_end"}
     latency_sum = defaultdict(float)
     for r in records:

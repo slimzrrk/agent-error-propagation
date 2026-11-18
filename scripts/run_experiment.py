@@ -3,10 +3,13 @@
     python -m scripts.run_experiment --config configs/baseline.yaml --split dev --limit 20
 
 On dev, --reuse OLD_LOG copies the runs of an older log whose inputs have not changed
-(same config, question and faulty message; same model, sampling settings and seed), so
-that only the affected runs are redone. Sampling is seeded per (question, agent), so a
-rerun would give the same messages; this is checked by rerunning a random sample of the
-copied runs, and nothing is reused if any of them differs.
+(same config, question and faulty message; same prompts, model, sampling settings and
+seed), so that only the affected runs are redone. Sampling is seeded per (question,
+agent), but batched inference on the server is not bit-for-bit reproducible: a rerun
+follows the logged text and may drift from it after a while. A random sample of the
+copied runs is therefore rerun as a diagnostic (not logged): the share of identical runs
+is stored in the metadata, and nothing is reused if most of them differ, which would
+point to a changed input rather than to numerical noise.
 """
 
 from __future__ import annotations
@@ -85,14 +88,16 @@ def check_old_log(path: str, cfg: RunConfig, split: str, server: dict) -> list[s
         raise SystemExit(f"{path}: no runs to reuse")
     for m in metas:
         same = (m["split"] == split and m["base_seed"] == cfg.seed and m["llm"] == cfg.llm.to_dict()
+                and m["prompts_sha"] == prompts.fingerprint()
                 and all(m["server"].get(k) == server.get(k) for k in ("model_digest", "ollama_version")))
         if not same:
-            raise SystemExit(f"{path} used another split, seed, sampling setting or model build; cannot reuse it")
+            raise SystemExit(f"{path} used another split, seed, prompts, sampling setting or model build; "
+                             "cannot reuse it")
     return sorted({m["session_id"] for m in metas})
 
 
-def prepare_reuse(args, cfg: RunConfig, llm: LLMClient, tasks: list, workers: int):
-    """(meta info, rerun check results, copied records)."""
+def prepare_reuse(args, cfg: RunConfig, llm: LLMClient, tasks: list, workers: int) -> tuple[dict, list[dict]]:
+    """(meta info, copied records)."""
     if args.split == "test":
         raise SystemExit("--reuse is for dev only: the test split is run once, from scratch")
     sessions = check_old_log(args.reuse, cfg, args.split, llm.server_info())
@@ -100,32 +105,30 @@ def prepare_reuse(args, cfg: RunConfig, llm: LLMClient, tasks: list, workers: in
     sample = set(random.Random(0).sample(sorted(reusable), min(args.reuse_check, len(reusable))))
     to_check = [(exp, q) for exp, q in tasks if (exp.id, q.id) in sample]
 
-    fresh, mismatches = [], []
+    identical, same_answer = 0, 0
     for exp, q, result in run_tasks(llm, to_check, cfg.seed, workers, desc="reuse check"):
         if isinstance(result, Exception):
             raise SystemExit(f"reuse check failed on {exp.id} / {q.id}: {result!r}")
-        fresh.append((exp, result))
-        if not same_outputs(result, reusable[(exp.id, q.id)]):
-            mismatches.append(f"{exp.id} / {q.id}")
-    if mismatches:
-        raise SystemExit(f"rerun differs from {args.reuse} for {mismatches}; run without --reuse")
+        old = reusable[(exp.id, q.id)]
+        identical += same_outputs(result, old)
+        same_answer += result["final_answer"] == old["final_answer"]
+    if identical * 2 < len(to_check):
+        raise SystemExit(f"only {identical}/{len(to_check)} reruns match {args.reuse}; its inputs probably "
+                         "differ, run without --reuse")
 
     questions = {q.id: q for _, q in tasks}
     exps = {exp.id: exp for exp, _ in tasks}
     copies = []
     for (cid, qid), old in reusable.items():
-        if (cid, qid) in sample:
-            continue
         rec = {k: v for k, v in old.items() if k not in ("record_type", "session_id", "timestamp", "reused_from")}
         if exps[cid].fault != "none":
             rec["fault"] = fault_record(questions[qid].id, exps[cid], old["fault"]["shown_at"])
         rec["reused_from"] = {"log": str(args.reuse), "session_id": old["session_id"]}
         copies.append(rec)
-    info = {"from": str(args.reuse), "sessions": sessions, "copied": len(copies),
-            "check": {"rerun": len(fresh), "identical": len(fresh) - len(mismatches)}}
-    print(f"reuse: {len(copies)} runs copied from {args.reuse}; "
-          f"{len(fresh)} others rerun as a check, all identical")
-    return info, fresh, copies
+    check = {"rerun": len(to_check), "identical": identical, "same_final_answer": same_answer}
+    print(f"reuse: {len(copies)} runs copied from {args.reuse}; check: {identical}/{len(to_check)} reruns "
+          f"identical, {same_answer}/{len(to_check)} with the same final answer")
+    return {"from": str(args.reuse), "sessions": sessions, "copied": len(copies), "check": check}, copies
 
 
 def main(argv=None) -> None:
@@ -150,11 +153,11 @@ def main(argv=None) -> None:
 
     done = jl.done_keys()
     tasks = [(exp, q) for exp in cfg.experiments for q in questions if (exp.id, q.id) not in done]
-    reuse_info, fresh, copies = None, [], []
+    reuse_info, copies = None, []
     if args.reuse and tasks:
-        reuse_info, fresh, copies = prepare_reuse(args, cfg, llm, tasks, workers)
-        handled = {(r["config_id"], r["question_id"]) for r in copies} | {(e.id, r["question_id"]) for e, r in fresh}
-        tasks = [(exp, q) for exp, q in tasks if (exp.id, q.id) not in handled]
+        reuse_info, copies = prepare_reuse(args, cfg, llm, tasks, workers)
+        copied = {(r["config_id"], r["question_id"]) for r in copies}
+        tasks = [(exp, q) for exp, q in tasks if (exp.id, q.id) not in copied]
     print(f"{len(cfg.experiments)} experiments x {len(questions)} questions; "
           f"{len(tasks)} to run, {len(done)} already in {out}")
 
@@ -162,7 +165,7 @@ def main(argv=None) -> None:
         return {"config_id": exp.id, "config": exp.to_dict(), "split": args.split,
                 "model": cfg.llm.model, "base_seed": cfg.seed, **result}
 
-    if tasks or fresh or copies:
+    if tasks or copies:
         jl.write_meta({
             "config_name": cfg.name,
             "config_file": str(args.config),
@@ -179,8 +182,6 @@ def main(argv=None) -> None:
             "reused": reuse_info,
             **environment_metadata(),
         })
-        for exp, result in fresh:  # outside the timed loop below, hence flagged
-            jl.write_run({**run_record(exp, result), "reuse_check": True})
         for rec in copies:
             jl.write_run(rec)
 
