@@ -1,5 +1,7 @@
 # When One Agent Goes Wrong: Error Propagation and Containment in Small Multi-Agent LLM Systems
 
+Ons Dekhil, Slim Zarrouk, Abdullah Hameed — Instructor: Chao Zhang
+
 *Course project — Machine Learning Techniques and Applications, Université Lyon 1.*
 
 ## Abstract
@@ -45,7 +47,11 @@ the same honest agents. We ask three questions:
    instruction, a verifier agent, or no LLM at all (a vote over the solvers' answers)?
 
 All design choices and prompts were tuned on a separate dev set; the hypotheses were then
-pre-registered and the test set was run once.
+pre-registered and the test set was run once. The project thus brings together two
+themes of the course: compound AI systems, in which several model calls are combined into
+one system, and the rigorous evaluation of LLMs, with a dev/test split, pre-registered
+hypotheses, and an LLM used as a judge (our aggregator) whose own biases have to be
+measured.
 
 ## 2. Related work
 
@@ -56,11 +62,11 @@ agents either by rewriting an agent's profile so that it makes stealthy mistakes
 hierarchical structure, A → (B ↔ C), is the most resilient of the structures they
 compare, and propose two defenses: a *Challenger*, which lets agents challenge others'
 outputs, and an *Inspector*, an additional agent that checks and corrects the messages of
-the others. Our study is a small, controlled replication of this
-question with three differences: the injected error is a single scripted calculation
-slip, identical across conditions, which allows paired comparisons; we separate the
-position of the faulty agent from the order in which the aggregator reads the solutions;
-and we include non-LLM aggregation (majority and hybrid votes) as zero-cost baselines.
+the others. Our study is a small, controlled replication of this question with three
+differences: the injected error is a single scripted calculation slip, identical across
+conditions, which allows paired comparisons; we separate the position of the faulty
+agent from the order in which the aggregator reads the solutions; and we include non-LLM
+aggregation (majority and hybrid votes) as zero-cost baselines.
 
 **Prompt Infection.** Lee and Tiwari (2024) show that malicious prompts can replicate
 themselves from agent to agent in a multi-agent system, like a computer virus, leading
@@ -69,11 +75,20 @@ origin of agent messages) as a defense, combined with existing safeguards. Their
 is adversarial instructions; ours is an honest-looking wrong answer. Both point to the
 same weakness: agents treat other agents' messages as trustworthy input.
 
-**Voting and order effects.** Sampling several solutions and taking the majority answer
-(self-consistency, Wang et al., 2023) is a strong baseline for math reasoning; our
-majority and hybrid votes apply it to the team's solvers. LLMs are also known to weight
-information by its position in the context (Liu et al., 2024), which matches the primacy
-effect we find in the aggregator.
+**LLM judges and order effects.** Our aggregator reads three candidate solutions and
+picks an answer: it is an LLM used as a judge. Ye et al. (2025) quantify twelve biases
+of LLM judges with their CALM framework, among them *position bias*, a preference for an
+answer because of where it appears in the prompt; they find that even strong models keep
+significant biases on some tasks. More generally, LLMs use information unevenly
+depending on its position in the context: Liu et al. (2024) find a U-shaped curve, with
+the best performance when the relevant information is at the beginning or the end of
+the context and the worst when it is in the middle ("lost in the middle"). We measure
+the same kind of effect inside a multi-agent team, where it decides whether an error
+spreads.
+
+**Voting.** Sampling several solutions and taking the majority answer (self-consistency,
+Wang et al., 2023) is a strong baseline for math reasoning; our majority and hybrid votes
+apply it to the team's solvers.
 
 ## 3. Method
 
@@ -81,10 +96,18 @@ effect we find in the aggregator.
 
 GSM8K (Cobbe et al., 2021): 200 questions sampled from the test split (seed 42) for the
 final run, 50 questions sampled from the *train* split for development. Every agent is
-`Qwen2.5-1.5B-Instruct` (fp16, Ollama, OpenAI-compatible API) sampled at temperature 0.7,
-with one seed per (question, agent), so that an agent draws the same sample across
-configurations, and must end with `Final answer: <number>`. The strict parser reads that
-line only; an output without it is invalid (and wrong).
+`Qwen2.5-1.5B-Instruct` (Qwen Team, 2024; fp16) sampled at temperature 0.7, with one seed
+per (question, agent), so that an agent draws the same sample across configurations, and
+must end with `Final answer: <number>`. The strict parser reads that line only; an
+output without it is invalid (and wrong).
+
+**Hardware and serving.** Everything ran locally on an Apple M4 Pro (24 GB), with the
+model served by Ollama 0.40.13 through its OpenAI-compatible API, 8 requests decoded in
+parallel. The project proposal planned a cloud GPU (Colab or Kaggle) with Transformers or
+vLLM; all the experiments, on dev and on test, used this local setup instead. The change
+of environment does not affect the protocol (model weights, prompts, seeds, parser,
+faults); only the exact samples would differ on another backend, since batched inference
+is not bit-for-bit reproducible (Section 6).
 
 ### 3.2 Teams
 
@@ -335,14 +358,25 @@ aggregator to redo the calculations does not change how it weighs the solutions.
 confident tone did not matter either, perhaps because a 1.5B model does not weigh such
 meta-statements, or because the aggregator's order bias dominates.
 
+**The aggregator as a biased judge.** The aggregator behaves like an LLM judge with the
+position bias documented by Ye et al. (2025). The shape of its bias, strong primacy and a
+small recency effect, is the U-shaped profile described by Liu et al. (2024): 36%, 9%
+and 16% adoption for ranks 1, 2 and 3 in the chain with rotated order. In the star only
+the primacy part appears (48%, 8%, 8%). Liu et al. study long contexts with many
+documents and our prompt holds three solutions, so the parallel concerns the shape of
+the effect, not necessarily its mechanism. Either way, the order in which an LLM judge
+reads its candidates is a hidden parameter of the system.
+
 **Recommendation: the hybrid vote.** For a small model, the cheapest effective defense is
 to take the aggregation decision away from the LLM whenever the solvers agree. The hybrid
-vote needs no extra call, saves the aggregator call in 56-75% of the fault runs, never
-loses accuracy without fault, and is the most accurate method under a fault in the chain
-and on par with the verifier in the star. A verifier (re-solve and compare, with the
-verdict computed in code) remains the best way to keep the error out of the team's final
-answer (4-5% adoption), at twice the calls; combined with the hybrid vote it reached 71%
-(chain) and 74% (star) accuracy with 2-3% adoption (exploratory). Asking the small model itself to judge or to compare
+vote needs no extra call: a strict majority exists in 70% of the fault runs without
+defense on average (from 56% in the star to 88% in the chain with the fault at p1), and
+in those runs the aggregator is not called. It never loses accuracy without fault, and
+it is the most accurate method under a fault in the chain and on par with the verifier in
+the star. A verifier (re-solve and compare, with the verdict computed in code) remains
+the best way to keep the error out of the team's final answer (4-5% adoption), at twice
+the calls; combined with the hybrid vote it reached 71% (chain) and 74% (star) accuracy
+with 2-3% adoption (exploratory). Asking the small model itself to judge or to compare
 answers is not an option: it rejected nearly half of the correct solutions.
 
 **Limitations.**
@@ -398,3 +432,5 @@ hash.
 - Qwen Team (2024). Qwen2.5 Technical Report. arXiv:2412.15115.
 - Wang, X., Wei, J., Schuurmans, D., et al. (2023). Self-Consistency Improves Chain of
   Thought Reasoning in Language Models. *ICLR 2023*. arXiv:2203.11171.
+- Ye, J., Wang, Y., Huang, Y., et al. (2025). Justice or Prejudice? Quantifying Biases in
+  LLM-as-a-Judge. *ICLR 2025*. arXiv:2410.02736.

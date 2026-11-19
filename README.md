@@ -70,8 +70,13 @@ python -m scripts.summarize results/test/grid.jsonl --save
 
 The committed test log can be analysed without running anything: the same two commands
 work on `results/test/grid.jsonl.gz`, and `notebooks/analysis.ipynb` (figures, written to
-`report/figures/`) and `notebooks/demo.ipynb` read it directly (open them with the
-project's virtual environment as kernel).
+`report/figures/`) and `notebooks/demo.ipynb` read it directly. Open them with the
+project's virtual environment as kernel, or re-execute them headless (`nbclient` is in
+`requirements.txt`):
+
+```bash
+jupyter execute --inplace notebooks/analysis.ipynb notebooks/demo.ipynb
+```
 
 ## Data
 
