@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import gzip
 import hashlib
 import json
 import platform
@@ -100,12 +101,21 @@ class JsonlLog:
         return {(r["config_id"], r["question_id"]) for r in read_records(self.path, "run")}
 
 
+def log_stem(path: str | Path) -> Path:
+    """results/test/grid.jsonl(.gz) -> results/test/grid, the prefix of the derived tables."""
+    path = Path(path)
+    if path.suffix == ".gz":
+        path = path.with_suffix("")
+    return path.with_suffix("")
+
+
 def read_records(path: str | Path, record_type: str | None = "run") -> list[dict]:
     path = Path(path)
     if not path.exists():
         return []
     records = []
-    with path.open(encoding="utf-8") as f:
+    opener = gzip.open if path.suffix == ".gz" else open  # final logs are committed compressed
+    with opener(path, "rt", encoding="utf-8") as f:
         for line in f:
             line = line.strip()
             if not line:

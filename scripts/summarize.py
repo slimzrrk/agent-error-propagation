@@ -14,7 +14,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from src.logging_utils import read_records
+from src.logging_utils import log_stem, read_records
 from src.metrics import (
     adoption, answers_match, bootstrap_ci, by_obvious, by_slip_position, by_slot, fault_summary, hybrid_adopted,
     hybrid_correct, hybrid_cost, is_correct, majority_adopted, majority_answer, majority_correct,
@@ -389,7 +389,7 @@ def main(argv=None):
         saved["obvious"] = covariate_table(faulty, "obvious faults (True = breaks the plausibility rule)", by_obvious)
 
     if args.save:
-        stem = Path(args.log).with_suffix("")
+        stem = log_stem(args.log)
         main_df.to_csv(f"{stem}_summary.csv", index=False, float_format="%.4f")
         Path(f"{stem}_propagation.json").write_text(json.dumps(json_safe(saved), indent=1, allow_nan=False) + "\n")
         if tests:

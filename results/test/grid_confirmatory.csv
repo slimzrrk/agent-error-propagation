@@ -1,0 +1,9 @@
+hypothesis,description,n_questions,mean_difference,ci_low,ci_high,alternative,p_value,p_holm,supported
+H1,chain: team adoption higher with the faulty solver at p1 than at p2/p3,200,0.2275,0.1713,0.2825,greater,0.0000,0.0001,True
+H2,persuasive vs neutral team adoption differ (chain p1-p3 and star),200,0.0187,-0.0175,0.0550,two-sided,0.3418,0.6835,False
+H3,primacy: team adoption higher when the faulty solution is shown first (chain_rotated),200,0.2288,0.1737,0.2825,greater,0.0000,0.0001,True
+H4,chain (chronological) vs star team adoption differ,200,-0.0192,-0.0692,0.0292,two-sided,0.4663,0.6835,False
+H5,the verifier lowers team adoption compared with no defense,200,0.1581,0.1375,0.1794,greater,0.0000,0.0001,True
+H6,verifier vs skeptical instruction team adoption differ,200,0.1363,0.1144,0.1575,two-sided,0.0000,0.0001,True
+H7,a majority vote adopts the error less than the LLM aggregator (no defense),200,0.1762,0.1550,0.1975,greater,0.0000,0.0001,True
+H8,"the hybrid vote is more accurate than the LLM aggregator (faults, no defense)",200,0.1050,0.0875,0.1225,greater,0.0000,0.0001,True

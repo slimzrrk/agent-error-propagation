@@ -15,12 +15,11 @@ from __future__ import annotations
 
 import argparse
 from collections import defaultdict
-from pathlib import Path
 
 import numpy as np
 import pandas as pd
 
-from src.logging_utils import read_records
+from src.logging_utils import log_stem, read_records
 from src.metrics import (
     bootstrap_ci, holm, hybrid_correct, is_correct, majority_adopted, paired_permutation_test, team_adopted,
 )
@@ -152,7 +151,7 @@ def main(argv=None):
               f"[{r.ci_low:+.3f}, {r.ci_high:+.3f}]  p ({r.alternative})={r.p_value:.4f}  Holm p={r.p_holm:.4f}  "
               f"{'supported' if r.supported else 'not supported'} at alpha={ALPHA}")
     if args.save:
-        out = f"{Path(args.logs[0]).with_suffix('')}_confirmatory.csv"
+        out = f"{log_stem(args.logs[0])}_confirmatory.csv"
         df.to_csv(out, index=False, float_format="%.4f")
         print(f"saved {out}")
 

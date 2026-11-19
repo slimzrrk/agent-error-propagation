@@ -1,6 +1,9 @@
+import gzip
+import shutil
+
 import numpy as np
 
-from src.logging_utils import JsonlLog, read_records
+from src.logging_utils import JsonlLog, log_stem, read_records
 from src.metrics import (
     adoption,
     bootstrap_ci,
@@ -96,6 +99,15 @@ def test_jsonl_resume(tmp_path):
     assert JsonlLog(path).done_keys() == {("a", "q1"), ("b", "q1")}
     assert len(read_records(path, "meta")) == 1
     assert len(read_records(path, None)) == 3
+
+
+def test_read_compressed_log(tmp_path):
+    path = tmp_path / "grid.jsonl"
+    JsonlLog(path).write_run({"config_id": "c", "question_id": "q1"})
+    with path.open("rb") as src, gzip.open(f"{path}.gz", "wb") as dst:
+        shutil.copyfileobj(src, dst)
+    assert read_records(f"{path}.gz") == read_records(path)
+    assert log_stem(f"{path}.gz") == log_stem(path) == tmp_path / "grid"
 
 
 def test_bootstrap_ci():
