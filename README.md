@@ -68,6 +68,11 @@ python -m scripts.confirmatory results/test/grid.jsonl --save                   
 python -m scripts.summarize results/test/grid.jsonl --save
 ```
 
+The committed test log can be analysed without running anything: the same two commands
+work on `results/test/grid.jsonl.gz`, and `notebooks/analysis.ipynb` (figures, written to
+`report/figures/`) and `notebooks/demo.ipynb` read it directly (open them with the
+project's virtual environment as kernel).
+
 ## Data
 
 - GSM8K (`openai/gsm8k`, config `main`).
@@ -77,8 +82,6 @@ python -m scripts.summarize results/test/grid.jsonl --save
 - All prompt and threshold tuning is done on dev; the test set is run once, at the end.
 
 ## Method
-
-*To be completed as the project progresses.*
 
 - **Agents** — Solver, Aggregator, Verifier: same model, different system prompts.
   Every agent ends with `Final answer: <number>`, parsed by `src/parser.py`. Without any
@@ -154,7 +157,7 @@ python -m scripts.summarize results/test/grid.jsonl --save
   (the majority when there is one, otherwise the LLM aggregator's answer), and compare
   both with the LLM aggregator. Exploratory: anchoring of the verifier on the message it
   checks (similarity of the two texts) and a pooled vote over solvers and verifiers.
-- **Pre-registration** — the confirmatory hypotheses H1–H7, their tests and the Holm
+- **Pre-registration** — the confirmatory hypotheses H1–H8, their tests and the Holm
   correction are fixed in `report/hypotheses.md` and `scripts/confirmatory.py`, committed
   before any run on the test split; later changes are dated amendments, also made before
   the test run. Everything else is reported as exploratory.
@@ -173,17 +176,24 @@ python -m scripts.summarize results/test/grid.jsonl --save
 - Every results file records the model tag and digest, temperature, seeds, server
   version, package versions, git commit, and a protocol hash (prompts, parser, agents,
   topologies, faults and splits): a log can only be resumed with the same protocol.
-- Raw JSONL logs are not committed (size); aggregated summaries are.
+- Raw dev logs are not committed (size); their aggregated summaries are. The test log is
+  committed compressed (`results/test/grid.jsonl.gz`, every message of the 7,400 runs);
+  the scripts and notebooks read it directly.
 
 ## Limitations and future work
 
 - **A blind verifier.** Our verifier reads the solution it checks before solving the
-  problem again, and on dev 29% of its texts are near copies of an honest solution it
-  checks (11% for the injected faults). A verifier that solves without seeing the
+  problem again, and on test 28% of its texts are near copies of an honest solution it
+  checks (7% for the injected faults); on those near copies it catches only 11% of the
+  wrong answers, against 38% otherwise. A verifier that solves without seeing the
   solution, and whose answer is then compared with the solver's, would remove this
   anchoring and make its errors less correlated with the solvers'.
-- Further limitations (type of injected error, plausibility and style of the faults,
-  presentation order, sampling reproducibility, scale) are listed in `report/notes.md`.
+- **Natural errors.** Injected faults are calculation slips, which downstream solvers
+  recompute; the model's own errors (mostly misreadings) are copied far more often.
+  Injecting comprehension errors is the natural next step.
+- Further limitations (plausibility and style of the faults, presentation order,
+  counterfactual votes, dev/test gap, sampling reproducibility, scale) are listed in
+  `report/report.md` and `report/notes.md`.
 
 ## Repository layout
 
@@ -191,13 +201,61 @@ python -m scripts.summarize results/test/grid.jsonl --save
 configs/     experiment configs (YAML)
 data/        splits.json, faults.json
 src/         llm, data, parser, prompts, agents, topologies, faults, defenses, metrics, logging
-scripts/     run_experiment, make_grid, benchmark_speed
+scripts/     run_experiment, summarize, confirmatory, show_run, make_faults, tune_defenses, make_grid
 notebooks/   analysis and demo notebooks
-results/     run logs and summaries
+results/     summaries (dev, test) and the compressed test log
 tests/       unit tests
-report/      final report
+report/      report, figures, pre-registration, notes
 ```
 
 ## Results
 
-*Coming in later phases.*
+Test split, 200 questions, 37 configs (7,400 runs), run once with the pre-registered
+protocol; no deviation. Full write-up: [`report/report.md`](report/report.md); figures and
+tables: [`notebooks/analysis.ipynb`](notebooks/analysis.ipynb); a worked example:
+[`notebooks/demo.ipynb`](notebooks/demo.ipynb).
+
+**Confirmatory tests** (permutation tests on per-question differences, Holm over H1-H8):
+
+| | Difference (points) | 95% CI | p (Holm) | |
+|---|---|---|---|---|
+| H1 chain: faulty solver at p1 adopted more than at p2/p3 | +22.8 | [+17.1, +28.2] | < 0.001 | supported |
+| H2 persuasive vs neutral fault (two-sided) | +1.9 | [−1.8, +5.5] | 0.68 | not supported |
+| H3 faulty solution read first by the aggregator adopted more | +22.9 | [+17.4, +28.2] | < 0.001 | supported |
+| H4 chain vs star (two-sided) | −1.9 | [−6.9, +2.9] | 0.68 | not supported |
+| H5 verifier lowers adoption vs no defense | +15.8 | [+13.8, +17.9] | < 0.001 | supported |
+| H6 verifier vs skeptical instruction (two-sided) | +13.6 | [+11.4, +15.8] | < 0.001 | supported |
+| H7 majority vote adopts less than the LLM aggregator | +17.6 | [+15.5, +19.8] | < 0.001 | supported |
+| H8 hybrid vote more accurate than the LLM aggregator | +10.5 | [+8.8, +12.2] | < 0.001 | supported |
+
+**Key numbers.**
+
+- Without fault, teams beat one agent: 71% (chain) and 72.5% (star) against 65%. With a
+  faulty solver at p1 and no defense, the chain falls to 51%.
+- The error spreads through the aggregator, not the solvers: in the chain with the fault
+  at p1, solvers 2 and 3 end with the injected answer in 4% and 2% of the runs, the
+  aggregator in 34%.
+- The aggregator follows the solution it reads first: 48% adoption when the faulty
+  solution comes first in the star, 8% when it comes second or third (36%, 9%, 16% in the
+  chain with rotated order). The chain position only matters through this order.
+- A confident tone ("I am completely sure...") changes nothing measurable.
+- Defenses, with a fault (pooled over cells): the verifier (re-solve and compare, verdict
+  computed in code) cuts team adoption to 4-5% but doubles the calls; the skeptical
+  instruction barely helps; the **hybrid vote** (the solvers' majority if there is one,
+  else the aggregator) is the most accurate in the chain (71% vs 67% for the verifier and
+  60% without defense) and on par with the verifier in the star (68% vs 69%), at about a
+  third of the verifier's tokens and no extra call.
+- Natural errors spread far more than injected slips: when solver 1 is wrong on its own,
+  53% of the downstream chain agents end with its wrong answer, against an 11%
+  coincidence baseline.
+
+| Fig. 1 — adoption by reading rank | Fig. 3 — accuracy with a fault vs cost |
+|---|---|
+| ![Adoption by presentation rank](report/figures/fig1_adoption_by_rank.png) | ![Defenses: accuracy against tokens](report/figures/fig3_defenses_cost.png) |
+| **Fig. 2 — adoption by agent (chain, fault at p1)** | **Fig. 4 — natural vs injected propagation** |
+| ![Adoption by agent](report/figures/fig2_adoption_by_agent.png) | ![Natural against injected propagation](report/figures/fig4_natural_vs_injected.png) |
+
+The dev set (GSM8K train split) is much easier for the model than the test set (84% vs
+65% for one agent; likely contamination and prompt tuning on dev), but every supported
+effect kept its sign and roughly its size between the dev dry run and the test run.
+Limitations are discussed in the report and in [`report/notes.md`](report/notes.md).
