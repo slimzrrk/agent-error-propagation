@@ -28,10 +28,15 @@ pre-registered, then the test set (200 questions, 7,400 team runs) was run once.
   extra call and gives the best accuracy under a fault in the chain: 71% vs 60% without
   defense; in the star it is on par with the verifier (68% vs 69%), at about a third of
   its tokens.
+- **Natural errors spread far more than injected slips:** when solver 1 is wrong on its
+  own, 53% of the downstream chain agents end with its wrong answer, against an 11%
+  coincidence baseline.
 
-| Adoption by reading rank | Accuracy with a fault vs cost |
+| Fig. 1 — adoption by reading rank | Fig. 2 — adoption by agent (chain, fault at p1) |
 |---|---|
-| ![Adoption by presentation rank](report/figures/fig1_adoption_by_rank.png) | ![Defenses: accuracy against tokens](report/figures/fig3_defenses_cost.png) |
+| ![Adoption by presentation rank](report/figures/fig1_adoption_by_rank.png) | ![Adoption by agent](report/figures/fig2_adoption_by_agent.png) |
+| **Fig. 3 — accuracy with a fault vs cost** | **Fig. 4 — natural vs injected propagation** |
+| ![Defenses: accuracy against tokens](report/figures/fig3_defenses_cost.png) | ![Natural against injected propagation](report/figures/fig4_natural_vs_injected.png) |
 
 **Pre-registered hypotheses** (permutation tests, Holm correction over H1-H8):
 
