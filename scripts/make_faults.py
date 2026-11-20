@@ -2,7 +2,7 @@
 
     python -m scripts.make_faults --config configs/baseline.yaml
 
-    python -m scripts.make_faults --fix-implausible   # revision 2, see README
+    python -m scripts.make_faults --fix-implausible   # revision 2, see docs/details.md
     python -m scripts.make_faults --fix-style         # revision 3
 
 For each question, plan a calculation slip (src/faults.py), let the model write the
