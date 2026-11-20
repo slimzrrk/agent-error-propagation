@@ -1,6 +1,4 @@
 # Local tool and editor files
-CLAUDE.md
-.claude/
 .vscode/
 .idea/
 .DS_Store
